@@ -21,6 +21,9 @@ import {
 import Schedule from "./Schedule";
 import Course from "./Course";
 import Assignment from "./Assignment";
+import Teachers from "./Teachers";
+import Classmates from "./Classmates";
+import Grades from "./Grades";
 
 // Global styles to ensure proper viewport fitting
 const GlobalStyles = createGlobalStyle`
@@ -619,6 +622,9 @@ const Home = ({ user, onLogout }) => {
             <Route path="/courses" element={<Course />} />
             <Route path="/schedule" element={<Schedule />} />
             <Route path="/assignments" element={<Assignment />} />
+            <Route path="/teachers" element={<Teachers />} />
+            <Route path="/classmates" element={<Classmates />} />
+            <Route path="/grades" element={<Grades />} />
             <Route path="*" element={
               <>
                 <WelcomeCard
@@ -626,34 +632,48 @@ const Home = ({ user, onLogout }) => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5 }}
                 >
-                  <h1>Welcome back, {user?.username || "User"}!</h1>
-                  <p>
-                    You're logged in as <span style={{
-                      color: '#A076F9',
-                      fontWeight: 'bold',
-                      textTransform: 'capitalize',
-                      background: 'rgba(160, 118, 249, 0.1)',
-                      padding: '3px 8px',
-                      borderRadius: '4px',
-                    }}>{role}</span>.
-                    Access all your educational resources, track assignments, communicate with teachers
-                    and classmates, and manage your academic journey from this dashboard.
-                  </p>
-                  <ButtonWrapper>
-                    <Button
-                      primary
-                      whileHover={{ scale: 1.03 }}
-                      whileTap={{ scale: 0.97 }}
-                    >
-                      <FaChartBar style={{ fontSize: '1.1rem' }} /> View Dashboard
-                    </Button>
-                    <Button
-                      whileHover={{ scale: 1.03 }}
-                      whileTap={{ scale: 0.97 }}
-                    >
-                      <FaUser style={{ fontSize: '1.1rem' }} /> My Profile
-                    </Button>
-                  </ButtonWrapper>
+                  <div style={{ position: 'relative', zIndex: 1 }}>
+                    <h1>Welcome back, {user?.username || "User"}!</h1>
+                    <p style={{ color: '#b0b0b0', marginBottom: '1rem' }}>
+                      It's <strong>11:32 AM IST</strong> on <strong>Thursday, July 24, 2025</strong>. You're logged in as{' '}
+                      <span style={{
+                        color: '#A076F9',
+                        fontWeight: 'bold',
+                        textTransform: 'capitalize',
+                        background: 'rgba(160, 118, 249, 0.1)',
+                        padding: '4px 10px',
+                        borderRadius: '6px',
+                      }}>{role}</span>. Explore your educational resources, track assignments, connect with teachers and classmates, and manage your academic journey from this dashboard.
+                    </p>
+                    <ButtonWrapper>
+                      <Button
+                        primary
+                        whileHover={{ scale: 1.03 }}
+                        whileTap={{ scale: 0.97 }}
+                      >
+                        <FaChartBar style={{ fontSize: '1.1rem' }} /> View Dashboard
+                      </Button>
+                      <Button
+                        whileHover={{ scale: 1.03 }}
+                        whileTap={{ scale: 0.97 }}
+                      >
+                        <FaUser style={{ fontSize: '1.1rem' }} /> My Profile
+                      </Button>
+                    </ButtonWrapper>
+                  </div>
+                  {/* Ensure the gradient overlay doesn't obscure content */}
+                  <div style={{
+                    position: 'absolute',
+                    top: 0,
+                    right: 0,
+                    width: '400px',
+                    height: '400px',
+                    background: 'radial-gradient(circle, rgba(160, 118, 249, 0.1) 0%, rgba(126, 87, 194, 0) 70%)',
+                    borderRadius: '50%',
+                    transform: 'translate(25%, -40%)',
+                    pointerEvents: 'none',
+                    zIndex: 0,
+                  }} />
                 </WelcomeCard>
 
                 <QuickStatsGrid>
