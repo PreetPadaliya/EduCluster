@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { FaUser, FaLock, FaUserTag } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import { validateUsername, validatePassword } from '../utils/validation';
 
 const LoginContainer = styled.div`
   display: flex;
@@ -36,12 +37,36 @@ const InputGroup = styled.div`
   position: relative;
   margin-bottom: 1.5rem;
   width: 100%;
+`; 
+
+const ErrorMessage = styled.div`
+  color: #ff6b6b;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+  padding-left: 1rem;
+  text-align: left;
+  animation: fadeIn 0.3s ease-in-out;
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+`;
+
+const GeneralError = styled(ErrorMessage)`
+  background-color: rgba(255, 107, 107, 0.1);
+  border-left: 3px solid #ff6b6b;
+  padding: 0.8rem 1rem;
+  margin: 1rem 0;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: 500;
 `;
 
 const Input = styled(motion.input)`
   width: 100%;
   padding: 1rem 1rem 1rem 3rem;
-  border: none;
+  border: 2px solid transparent;
   border-radius: 50px;
   background-color: rgba(30, 30, 35, 0.8);
   color: #e0e0e0;
@@ -53,10 +78,16 @@ const Input = styled(motion.input)`
   &:focus {
     box-shadow: 0 4px 12px rgba(160, 118, 249, 0.4);
     background-color: rgba(40, 40, 45, 0.9);
+    border-color: #A076F9;
   }
 
   &::placeholder {
     color: #a0a0a0;
+  }
+  
+  &.error {
+    border-color: #ff6b6b;
+    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
   }
 `;
 
@@ -82,10 +113,56 @@ const Button = styled(motion.button)`
   margin-top: 1rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
 
   &:hover {
     box-shadow: 0 6px 12px rgba(160, 118, 249, 0.4);
     transform: translateY(-2px);
+  }
+  
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: translateY(0);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  }
+  
+  &:before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+      to bottom right,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.1) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    transform: rotate(45deg);
+    opacity: 0;
+    transition: opacity 0.6s;
+  }
+  
+  &:hover:not(:disabled):before {
+    opacity: 1;
+    animation: shine 1.5s ease-in-out infinite;
+  }
+  
+  @keyframes shine {
+    0% {
+      left: -100%;
+      opacity: 0;
+    }
+    20% {
+      opacity: 0.1;
+    }
+    100% {
+      left: 100%;
+      opacity: 0;
+    }
   }
 `;
 
@@ -195,6 +272,9 @@ const Login = ({ onLogin }) => {
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('student');
   const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [loginAttempts, setLoginAttempts] = useState(0);
+  const [isLocked, setIsLocked] = useState(false);
 
   const roleColors = {
     principal: '#A076F9',
@@ -204,14 +284,69 @@ const Login = ({ onLogin }) => {
     admin: '#7E57C2'
   };
 
+  // Validation functions are now imported from utils/validation.js
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    setIsLoading(true);
+    
+    // If account is locked, prevent login
+    if (isLocked) {
+      return;
+    }
 
-    setTimeout(() => {
-      onLogin({ username, role });
-      setIsLoading(false);
-    }, 1500);
+    // Validate inputs
+    const usernameError = validateUsername(username);
+    const passwordError = validatePassword(password);
+    
+    const newErrors = {
+      username: usernameError,
+      password: passwordError
+    };
+    
+    setErrors(newErrors);
+
+    // If no errors, proceed with login
+    if (!usernameError && !passwordError) {
+      setIsLoading(true);
+
+      // Mock authentication - in a real app this would call an API
+      setTimeout(() => {
+        // Simulate failed login for demo purposes (70% success rate)
+        const loginSuccess = Math.random() > 0.3;
+        
+        if (loginSuccess) {
+          // Reset login attempts on successful login
+          setLoginAttempts(0);
+          onLogin({ username, role });
+        } else {
+          // Increment login attempts
+          const newAttempts = loginAttempts + 1;
+          setLoginAttempts(newAttempts);
+          
+          // Lock account after 5 failed attempts
+          if (newAttempts >= 5) {
+            setIsLocked(true);
+            setErrors({
+              ...newErrors,
+              general: "Account locked due to multiple failed attempts. Please try again after 30 minutes."
+            });
+            
+            // Unlock account after 30 minutes (in a real app, this would be handled by backend)
+            setTimeout(() => {
+              setIsLocked(false);
+              setLoginAttempts(0);
+            }, 30 * 60 * 1000); // 30 minutes
+          } else {
+            setErrors({
+              ...newErrors,
+              general: `Invalid username or password. ${5 - newAttempts} attempts remaining.`
+            });
+          }
+        }
+        
+        setIsLoading(false);
+      }, 1500);
+    }
   };
 
   return (
@@ -230,6 +365,8 @@ const Login = ({ onLogin }) => {
         </LoginTitle>
 
         <form onSubmit={handleSubmit}>
+          {errors.general && <GeneralError>{errors.general}</GeneralError>}
+
           <InputGroup>
             <IconWrapper>
               <FaUser />
@@ -238,12 +375,19 @@ const Login = ({ onLogin }) => {
               type="text"
               placeholder="Username or Email"
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={(e) => {
+                setUsername(e.target.value);
+                if (errors.username) {
+                  setErrors({...errors, username: ''});
+                }
+              }}
               required
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ delay: 0.3 }}
+              style={{ borderColor: errors.username ? '#ff6b6b' : 'transparent' }}
             />
+            {errors.username && <ErrorMessage>{errors.username}</ErrorMessage>}
           </InputGroup>
 
           <InputGroup>
@@ -254,12 +398,19 @@ const Login = ({ onLogin }) => {
               type="password"
               placeholder="Password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                if (errors.password) {
+                  setErrors({...errors, password: ''});
+                }
+              }}
               required
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ delay: 0.4 }}
+              style={{ borderColor: errors.password ? '#ff6b6b' : 'transparent' }}
             />
+            {errors.password && <ErrorMessage>{errors.password}</ErrorMessage>}
           </InputGroup>
 
           <SelectGroup>
@@ -269,13 +420,20 @@ const Login = ({ onLogin }) => {
             <SelectWrapper>
               <Select
                 value={role}
-                onChange={(e) => setRole(e.target.value)}
+                onChange={(e) => {
+                  setRole(e.target.value);
+                  // Reset errors when changing role
+                  if (errors.username || errors.password) {
+                    setErrors({});
+                  }
+                }}
                 required
                 initial={{ x: -20, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ delay: 0.45 }}
                 whileFocus={{ scale: 1.01 }}
                 style={{ color: roleColors[role] || '#A076F9' }}
+                disabled={isLocked}
               >
                 <option value="" disabled>Select Your Role</option>
                 <option value="principal">Principal</option>
@@ -294,15 +452,24 @@ const Login = ({ onLogin }) => {
 
           <Button
             type="submit"
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.98 }}
+            whileHover={{ scale: isLocked ? 1 : 1.03 }}
+            whileTap={{ scale: isLocked ? 1 : 0.98 }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
-            disabled={isLoading}
+            disabled={isLoading || isLocked}
+            style={{ 
+              opacity: isLocked ? 0.6 : 1,
+              cursor: isLocked ? 'not-allowed' : 'pointer',
+              background: isLocked ? 'linear-gradient(135deg, #888, #666)' : undefined
+            }}
           >
-            {isLoading ? 'Signing In...' : 'Sign In'}
+            {isLoading ? 'Signing In...' : isLocked ? 'Account Locked' : 'Sign In'}
           </Button>
+          
+          <div style={{ fontSize: '0.8rem', textAlign: 'center', marginTop: '0.8rem', color: '#a0a0a0' }}>
+            By signing in, you agree to our Terms of Service and Privacy Policy
+          </div>
         </form>
 
         <ForgotPassword
@@ -310,6 +477,8 @@ const Login = ({ onLogin }) => {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6 }}
           whileHover={{ scale: 1.02 }}
+          as={Link}
+          to="/forgot-password"
         >
           Forgot password?
         </ForgotPassword>
@@ -320,7 +489,19 @@ const Login = ({ onLogin }) => {
           transition={{ delay: 0.7 }}
         >
           New to EduCluster?
-          <Link to="/signup" style={{ color: '#A076F9', textDecoration: 'none', fontWeight: 600, marginLeft: '0.5rem', position: 'relative', display: 'inline-block' }}>
+          <Link 
+            to="/signup" 
+            style={{ 
+              color: '#A076F9', 
+              textDecoration: 'none', 
+              fontWeight: 600, 
+              marginLeft: '0.5rem', 
+              position: 'relative', 
+              display: 'inline-block' 
+            }}
+            whileHover={{ scale: 1.05 }}
+            as={motion.a}
+          >
             Create Account
           </Link>
         </CreateAccount>

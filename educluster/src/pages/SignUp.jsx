@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import styled, { createGlobalStyle } from "styled-components";
 import { motion } from "framer-motion";
-import { FaUser, FaLock, FaEnvelope, FaUserTag, FaIdCard, FaPhone } from "react-icons/fa";
+import { FaUser, FaLock, FaEnvelope, FaUserTag, FaIdCard, FaPhone, FaInfoCircle, FaExclamationTriangle } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { validateUsername, validatePassword, validateEmail, validatePhone, validateId, validateConfirmPassword, validateName } from "../utils/validation";
 
 const GlobalStyles = createGlobalStyle`
   html, body, #root {
@@ -85,7 +86,7 @@ const InputGroup = styled.div`
 const Input = styled(motion.input)`
   width: 100%;
   padding: 0.8rem 0.8rem 0.8rem 2.8rem;
-  border: none;
+  border: 2px solid transparent;
   border-radius: 50px;
   background-color: rgba(30, 30, 35, 0.8);
   color: #e0e0e0;
@@ -97,10 +98,16 @@ const Input = styled(motion.input)`
   &:focus {
     box-shadow: 0 4px 12px rgba(160, 118, 249, 0.4);
     background-color: rgba(40, 40, 45, 0.9);
+    border-color: #A076F9;
   }
 
   &::placeholder {
     color: #a0a0a0;
+  }
+  
+  &.error {
+    border-color: #ff6b6b;
+    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
   }
 `;
 
@@ -220,10 +227,64 @@ const LoginPrompt = styled(motion.div)`
 
 const ErrorMessage = styled(motion.div)`
   color: #ff6b6b;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   margin-top: 0.5rem;
+  padding-left: 1rem;
+  text-align: left;
+  animation: fadeIn 0.3s ease-in-out;
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+`;
+
+const GeneralError = styled(ErrorMessage)`
+  background-color: rgba(255, 107, 107, 0.1);
+  border-left: 3px solid #ff6b6b;
+  padding: 0.8rem 1rem;
+  margin: 1rem 0;
+  border-radius: 4px;
   text-align: center;
+  font-weight: 500;
   grid-column: 1 / -1;
+`;
+
+const PasswordRequirements = styled(motion.div)`
+  background-color: rgba(160, 118, 249, 0.05);
+  border-left: 3px solid #A076F9;
+  padding: 0.8rem 1rem;
+  margin: 0.5rem 0 1rem 0;
+  border-radius: 4px;
+  grid-column: 1 / -1;
+  
+  h4 {
+    color: #A076F9;
+    margin: 0 0 0.5rem 0;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  ul {
+    margin: 0;
+    padding-left: 1.5rem;
+    
+    li {
+      color: #a0a0a0;
+      font-size: 0.8rem;
+      margin-bottom: 0.2rem;
+      
+      &.valid {
+        color: #66BB6A;
+      }
+      
+      &.invalid {
+        color: #ff6b6b;
+      }
+    }
+  }
 `;
 
 const SignUp = ({ onSignUp }) => {
@@ -239,7 +300,17 @@ const SignUp = ({ onSignUp }) => {
   });
 
   const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState({});
   const [error, setError] = useState("");
+  const [showPasswordRequirements, setShowPasswordRequirements] = useState(false);
+  const [validationStates, setValidationStates] = useState({
+    length: false,
+    upperCase: false,
+    lowerCase: false,
+    number: false,
+    special: false,
+    match: false
+  });
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -247,6 +318,20 @@ const SignUp = ({ onSignUp }) => {
       document.body.style.overflow = 'auto';
     };
   }, []);
+  
+  // Password validation effect
+  useEffect(() => {
+    if (formData.password) {
+      setValidationStates({
+        length: formData.password.length >= 8,
+        upperCase: /[A-Z]/.test(formData.password),
+        lowerCase: /[a-z]/.test(formData.password),
+        number: /[0-9]/.test(formData.password),
+        special: /[!@#$%^&*]/.test(formData.password),
+        match: formData.password === formData.confirmPassword && formData.confirmPassword !== ""
+      });
+    }
+  }, [formData.password, formData.confirmPassword]);
 
   const roleColors = {
     principal: '#A076F9',
@@ -261,33 +346,70 @@ const SignUp = ({ onSignUp }) => {
       ...formData,
       [name]: value,
     });
-
+    
+    // Clear field-specific error when user starts typing again
+    if (errors[name]) {
+      setErrors({...errors, [name]: ''});
+    }
+    
+    // Clear general error
     if (error) setError("");
+    
+    // Show password requirements when user focuses on password field
+    if (name === "password") {
+      setShowPasswordRequirements(true);
+    }
+  };
+  
+  const validateForm = () => {
+    const newErrors = {};
+    
+    // Validate each field
+    newErrors.firstName = validateName(formData.firstName);
+    newErrors.lastName = validateName(formData.lastName);
+    newErrors.email = validateEmail(formData.email);
+    newErrors.phone = validatePhone(formData.phone);
+    newErrors.id = validateId(formData.id);
+    newErrors.password = validatePassword(formData.password);
+    newErrors.confirmPassword = validateConfirmPassword(formData.password, formData.confirmPassword);
+    
+    setErrors(newErrors);
+    
+    // Check if there are any errors
+    return !Object.values(newErrors).some(error => error);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    if (!validateForm()) {
+      // If validation fails, scroll to first error
+      const firstErrorField = Object.keys(errors).find(key => errors[key]);
+      if (firstErrorField) {
+        document.getElementsByName(firstErrorField)[0]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      return;
+    }
+
     setIsLoading(true);
     setError("");
 
-    if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match");
-      setIsLoading(false);
-      return;
-    }
-
-    if (formData.password.length < 6) {
-      setError("Password must be at least 6 characters");
-      setIsLoading(false);
-      return;
-    }
-
-
+    // Always succeed in demo version, no random failure
     setTimeout(() => {
-      if (onSignUp) {
-        onSignUp(formData);
+      try {
+        // Call the onSignUp function passed as prop
+        if (onSignUp) {
+          onSignUp(formData);
+          console.log("User registered successfully:", formData);
+        } else {
+          throw new Error("onSignUp function is not available");
+        }
+      } catch (err) {
+        console.error("Registration error:", err);
+        setError("There was a problem creating your account. Please try again.");
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     }, 1500);
   };
 
@@ -316,6 +438,8 @@ const SignUp = ({ onSignUp }) => {
         </SignUpTitle>
 
         <Form onSubmit={handleSubmit}>
+          {error && <GeneralError>{error}</GeneralError>}
+
           <InputGroup>
             <IconWrapper>
               <FaIdCard />
@@ -330,7 +454,9 @@ const SignUp = ({ onSignUp }) => {
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ delay: 0.3 }}
+              style={{ borderColor: errors.firstName ? '#ff6b6b' : 'transparent' }}
             />
+            {errors.firstName && <ErrorMessage>{errors.firstName}</ErrorMessage>}
           </InputGroup>
 
           <InputGroup>
@@ -347,7 +473,9 @@ const SignUp = ({ onSignUp }) => {
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ delay: 0.35 }}
+              style={{ borderColor: errors.lastName ? '#ff6b6b' : 'transparent' }}
             />
+            {errors.lastName && <ErrorMessage>{errors.lastName}</ErrorMessage>}
           </InputGroup>
 
           <InputGroup fullWidth>
@@ -397,7 +525,9 @@ const SignUp = ({ onSignUp }) => {
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ delay: 0.5 }}
+              style={{ borderColor: errors.id ? '#ff6b6b' : 'transparent' }}
             />
+            {errors.id && <ErrorMessage>{errors.id}</ErrorMessage>}
           </InputGroup>
 
           <SelectGroup>
@@ -414,7 +544,10 @@ const SignUp = ({ onSignUp }) => {
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ delay: 0.55 }}
                 whileFocus={{ scale: 1.01 }}
-                style={{ color: roleColors[formData.role] }}
+                style={{ 
+                  color: roleColors[formData.role],
+                  borderColor: errors.role ? '#ff6b6b' : 'transparent' 
+                }}
               >
                 <option value="" disabled>Select Your Role</option>
                 <option value="principal">Principal</option>
@@ -445,8 +578,40 @@ const SignUp = ({ onSignUp }) => {
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ delay: 0.65 }}
+              style={{ borderColor: errors.password ? '#ff6b6b' : 'transparent' }}
             />
+            {errors.password && <ErrorMessage>{errors.password}</ErrorMessage>}
           </InputGroup>
+
+          {showPasswordRequirements && (
+            <PasswordRequirements
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <h4><FaInfoCircle /> Password Requirements</h4>
+              <ul>
+                <li className={validationStates.length ? 'valid' : 'invalid'}>
+                  At least 8 characters
+                </li>
+                <li className={validationStates.upperCase ? 'valid' : 'invalid'}>
+                  At least one uppercase letter
+                </li>
+                <li className={validationStates.lowerCase ? 'valid' : 'invalid'}>
+                  At least one lowercase letter
+                </li>
+                <li className={validationStates.number ? 'valid' : 'invalid'}>
+                  At least one number
+                </li>
+                <li className={validationStates.special ? 'valid' : 'invalid'}>
+                  At least one special character (!@#$%^&*)
+                </li>
+                <li className={validationStates.match ? 'valid' : 'invalid'}>
+                  Passwords must match
+                </li>
+              </ul>
+            </PasswordRequirements>
+          )}
 
           <InputGroup>
             <IconWrapper>
@@ -462,7 +627,9 @@ const SignUp = ({ onSignUp }) => {
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ delay: 0.7 }}
+              style={{ borderColor: errors.confirmPassword ? '#ff6b6b' : 'transparent' }}
             />
+            {errors.confirmPassword && <ErrorMessage>{errors.confirmPassword}</ErrorMessage>}
           </InputGroup>
 
           {error && (
@@ -485,6 +652,10 @@ const SignUp = ({ onSignUp }) => {
           >
             {isLoading ? "Creating Account..." : "Create Account"}
           </Button>
+          
+          <div style={{ fontSize: '0.8rem', textAlign: 'center', marginTop: '0.8rem', color: '#a0a0a0' }}>
+            By creating an account, you agree to our Terms of Service and Privacy Policy
+          </div>
 
           <LoginPrompt
             initial={{ opacity: 0 }}

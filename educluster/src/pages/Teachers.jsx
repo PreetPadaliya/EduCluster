@@ -588,7 +588,7 @@ const ModalContent = styled(motion.div)`
 const teachersData = [
     {
         id: 1,
-        name: "Dr. Sarah Johnson",
+        name: "Mr.Alok Patel",
         specialization: "Mathematics",
         email: "sarah.johnson@example.com",
         phone: "+1-555-123-4567",
@@ -606,7 +606,7 @@ const teachersData = [
     },
     {
         id: 2,
-        name: "Prof. Michael Chen",
+        name: "Prof. Bhautik Panchal",
         specialization: "Physics",
         email: "michael.chen@example.com",
         phone: "+1-555-987-6543",
@@ -623,7 +623,7 @@ const teachersData = [
     },
     {
         id: 3,
-        name: "Emma Rodriguez",
+        name: "Madhuri Dixitx",
         specialization: "Language Arts",
         email: "emma.rodriguez@example.com",
         phone: "+1-555-456-7890",

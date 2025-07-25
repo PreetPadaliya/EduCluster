@@ -17,13 +17,13 @@ import {
   FaSignOutAlt
 } from "react-icons/fa";
 
-// Import pages
 import Schedule from "./Schedule";
 import Course from "./Course";
 import Assignment from "./Assignment";
 import Teachers from "./Teachers";
 import Classmates from "./Classmates";
 import Grades from "./Grades";
+import Reports from "./Reports";
 
 // Global styles to ensure proper viewport fitting
 const GlobalStyles = createGlobalStyle`
@@ -625,6 +625,7 @@ const Home = ({ user, onLogout }) => {
             <Route path="/teachers" element={<Teachers />} />
             <Route path="/classmates" element={<Classmates />} />
             <Route path="/grades" element={<Grades />} />
+            <Route path="/reports" element={<Reports />} />
             <Route path="*" element={
               <>
                 <WelcomeCard

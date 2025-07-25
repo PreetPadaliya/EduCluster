@@ -34,9 +34,18 @@ function App() {
   };
 
   const handleSignUp = (userData) => {
-
-    console.log("User signed up:", userData);
-    setUser(userData);
+    // Create a new user object with the signup data
+    const newUser = {
+      username: userData.firstName + ' ' + userData.lastName,
+      role: userData.role,
+      email: userData.email,
+      id: userData.id,
+      // Add any additional user properties you want to track
+    };
+    
+    console.log("User signed up:", newUser);
+    // Set the user state to log them in
+    setUser(newUser);
   };
 
   const handleLogout = () => {
