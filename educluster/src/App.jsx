@@ -39,16 +39,14 @@ function App() {
       username: userData.firstName + ' ' + userData.lastName,
       role: userData.role,
       email: userData.email,
-      id: userData.id,
+      enrollmentNo: userData.id,
       // Add any additional user properties you want to track
     };
-    
+
     console.log("User signed up:", newUser);
     // Set the user state to log them in
     setUser(newUser);
-  };
-
-  const handleLogout = () => {
+  }; const handleLogout = () => {
     setUser(null);
   };
 

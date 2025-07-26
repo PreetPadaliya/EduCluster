@@ -37,7 +37,7 @@ const InputGroup = styled.div`
   position: relative;
   margin-bottom: 1.5rem;
   width: 100%;
-`; 
+`;
 
 const ErrorMessage = styled.div`
   color: #ff6b6b;
@@ -288,7 +288,7 @@ const Login = ({ onLogin }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     // If account is locked, prevent login
     if (isLocked) {
       return;
@@ -297,12 +297,12 @@ const Login = ({ onLogin }) => {
     // Validate inputs
     const usernameError = validateUsername(username);
     const passwordError = validatePassword(password);
-    
+
     const newErrors = {
       username: usernameError,
       password: passwordError
     };
-    
+
     setErrors(newErrors);
 
     // If no errors, proceed with login
@@ -313,7 +313,7 @@ const Login = ({ onLogin }) => {
       setTimeout(() => {
         // Simulate failed login for demo purposes (70% success rate)
         const loginSuccess = Math.random() > 0.3;
-        
+
         if (loginSuccess) {
           // Reset login attempts on successful login
           setLoginAttempts(0);
@@ -322,7 +322,7 @@ const Login = ({ onLogin }) => {
           // Increment login attempts
           const newAttempts = loginAttempts + 1;
           setLoginAttempts(newAttempts);
-          
+
           // Lock account after 5 failed attempts
           if (newAttempts >= 5) {
             setIsLocked(true);
@@ -330,7 +330,7 @@ const Login = ({ onLogin }) => {
               ...newErrors,
               general: "Account locked due to multiple failed attempts. Please try again after 30 minutes."
             });
-            
+
             // Unlock account after 30 minutes (in a real app, this would be handled by backend)
             setTimeout(() => {
               setIsLocked(false);
@@ -343,7 +343,7 @@ const Login = ({ onLogin }) => {
             });
           }
         }
-        
+
         setIsLoading(false);
       }, 1500);
     }
@@ -378,7 +378,7 @@ const Login = ({ onLogin }) => {
               onChange={(e) => {
                 setUsername(e.target.value);
                 if (errors.username) {
-                  setErrors({...errors, username: ''});
+                  setErrors({ ...errors, username: '' });
                 }
               }}
               required
@@ -401,7 +401,7 @@ const Login = ({ onLogin }) => {
               onChange={(e) => {
                 setPassword(e.target.value);
                 if (errors.password) {
-                  setErrors({...errors, password: ''});
+                  setErrors({ ...errors, password: '' });
                 }
               }}
               required
@@ -458,7 +458,7 @@ const Login = ({ onLogin }) => {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
             disabled={isLoading || isLocked}
-            style={{ 
+            style={{
               opacity: isLocked ? 0.6 : 1,
               cursor: isLocked ? 'not-allowed' : 'pointer',
               background: isLocked ? 'linear-gradient(135deg, #888, #666)' : undefined
@@ -466,7 +466,7 @@ const Login = ({ onLogin }) => {
           >
             {isLoading ? 'Signing In...' : isLocked ? 'Account Locked' : 'Sign In'}
           </Button>
-          
+
           <div style={{ fontSize: '0.8rem', textAlign: 'center', marginTop: '0.8rem', color: '#a0a0a0' }}>
             By signing in, you agree to our Terms of Service and Privacy Policy
           </div>
@@ -489,15 +489,15 @@ const Login = ({ onLogin }) => {
           transition={{ delay: 0.7 }}
         >
           New to EduCluster?
-          <Link 
-            to="/signup" 
-            style={{ 
-              color: '#A076F9', 
-              textDecoration: 'none', 
-              fontWeight: 600, 
-              marginLeft: '0.5rem', 
-              position: 'relative', 
-              display: 'inline-block' 
+          <Link
+            to="/signup"
+            style={{
+              color: '#A076F9',
+              textDecoration: 'none',
+              fontWeight: 600,
+              marginLeft: '0.5rem',
+              position: 'relative',
+              display: 'inline-block'
             }}
             whileHover={{ scale: 1.05 }}
             as={motion.a}

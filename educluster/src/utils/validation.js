@@ -65,14 +65,14 @@ export const validatePhone = (value) => {
   return "";
 };
 
-// Student/Faculty ID validation
+// Student/Faculty Enrollment No. validation
 export const validateId = (value) => {
   if (!value) {
-    return "ID is required";
+    return "Enrollment No. is required";
   }
   
   if (value.length < 5) {
-    return "ID must be at least 5 characters long";
+    return "Enrollment No. must be at least 5 characters long";
   }
   
   return "";

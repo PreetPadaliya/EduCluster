@@ -318,7 +318,7 @@ const SignUp = ({ onSignUp }) => {
       document.body.style.overflow = 'auto';
     };
   }, []);
-  
+
   // Password validation effect
   useEffect(() => {
     if (formData.password) {
@@ -346,24 +346,24 @@ const SignUp = ({ onSignUp }) => {
       ...formData,
       [name]: value,
     });
-    
+
     // Clear field-specific error when user starts typing again
     if (errors[name]) {
-      setErrors({...errors, [name]: ''});
+      setErrors({ ...errors, [name]: '' });
     }
-    
+
     // Clear general error
     if (error) setError("");
-    
+
     // Show password requirements when user focuses on password field
     if (name === "password") {
       setShowPasswordRequirements(true);
     }
   };
-  
+
   const validateForm = () => {
     const newErrors = {};
-    
+
     // Validate each field
     newErrors.firstName = validateName(formData.firstName);
     newErrors.lastName = validateName(formData.lastName);
@@ -372,16 +372,16 @@ const SignUp = ({ onSignUp }) => {
     newErrors.id = validateId(formData.id);
     newErrors.password = validatePassword(formData.password);
     newErrors.confirmPassword = validateConfirmPassword(formData.password, formData.confirmPassword);
-    
+
     setErrors(newErrors);
-    
+
     // Check if there are any errors
     return !Object.values(newErrors).some(error => error);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       // If validation fails, scroll to first error
       const firstErrorField = Object.keys(errors).find(key => errors[key]);
@@ -492,7 +492,9 @@ const SignUp = ({ onSignUp }) => {
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ delay: 0.4 }}
+              style={{ borderColor: errors.email ? '#ff6b6b' : 'transparent' }}
             />
+            {errors.email && <ErrorMessage>{errors.email}</ErrorMessage>}
           </InputGroup>
 
           <InputGroup>
@@ -505,10 +507,13 @@ const SignUp = ({ onSignUp }) => {
               name="phone"
               value={formData.phone}
               onChange={handleChange}
+              required
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ delay: 0.45 }}
+              style={{ borderColor: errors.phone ? '#ff6b6b' : 'transparent' }}
             />
+            {errors.phone && <ErrorMessage>{errors.phone}</ErrorMessage>}
           </InputGroup>
 
           <InputGroup>
@@ -517,7 +522,7 @@ const SignUp = ({ onSignUp }) => {
             </IconWrapper>
             <Input
               type="text"
-              placeholder="ID"
+              placeholder="Enrollment No."
               name="id"
               value={formData.id}
               onChange={handleChange}
@@ -544,9 +549,9 @@ const SignUp = ({ onSignUp }) => {
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ delay: 0.55 }}
                 whileFocus={{ scale: 1.01 }}
-                style={{ 
+                style={{
                   color: roleColors[formData.role],
-                  borderColor: errors.role ? '#ff6b6b' : 'transparent' 
+                  borderColor: errors.role ? '#ff6b6b' : 'transparent'
                 }}
               >
                 <option value="" disabled>Select Your Role</option>
@@ -652,7 +657,7 @@ const SignUp = ({ onSignUp }) => {
           >
             {isLoading ? "Creating Account..." : "Create Account"}
           </Button>
-          
+
           <div style={{ fontSize: '0.8rem', textAlign: 'center', marginTop: '0.8rem', color: '#a0a0a0' }}>
             By creating an account, you agree to our Terms of Service and Privacy Policy
           </div>
