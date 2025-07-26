@@ -522,7 +522,7 @@ const SignUp = ({ onSignUp }) => {
             </IconWrapper>
             <Input
               type="text"
-              placeholder="Enrollment No."
+              placeholder="ID No."
               name="id"
               value={formData.id}
               onChange={handleChange}

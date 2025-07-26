@@ -2,15 +2,15 @@
  * Validation utilities for EduCluster forms
  */
 
-// Username validation
+// Enrollment No. validation (formerly username validation)
 export const validateUsername = (value) => {
-  // Check if username is at least 5 characters long
+  // Check if enrollment number is at least 5 characters long
   if (!value || value.length < 5) {
-    return "Username must be at least 5 characters long";
+    return "Enrollment No. must be at least 5 characters long";
   }
-  // Check if username contains only alphanumeric characters and allowed symbols
+  // Check if enrollment number contains only alphanumeric characters and allowed symbols
   if (!/^[a-zA-Z0-9._@-]+$/.test(value)) {
-    return "Username can only contain letters, numbers, and ._@-";
+    return "Enrollment No. can only contain letters, numbers, and ._@-";
   }
   return "";
 };

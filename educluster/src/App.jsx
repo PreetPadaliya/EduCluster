@@ -7,6 +7,7 @@ import SignUp from './pages/SignUp';
 import Home from './pages/Home';
 import Schedule from './pages/Schedule';
 import AnimatedBackground from './components/AnimatedBackground';
+import TestComponent from './TestComponent';
 import './App.css';
 
 const AppContainer = styled.div`
@@ -29,8 +30,20 @@ const Logo = styled(motion.h1)`
 function App() {
   const [user, setUser] = useState(null);
 
+  // Add a debug log to see the current state
+  console.log("App render - Current user:", user);
+
   const handleLogin = (userData) => {
-    setUser(userData);
+    // Create a consistent user object from login data
+    const loginUser = {
+      enrollmentNo: userData.enrollmentNo,
+      role: userData.role,
+      username: userData.enrollmentNo, // Use enrollment number as display name for login
+      // For login, we only have enrollment number and role
+      // Additional user data would typically come from the server
+    };
+    console.log("User logged in:", loginUser);
+    setUser(loginUser);
   };
 
   const handleSignUp = (userData) => {
@@ -40,28 +53,39 @@ function App() {
       role: userData.role,
       email: userData.email,
       enrollmentNo: userData.id,
+      firstName: userData.firstName,
+      lastName: userData.lastName,
       // Add any additional user properties you want to track
     };
 
     console.log("User signed up:", newUser);
     // Set the user state to log them in
     setUser(newUser);
-  }; const handleLogout = () => {
+  };
+
+  const handleLogout = () => {
+    console.log("User logged out");
     setUser(null);
   };
 
   return (
     <Router>
       {user ? (
-        <Routes>
-          <Route path="/*" element={<Home user={user} onLogout={handleLogout} />} />
-        </Routes>
+        <div>
+          <p style={{ color: 'white', padding: '10px', backgroundColor: 'green' }}>
+            User logged in: {user.username || user.enrollmentNo} ({user.role})
+          </p>
+          <Routes>
+            <Route path="/*" element={<Home user={user} onLogout={handleLogout} />} />
+          </Routes>
+        </div>
       ) : (
         <AppContainer>
           <AnimatedBackground />
           <Routes>
             <Route path="/login" element={<Login onLogin={handleLogin} />} />
             <Route path="/signup" element={<SignUp onSignUp={handleSignUp} />} />
+            <Route path="/test" element={<TestComponent />} />
             <Route path="/*" element={<Navigate to="/login" replace />} />
           </Routes>
         </AppContainer>

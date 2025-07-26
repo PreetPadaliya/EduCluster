@@ -7,8 +7,23 @@ import { validateUsername, validatePassword } from '../utils/validation';
 
 const LoginContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-directio            <Input
+              type="text"
+              placeholder="Enrollment No."
+              value={enrollmentNo}
+              onChange={(e) => {
+                setEnrollmentNo(e.target.value);
+                if (errors.enrollmentNo) {
+                  setErrors({...errors, enrollmentNo: ''});
+                }
+              }}
+              required
+              initial={{ x: -20, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ delay: 0.3 }}
+              style={{ borderColor: errors.enrollmentNo ? '#ff6b6b' : 'transparent' }}
+            />
+            {errors.enrollmentNo && <ErrorMessage>{errors.enrollmentNo}</ErrorMessage>}gn-items: center;
   justify-content: center;
   height: 100%;
   width: 100%;
@@ -268,7 +283,7 @@ const SelectArrow = styled(motion.div)`
 `;
 
 const Login = ({ onLogin }) => {
-  const [username, setUsername] = useState('');
+  const [enrollmentNo, setEnrollmentNo] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('student');
   const [isLoading, setIsLoading] = useState(false);
@@ -295,18 +310,18 @@ const Login = ({ onLogin }) => {
     }
 
     // Validate inputs
-    const usernameError = validateUsername(username);
+    const enrollmentNoError = validateUsername(enrollmentNo);
     const passwordError = validatePassword(password);
 
     const newErrors = {
-      username: usernameError,
+      enrollmentNo: enrollmentNoError,
       password: passwordError
     };
 
     setErrors(newErrors);
 
     // If no errors, proceed with login
-    if (!usernameError && !passwordError) {
+    if (!enrollmentNoError && !passwordError) {
       setIsLoading(true);
 
       // Mock authentication - in a real app this would call an API
@@ -317,7 +332,7 @@ const Login = ({ onLogin }) => {
         if (loginSuccess) {
           // Reset login attempts on successful login
           setLoginAttempts(0);
-          onLogin({ username, role });
+          onLogin({ enrollmentNo, role });
         } else {
           // Increment login attempts
           const newAttempts = loginAttempts + 1;
@@ -339,7 +354,7 @@ const Login = ({ onLogin }) => {
           } else {
             setErrors({
               ...newErrors,
-              general: `Invalid username or password. ${5 - newAttempts} attempts remaining.`
+              general: `Invalid enrollment number or password. ${5 - newAttempts} attempts remaining.`
             });
           }
         }
@@ -373,21 +388,21 @@ const Login = ({ onLogin }) => {
             </IconWrapper>
             <Input
               type="text"
-              placeholder="Username or Email"
-              value={username}
+              placeholder="ID No. or Email"
+              value={enrollmentNo}
               onChange={(e) => {
-                setUsername(e.target.value);
-                if (errors.username) {
-                  setErrors({ ...errors, username: '' });
+                setEnrollmentNo(e.target.value);
+                if (errors.enrollmentNo) {
+                  setErrors({ ...errors, enrollmentNo: '' });
                 }
               }}
               required
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ delay: 0.3 }}
-              style={{ borderColor: errors.username ? '#ff6b6b' : 'transparent' }}
+              style={{ borderColor: errors.enrollmentNo ? '#ff6b6b' : 'transparent' }}
             />
-            {errors.username && <ErrorMessage>{errors.username}</ErrorMessage>}
+            {errors.enrollmentNo && <ErrorMessage>{errors.enrollmentNo}</ErrorMessage>}
           </InputGroup>
 
           <InputGroup>
@@ -423,7 +438,7 @@ const Login = ({ onLogin }) => {
                 onChange={(e) => {
                   setRole(e.target.value);
                   // Reset errors when changing role
-                  if (errors.username || errors.password) {
+                  if (errors.enrollmentNo || errors.password) {
                     setErrors({});
                   }
                 }}
