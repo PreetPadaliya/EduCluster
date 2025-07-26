@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled, { createGlobalStyle } from "styled-components";
 import { motion } from "framer-motion";
 import { FaUser, FaLock, FaEnvelope, FaUserTag, FaIdCard, FaPhone, FaInfoCircle, FaExclamationTriangle } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { validateUsername, validatePassword, validateEmail, validatePhone, validateId, validateConfirmPassword, validateName } from "../utils/validation";
 
 const GlobalStyles = createGlobalStyle`
@@ -288,6 +288,7 @@ const PasswordRequirements = styled(motion.div)`
 `;
 
 const SignUp = ({ onSignUp }) => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -401,6 +402,10 @@ const SignUp = ({ onSignUp }) => {
         if (onSignUp) {
           onSignUp(formData);
           console.log("User registered successfully:", formData);
+
+          // No need to store in localStorage or redirect to login
+          // The onSignUp function will handle the automatic login
+          // and the App component will automatically show the main interface
         } else {
           throw new Error("onSignUp function is not available");
         }
@@ -655,7 +660,7 @@ const SignUp = ({ onSignUp }) => {
             transition={{ delay: 0.75 }}
             disabled={isLoading}
           >
-            {isLoading ? "Creating Account..." : "Create Account"}
+            {isLoading ? "Creating Account & Logging In..." : "Create Account & Login"}
           </Button>
 
           <div style={{ fontSize: '0.8rem', textAlign: 'center', marginTop: '0.8rem', color: '#a0a0a0' }}>

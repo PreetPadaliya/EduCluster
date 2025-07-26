@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { FaUser, FaLock, FaUserTag } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { validateUsername, validatePassword } from '../utils/validation';
 
 const LoginContainer = styled.div`
@@ -76,6 +76,12 @@ const GeneralError = styled(ErrorMessage)`
   border-radius: 4px;
   text-align: center;
   font-weight: 500;
+`;
+
+const SuccessMessage = styled(GeneralError)`
+  background-color: rgba(102, 187, 106, 0.1);
+  border-left: 3px solid #66BB6A;
+  color: #66BB6A;
 `;
 
 const Input = styled(motion.input)`
@@ -283,6 +289,7 @@ const SelectArrow = styled(motion.div)`
 `;
 
 const Login = ({ onLogin }) => {
+  const location = useLocation();
   const [enrollmentNo, setEnrollmentNo] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('student');
@@ -290,6 +297,19 @@ const Login = ({ onLogin }) => {
   const [errors, setErrors] = useState({});
   const [loginAttempts, setLoginAttempts] = useState(0);
   const [isLocked, setIsLocked] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+
+  // Check for signup success message and pre-fill the enrollment number
+  useEffect(() => {
+    if (location.state?.message) {
+      setSuccessMessage(location.state.message);
+      if (location.state?.newUserId) {
+        setEnrollmentNo(location.state.newUserId);
+      }
+      // Clear the message after 5 seconds
+      setTimeout(() => setSuccessMessage(''), 5000);
+    }
+  }, [location]);
 
   const roleColors = {
     principal: '#A076F9',
@@ -326,8 +346,22 @@ const Login = ({ onLogin }) => {
 
       // Mock authentication - in a real app this would call an API
       setTimeout(() => {
-        // Simulate failed login for demo purposes (70% success rate)
-        const loginSuccess = Math.random() > 0.3;
+        // Check if this matches the newly created user
+        const newUser = JSON.parse(localStorage.getItem('newUser') || '{}');
+        let loginSuccess = false;
+
+        // Check against newly created user first
+        if (newUser.id &&
+          (enrollmentNo === newUser.id || enrollmentNo === newUser.email) &&
+          password === newUser.password &&
+          role === newUser.role) {
+          loginSuccess = true;
+          // Clear the stored user data after successful login
+          localStorage.removeItem('newUser');
+        } else {
+          // Fall back to demo login logic (70% success rate for demo purposes)
+          loginSuccess = Math.random() > 0.3;
+        }
 
         if (loginSuccess) {
           // Reset login attempts on successful login
@@ -354,7 +388,7 @@ const Login = ({ onLogin }) => {
           } else {
             setErrors({
               ...newErrors,
-              general: `Invalid enrollment number or password. ${5 - newAttempts} attempts remaining.`
+              general: `Invalid ID number/email or password. ${5 - newAttempts} attempts remaining.`
             });
           }
         }
@@ -380,6 +414,7 @@ const Login = ({ onLogin }) => {
         </LoginTitle>
 
         <form onSubmit={handleSubmit}>
+          {successMessage && <SuccessMessage>{successMessage}</SuccessMessage>}
           {errors.general && <GeneralError>{errors.general}</GeneralError>}
 
           <InputGroup>
