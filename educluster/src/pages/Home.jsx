@@ -24,6 +24,7 @@ import Teachers from "./Teachers";
 import Classmates from "./Classmates";
 import Grades from "./Grades";
 import Reports from "./Reports";
+import BackButton from "../components/Backbutton";
 
 // Global styles to ensure proper viewport fitting
 const GlobalStyles = createGlobalStyle`
@@ -253,18 +254,23 @@ const WelcomeCard = styled(motion.div)`
   background: linear-gradient(135deg, rgba(126, 87, 194, 0.2), rgba(160, 118, 249, 0.1));
   backdrop-filter: blur(10px);
   border-radius: 16px;
-  padding: 2.5rem;
+  padding: 3.5rem 2rem;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   border: 1px solid rgba(160, 118, 249, 0.2);
   position: relative;
   overflow: hidden;
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
   width: calc(100% - 2rem);
-  min-height: 200px;
+  min-height: 240px;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  
+  @media (max-width: 768px) {
+    padding: 2.5rem 1.5rem;
+    min-height: 200px;
+  }
   
   &::before {
     content: '';
@@ -281,7 +287,7 @@ const WelcomeCard = styled(motion.div)`
   }
   
   h1 {
-    font-size: 2rem;
+    font-size: 1.8rem;
     font-weight: 700;
     background: linear-gradient(135deg, #e0e0e0, #ffffff);
     -webkit-background-clip: text;
@@ -291,17 +297,33 @@ const WelcomeCard = styled(motion.div)`
     position: relative;
     z-index: 1;
     padding: 0;
+    line-height: 1.2;
+    
+    @media (max-width: 768px) {
+      font-size: 1.5rem;
+    }
   }
   
   p {
-    color: #a0a0a0;
-    max-width: 80%;
-    line-height: 1.6;
-    font-size: 1.05rem;
+    color: #b0b0b0;
+    max-width: 90%;
+    line-height: 1.5;
+    font-size: 0.95rem;
     position: relative;
     z-index: 1;
     padding: 0;
     margin-bottom: 0.5rem;
+    
+    @media (max-width: 768px) {
+      max-width: 100%;
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+    
+    strong {
+      color: #e0e0e0;
+      font-weight: 600;
+    }
   }
 `;
 
@@ -401,24 +423,24 @@ const CardHeader = styled.div`
 
 const ButtonWrapper = styled.div`
   display: flex;
-  margin-top: 1.5rem;
-  gap: 1rem;
+  margin-top: 1.2rem;
+  gap: 0.8rem;
   position: relative;
   z-index: 1;
 `;
 
 const Button = styled(motion.button)`
-  padding: 0.8rem 1.5rem;
+  padding: 0.6rem 1.2rem;
   background: ${props => props.primary ? 'linear-gradient(135deg, #A076F9, #7E57C2)' : 'rgba(30, 30, 35, 0.5)'};
   color: ${props => props.primary ? 'white' : '#d0d0d0'};
   border: ${props => props.primary ? 'none' : '1px solid rgba(160, 118, 249, 0.3)'};
   border-radius: 50px;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 0.85rem;
   font-weight: ${props => props.primary ? '600' : '400'};
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.5rem;
   box-shadow: ${props => props.primary ? '0 4px 15px rgba(126, 87, 194, 0.3)' : 'none'};
   transition: all 0.3s ease;
   
@@ -516,10 +538,21 @@ const ScrollToTop = () => {
 const Home = ({ user, onLogout }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const currentPath = location.pathname === '/' ? '/courses' : location.pathname;
-  const activeItem = sidebarItems.find(item => item.path === currentPath)?.label || "Courses";
+  // Don't default to courses - only set active if explicitly on a specific path
+  const currentPath = location.pathname;
+  const activeItem = currentPath !== '/' ? sidebarItems.find(item => item.path === currentPath)?.label : null;
 
   const [activeTab, setActiveTab] = useState(activeItem);
+  const [currentDateTime, setCurrentDateTime] = useState(new Date());
+
+  // Update time every minute
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentDateTime(new Date());
+    }, 60000); // Update every minute
+
+    return () => clearInterval(timer);
+  }, []);
 
   // Get user's display name - prefer firstName + lastName, fallback to username, then to "User"
   const userDisplayName = user?.firstName && user?.lastName
@@ -536,10 +569,35 @@ const Home = ({ user, onLogout }) => {
   const role = user?.role || "Student";
   const [showUserMenu, setShowUserMenu] = useState(false);
 
+  // Format current date and time
+  const formatDateTime = (date) => {
+    const timeOptions = {
+      hour: '2-digit',
+      minute: '2-digit',
+      timeZone: 'Asia/Kolkata',
+      hour12: true
+    };
+    const dateOptions = {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      timeZone: 'Asia/Kolkata'
+    };
+
+    const time = date.toLocaleTimeString('en-IN', timeOptions);
+    const dateString = date.toLocaleDateString('en-IN', dateOptions);
+
+    return { time: `${time} IST`, date: dateString };
+  };
+
+  const { time, date } = formatDateTime(currentDateTime);
+
   return (
     <HomeContainer>
       <GlobalStyles />
       <ScrollToTop />
+      <BackButton />
       <Header>
         <Logo
           initial={{ opacity: 0, x: -20 }}
@@ -647,16 +705,21 @@ const Home = ({ user, onLogout }) => {
                 >
                   <div style={{ position: 'relative', zIndex: 1 }}>
                     <h1>Welcome back, {userDisplayName}!</h1>
-                    <p style={{ color: '#b0b0b0', marginBottom: '1rem' }}>
-                      It's <strong>11:32 AM IST</strong> on <strong>Thursday, July 24, 2025</strong>. You're logged in as{' '}
+                    <p style={{ marginBottom: '1rem' }}>
+                      It's <strong>{time}</strong> on <strong>{date}</strong>.
+                    </p>
+                    <p style={{ marginBottom: '1.2rem' }}>
+                      You're logged in as{' '}
                       <span style={{
                         color: '#A076F9',
                         fontWeight: 'bold',
                         textTransform: 'capitalize',
-                        background: 'rgba(160, 118, 249, 0.1)',
-                        padding: '4px 10px',
+                        background: 'rgba(160, 118, 249, 0.15)',
+                        padding: '4px 8px',
                         borderRadius: '6px',
-                      }}>{role}</span>. Explore your educational resources, track assignments, connect with teachers and classmates, and manage your academic journey from this dashboard.
+                        border: '1px solid rgba(160, 118, 249, 0.3)',
+                        fontSize: '0.9rem',
+                      }}>{role}</span>. Explore your educational resources, track assignments, connect with teachers and classmates, and manage your academic journey from this comprehensive dashboard.
                     </p>
                     <ButtonWrapper>
                       <Button
@@ -664,13 +727,13 @@ const Home = ({ user, onLogout }) => {
                         whileHover={{ scale: 1.03 }}
                         whileTap={{ scale: 0.97 }}
                       >
-                        <FaChartBar style={{ fontSize: '1.1rem' }} /> View Dashboard
+                        <FaChartBar style={{ fontSize: '0.9rem' }} /> View Dashboard
                       </Button>
                       <Button
                         whileHover={{ scale: 1.03 }}
                         whileTap={{ scale: 0.97 }}
                       >
-                        <FaUser style={{ fontSize: '1.1rem' }} /> My Profile
+                        <FaUser style={{ fontSize: '0.9rem' }} /> My Profile
                       </Button>
                     </ButtonWrapper>
                   </div>

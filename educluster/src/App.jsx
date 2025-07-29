@@ -34,13 +34,15 @@ function App() {
   console.log("App render - Current user:", user);
 
   const handleLogin = (userData) => {
-    // Create a consistent user object from login data
+    // Use the complete user data passed from Login component
     const loginUser = {
       enrollmentNo: userData.enrollmentNo,
       role: userData.role,
-      username: userData.enrollmentNo, // Use enrollment number as display name for login
-      // For login, we only have enrollment number and role
-      // Additional user data would typically come from the server
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      email: userData.email,
+      phone: userData.phone,
+      username: userData.username // This is the full name from Login component
     };
     console.log("User logged in:", loginUser);
     setUser(loginUser);
