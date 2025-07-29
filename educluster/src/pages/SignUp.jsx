@@ -403,7 +403,18 @@ const SignUp = ({ onSignUp }) => {
           onSignUp(formData);
           console.log("User registered successfully:", formData);
 
-          // No need to store in localStorage or redirect to login
+          // Store the newly created user data in localStorage for login verification
+          const newUser = {
+            id: formData.id,
+            email: formData.email,
+            password: formData.password,
+            role: formData.role,
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            phone: formData.phone
+          };
+          localStorage.setItem('newUser', JSON.stringify(newUser));
+
           // The onSignUp function will handle the automatic login
           // and the App component will automatically show the main interface
         } else {

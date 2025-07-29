@@ -520,7 +520,19 @@ const Home = ({ user, onLogout }) => {
   const activeItem = sidebarItems.find(item => item.path === currentPath)?.label || "Courses";
 
   const [activeTab, setActiveTab] = useState(activeItem);
-  const userInitial = user?.username ? user.username.charAt(0).toUpperCase() : "U";
+
+  // Get user's display name - prefer firstName + lastName, fallback to username, then to "User"
+  const userDisplayName = user?.firstName && user?.lastName
+    ? `${user.firstName} ${user.lastName}`
+    : user?.username || "User";
+
+  // Get first letter for avatar - use firstName if available, otherwise username or "U"
+  const userInitial = user?.firstName
+    ? user.firstName.charAt(0).toUpperCase()
+    : user?.username
+      ? user.username.charAt(0).toUpperCase()
+      : "U";
+
   const role = user?.role || "Student";
   const [showUserMenu, setShowUserMenu] = useState(false);
 
@@ -634,7 +646,7 @@ const Home = ({ user, onLogout }) => {
                   transition={{ duration: 0.5 }}
                 >
                   <div style={{ position: 'relative', zIndex: 1 }}>
-                    <h1>Welcome back, {user?.username || "User"}!</h1>
+                    <h1>Welcome back, {userDisplayName}!</h1>
                     <p style={{ color: '#b0b0b0', marginBottom: '1rem' }}>
                       It's <strong>11:32 AM IST</strong> on <strong>Thursday, July 24, 2025</strong>. You're logged in as{' '}
                       <span style={{

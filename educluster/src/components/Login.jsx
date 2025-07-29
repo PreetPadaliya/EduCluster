@@ -1,97 +1,91 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 import { motion } from 'framer-motion';
 import { FaUser, FaLock, FaUserTag } from 'react-icons/fa';
 import { Link, useLocation } from 'react-router-dom';
 import { validateUsername, validatePassword } from '../utils/validation';
 
+const GlobalStyles = createGlobalStyle`
+  html, body, #root {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+`;
+
 const LoginContainer = styled.div`
   display: flex;
-  flex-directio            <Input
-              type="text"
-              placeholder="Enrollment No."
-              value={enrollmentNo}
-              onChange={(e) => {
-                setEnrollmentNo(e.target.value);
-                if (errors.enrollmentNo) {
-                  setErrors({...errors, enrollmentNo: ''});
-                }
-              }}
-              required
-              initial={{ x: -20, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ delay: 0.3 }}
-              style={{ borderColor: errors.enrollmentNo ? '#ff6b6b' : 'transparent' }}
-            />
-            {errors.enrollmentNo && <ErrorMessage>{errors.enrollmentNo}</ErrorMessage>}gn-items: center;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  height: 100%;
+  min-height: 100vh;
   width: 100%;
-  max-width: 450px;
+  max-width: 550px;
   margin: 0 auto;
+  padding: 1rem 0;
+  box-sizing: border-box;
 `;
 
 const LoginBox = styled(motion.div)`
   background: rgba(18, 18, 20, 0.85);
   backdrop-filter: blur(10px);
   border-radius: 20px;
-  padding: 3rem;
+  padding: 2rem;
   width: 100%;
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(50, 50, 60, 0.4);
+  
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 `;
 
 const LoginTitle = styled(motion.h2)`
   color: #e0e0e0;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   text-align: center;
-  font-size: 1.8rem;
+  font-size: 1.5rem;
+`;
+
+const WelcomeTitle = styled(motion.h1)`
+  color: #e0e0e0;
+  margin-bottom: 0.5rem;
+  text-align: center;
+  font-size: 2rem;
+  background: linear-gradient(135deg, #A076F9, #7E57C2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+`;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
 `;
 
 const InputGroup = styled.div`
   position: relative;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   width: 100%;
-`;
-
-const ErrorMessage = styled.div`
-  color: #ff6b6b;
-  font-size: 0.8rem;
-  margin-top: 0.5rem;
-  padding-left: 1rem;
-  text-align: left;
-  animation: fadeIn 0.3s ease-in-out;
-  
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-5px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-`;
-
-const GeneralError = styled(ErrorMessage)`
-  background-color: rgba(255, 107, 107, 0.1);
-  border-left: 3px solid #ff6b6b;
-  padding: 0.8rem 1rem;
-  margin: 1rem 0;
-  border-radius: 4px;
-  text-align: center;
-  font-weight: 500;
-`;
-
-const SuccessMessage = styled(GeneralError)`
-  background-color: rgba(102, 187, 106, 0.1);
-  border-left: 3px solid #66BB6A;
-  color: #66BB6A;
 `;
 
 const Input = styled(motion.input)`
   width: 100%;
-  padding: 1rem 1rem 1rem 3rem;
+  padding: 0.8rem 0.8rem 0.8rem 2.8rem;
   border: 2px solid transparent;
   border-radius: 50px;
   background-color: rgba(30, 30, 35, 0.8);
   color: #e0e0e0;
-  font-size: 1rem;
+  font-size: 0.95rem;
   transition: all 0.3s ease;
   outline: none;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
@@ -121,115 +115,8 @@ const IconWrapper = styled.div`
   font-size: 1.2rem;
 `;
 
-const Button = styled(motion.button)`
-  width: 100%;
-  padding: 1rem;
-  border: none;
-  border-radius: 50px;
-  background: linear-gradient(135deg, #A076F9, #7E57C2);
-  color: white;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  margin-top: 1rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-
-  &:hover {
-    box-shadow: 0 6px 12px rgba(160, 118, 249, 0.4);
-    transform: translateY(-2px);
-  }
-  
-  &:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-    transform: translateY(0);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-  }
-  
-  &:before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(
-      to bottom right,
-      rgba(255, 255, 255, 0) 0%,
-      rgba(255, 255, 255, 0.1) 50%,
-      rgba(255, 255, 255, 0) 100%
-    );
-    transform: rotate(45deg);
-    opacity: 0;
-    transition: opacity 0.6s;
-  }
-  
-  &:hover:not(:disabled):before {
-    opacity: 1;
-    animation: shine 1.5s ease-in-out infinite;
-  }
-  
-  @keyframes shine {
-    0% {
-      left: -100%;
-      opacity: 0;
-    }
-    20% {
-      opacity: 0.1;
-    }
-    100% {
-      left: 100%;
-      opacity: 0;
-    }
-  }
-`;
-
-const ForgotPassword = styled(motion.a)`
-  color: #A076F9;
-  text-decoration: none;
-  font-size: 0.9rem;
-  text-align: right;
-  display: block;
-  margin-top: 1.5rem;
-  padding: 0.5rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border-radius: 4px;
-
-  &:hover {
-    color: #c3a3fa;
-    background-color: rgba(160, 118, 249, 0.05);
-  }
-`;
-
-const CreateAccount = styled(motion.div)`
-  margin-top: 2.5rem;
-  text-align: center;
-  font-size: 1rem;
-  color: #a0a0a0;
-
-  a {
-    color: #A076F9;
-    text-decoration: none;
-    font-weight: 600;
-    cursor: pointer;
-    margin-left: 0.5rem;
-    padding-bottom: 2px;
-    border-bottom: 1px dashed transparent;
-    transition: all 0.3s ease;
-
-    &:hover {
-      color: #c3a3fa;
-      border-bottom-color: #c3a3fa;
-    }
-  }
-`;
-
 const SelectGroup = styled(InputGroup)`
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 `;
 
 const SelectWrapper = styled.div`
@@ -239,12 +126,12 @@ const SelectWrapper = styled.div`
 
 const Select = styled(motion.select)`
   width: 100%;
-  padding: 1rem 1rem 1rem 3rem;
+  padding: 0.8rem 0.8rem 0.8rem 2.8rem;
   border: none;
   border-radius: 50px;
   background-color: rgba(30, 30, 35, 0.8);
   color: #e0e0e0;
-  font-size: 1rem;
+  font-size: 0.95rem;
   transition: all 0.3s ease;
   outline: none;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
@@ -256,11 +143,11 @@ const Select = styled(motion.select)`
     box-shadow: 0 4px 12px rgba(160, 118, 249, 0.4);
     background-color: rgba(40, 40, 45, 0.9);
   }
-
+  
   &:hover {
     box-shadow: 0 4px 12px rgba(160, 118, 249, 0.4);
   }
-
+  
   option {
     background-color: #1e1e24;
     color: #e0e0e0;
@@ -288,6 +175,79 @@ const SelectArrow = styled(motion.div)`
   }
 `;
 
+const ErrorMessage = styled(motion.div)`
+  color: #ff6b6b;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+  padding-left: 1rem;
+  text-align: left;
+  animation: fadeIn 0.3s ease-in-out;
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+`;
+
+const GeneralError = styled(ErrorMessage)`
+  background-color: rgba(255, 107, 107, 0.1);
+  border-left: 3px solid #ff6b6b;
+  padding: 0.8rem 1rem;
+  margin: 1rem 0;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: 500;
+`;
+
+const SuccessMessage = styled(GeneralError)`
+  background-color: rgba(102, 187, 106, 0.1);
+  border-left: 3px solid #66BB6A;
+  color: #66BB6A;
+`;
+
+const Button = styled(motion.button)`
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  border-radius: 50px;
+  background: linear-gradient(135deg, #A076F9, #7E57C2);
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 6px 12px rgba(160, 118, 249, 0.4);
+    transform: translateY(-2px);
+  }
+`;
+
+const LoginPrompt = styled(motion.div)`
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 0.95rem;
+  color: #a0a0a0;
+
+  a {
+    color: #A076F9;
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+    margin-left: 0.5rem;
+    padding-bottom: 2px;
+    border-bottom: 1px dashed transparent;
+    transition: all 0.3s ease;
+
+    &:hover {
+      color: #c3a3fa;
+      border-bottom-color: #c3a3fa;
+    }
+  }
+`;
+
 const Login = ({ onLogin }) => {
   const location = useLocation();
   const [enrollmentNo, setEnrollmentNo] = useState('');
@@ -295,8 +255,6 @@ const Login = ({ onLogin }) => {
   const [role, setRole] = useState('student');
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
-  const [loginAttempts, setLoginAttempts] = useState(0);
-  const [isLocked, setIsLocked] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
 
   // Check for signup success message and pre-fill the enrollment number
@@ -324,11 +282,6 @@ const Login = ({ onLogin }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // If account is locked, prevent login
-    if (isLocked) {
-      return;
-    }
-
     // Validate inputs
     const enrollmentNoError = validateUsername(enrollmentNo);
     const passwordError = validatePassword(password);
@@ -349,6 +302,7 @@ const Login = ({ onLogin }) => {
         // Check if this matches the newly created user
         const newUser = JSON.parse(localStorage.getItem('newUser') || '{}');
         let loginSuccess = false;
+        let userDataToPass = null;
 
         // Check against newly created user first
         if (newUser.id &&
@@ -356,41 +310,31 @@ const Login = ({ onLogin }) => {
           password === newUser.password &&
           role === newUser.role) {
           loginSuccess = true;
+          // Pass the complete user data from signup
+          userDataToPass = {
+            enrollmentNo: newUser.id,
+            role: newUser.role,
+            firstName: newUser.firstName,
+            lastName: newUser.lastName,
+            email: newUser.email,
+            phone: newUser.phone,
+            username: `${newUser.firstName} ${newUser.lastName}` // Full name as username
+          };
           // Clear the stored user data after successful login
           localStorage.removeItem('newUser');
         } else {
-          // Fall back to demo login logic (70% success rate for demo purposes)
-          loginSuccess = Math.random() > 0.3;
+          // Only allow login if credentials match exactly - no random success
+          loginSuccess = false;
         }
 
-        if (loginSuccess) {
-          // Reset login attempts on successful login
-          setLoginAttempts(0);
-          onLogin({ enrollmentNo, role });
+        if (loginSuccess && userDataToPass) {
+          onLogin(userDataToPass);
         } else {
-          // Increment login attempts
-          const newAttempts = loginAttempts + 1;
-          setLoginAttempts(newAttempts);
-
-          // Lock account after 5 failed attempts
-          if (newAttempts >= 5) {
-            setIsLocked(true);
-            setErrors({
-              ...newErrors,
-              general: "Account locked due to multiple failed attempts. Please try again after 30 minutes."
-            });
-
-            // Unlock account after 30 minutes (in a real app, this would be handled by backend)
-            setTimeout(() => {
-              setIsLocked(false);
-              setLoginAttempts(0);
-            }, 30 * 60 * 1000); // 30 minutes
-          } else {
-            setErrors({
-              ...newErrors,
-              general: `Invalid ID number/email or password. ${5 - newAttempts} attempts remaining.`
-            });
-          }
+          // Show simple error message without attempts warning
+          setErrors({
+            ...newErrors,
+            general: "Invalid ID number/email, password, or role. Please check your credentials."
+          });
         }
 
         setIsLoading(false);
@@ -400,20 +344,29 @@ const Login = ({ onLogin }) => {
 
   return (
     <LoginContainer>
+      <GlobalStyles />
       <LoginBox
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
+        <WelcomeTitle
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.1 }}
+        >
+          Welcome to EduCluster
+        </WelcomeTitle>
+
         <LoginTitle
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
         >
-          Welcome to EduCluster
+          Sign In to Your Account
         </LoginTitle>
 
-        <form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit}>
           {successMessage && <SuccessMessage>{successMessage}</SuccessMessage>}
           {errors.general && <GeneralError>{errors.general}</GeneralError>}
 
@@ -472,9 +425,9 @@ const Login = ({ onLogin }) => {
                 value={role}
                 onChange={(e) => {
                   setRole(e.target.value);
-                  // Reset errors when changing role
-                  if (errors.enrollmentNo || errors.password) {
-                    setErrors({});
+                  // Clear general error when changing role
+                  if (errors.general) {
+                    setErrors({ ...errors, general: '' });
                   }
                 }}
                 required
@@ -482,8 +435,10 @@ const Login = ({ onLogin }) => {
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ delay: 0.45 }}
                 whileFocus={{ scale: 1.01 }}
-                style={{ color: roleColors[role] || '#A076F9' }}
-                disabled={isLocked}
+                style={{
+                  color: roleColors[role],
+                  borderColor: errors.role ? '#ff6b6b' : 'transparent'
+                }}
               >
                 <option value="" disabled>Select Your Role</option>
                 <option value="principal">Principal</option>
@@ -495,66 +450,36 @@ const Login = ({ onLogin }) => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
-                style={{ borderTopColor: roleColors[role] || '#A076F9' }}
+                style={{ borderTopColor: roleColors[role] }}
               />
             </SelectWrapper>
           </SelectGroup>
 
           <Button
             type="submit"
-            whileHover={{ scale: isLocked ? 1 : 1.03 }}
-            whileTap={{ scale: isLocked ? 1 : 0.98 }}
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.98 }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            disabled={isLoading || isLocked}
-            style={{
-              opacity: isLocked ? 0.6 : 1,
-              cursor: isLocked ? 'not-allowed' : 'pointer',
-              background: isLocked ? 'linear-gradient(135deg, #888, #666)' : undefined
-            }}
+            transition={{ delay: 0.55 }}
+            disabled={isLoading}
           >
-            {isLoading ? 'Signing In...' : isLocked ? 'Account Locked' : 'Sign In'}
+            {isLoading ? 'Signing In...' : 'Sign In'}
           </Button>
 
           <div style={{ fontSize: '0.8rem', textAlign: 'center', marginTop: '0.8rem', color: '#a0a0a0' }}>
             By signing in, you agree to our Terms of Service and Privacy Policy
           </div>
-        </form>
 
-        <ForgotPassword
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.6 }}
-          whileHover={{ scale: 1.02 }}
-          as={Link}
-          to="/forgot-password"
-        >
-          Forgot password?
-        </ForgotPassword>
-
-        <CreateAccount
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.7 }}
-        >
-          New to EduCluster?
-          <Link
-            to="/signup"
-            style={{
-              color: '#A076F9',
-              textDecoration: 'none',
-              fontWeight: 600,
-              marginLeft: '0.5rem',
-              position: 'relative',
-              display: 'inline-block'
-            }}
-            whileHover={{ scale: 1.05 }}
-            as={motion.a}
+          <LoginPrompt
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6 }}
           >
-            Create Account
-          </Link>
-        </CreateAccount>
+            New to EduCluster?
+            <Link to="/signup">Create Account</Link>
+          </LoginPrompt>
+        </Form>
       </LoginBox>
     </LoginContainer>
   );
