@@ -299,18 +299,40 @@ const Login = ({ onLogin }) => {
 
       // Mock authentication - in a real app this would call an API
       setTimeout(() => {
-        // Check if this matches the newly created user
+        // Get all saved users from localStorage
+        const savedUsers = JSON.parse(localStorage.getItem('educluster_users') || '[]');
+
+        // Also check for the temporary new user (for immediate login after signup)
         const newUser = JSON.parse(localStorage.getItem('newUser') || '{}');
+
         let loginSuccess = false;
         let userDataToPass = null;
 
-        // Check against newly created user first
-        if (newUser.id &&
+        // Check against all saved users
+        for (const user of savedUsers) {
+          if ((enrollmentNo === user.id || enrollmentNo === user.email) &&
+            password === user.password &&
+            role === user.role) {
+            loginSuccess = true;
+            userDataToPass = {
+              enrollmentNo: user.id,
+              role: user.role,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              email: user.email,
+              phone: user.phone,
+              username: `${user.firstName} ${user.lastName}`
+            };
+            break;
+          }
+        }
+
+        // If not found in saved users, check the temporary new user
+        if (!loginSuccess && newUser.id &&
           (enrollmentNo === newUser.id || enrollmentNo === newUser.email) &&
           password === newUser.password &&
           role === newUser.role) {
           loginSuccess = true;
-          // Pass the complete user data from signup
           userDataToPass = {
             enrollmentNo: newUser.id,
             role: newUser.role,
@@ -318,13 +340,10 @@ const Login = ({ onLogin }) => {
             lastName: newUser.lastName,
             email: newUser.email,
             phone: newUser.phone,
-            username: `${newUser.firstName} ${newUser.lastName}` // Full name as username
+            username: `${newUser.firstName} ${newUser.lastName}`
           };
-          // Clear the stored user data after successful login
+          // Clear the temporary user data after successful login
           localStorage.removeItem('newUser');
-        } else {
-          // Only allow login if credentials match exactly - no random success
-          loginSuccess = false;
         }
 
         if (loginSuccess && userDataToPass) {

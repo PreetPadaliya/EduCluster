@@ -413,7 +413,23 @@ const SignUp = ({ onSignUp }) => {
             lastName: formData.lastName,
             phone: formData.phone
           };
+
+          // Save for immediate login (temporary)
           localStorage.setItem('newUser', JSON.stringify(newUser));
+
+          // Also save permanently in the users array
+          const savedUsers = JSON.parse(localStorage.getItem('educluster_users') || '[]');
+
+          // Check if user already exists to prevent duplicates
+          const userExists = savedUsers.some(user =>
+            user.id === newUser.id || user.email === newUser.email
+          );
+
+          if (!userExists) {
+            savedUsers.push(newUser);
+            localStorage.setItem('educluster_users', JSON.stringify(savedUsers));
+            console.log("User saved permanently:", newUser);
+          }
 
           // The onSignUp function will handle the automatic login
           // and the App component will automatically show the main interface
