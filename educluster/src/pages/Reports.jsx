@@ -196,59 +196,74 @@ const TabsContainer = styled.div`
   margin-bottom: 1.8rem;
   margin-top: 0.5rem;
   border-bottom: 1px solid rgba(50, 50, 60, 0.4);
-  padding: 0.25rem 0 0.8rem 0;
-  overflow-x: auto;
-  flex-wrap: nowrap;
-  flex: 1;
+  padding: 0.5rem 0 1rem 0;
+  overflow: visible;
+  flex-wrap: wrap;
   width: 100%;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
-  
-  &::-webkit-scrollbar {
-    height: 4px;
-  }
-  
-  &::-webkit-scrollbar-thumb {
-    background-color: rgba(160, 118, 249, 0.3);
-    border-radius: 10px;
-  }
+  justify-content: flex-start;
+  align-items: center;
   
   @media (max-width: 768px) {
-    gap: 0.5rem;
-    padding: 0.25rem 0 0.8rem 0;
+    gap: 0.8rem;
+    padding: 0.5rem 0 1.2rem 0;
     margin-bottom: 1rem;
+    justify-content: center;
+  }
+  
+  @media (max-width: 480px) {
+    gap: 0.6rem;
+    justify-content: flex-start;
   }
 `;
 
 const Tab = styled(motion.button)`
-  padding: 0.7rem 1.5rem;
-  background: ${props => props.active ? 'rgba(160, 118, 249, 0.15)' : 'rgba(30, 30, 35, 0.6)'};
-  color: ${props => props.active ? '#A076F9' : '#a0a0a0'};
-  border: ${props => props.active ? '2px solid #A076F9' : '2px solid transparent'};
-  border-radius: 8px;
+  padding: 0.7rem 1.3rem;
+  background: ${props => props.active ? 'rgba(160, 118, 249, 0.15)' : 'rgba(30, 30, 35, 0.8)'};
+  color: ${props => props.active ? '#A076F9' : '#b0b0b0'};
+  border: ${props => props.active ? '2px solid #A076F9' : '2px solid rgba(160, 118, 249, 0.2)'};
+  border-radius: 10px;
   cursor: pointer;
   font-size: 0.85rem;
-  font-weight: ${props => props.active ? '600' : '400'};
+  font-weight: ${props => props.active ? '600' : '500'};
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.7rem;
-  transition: all 0.2s ease;
+  gap: 0.6rem;
+  transition: all 0.3s ease;
   white-space: nowrap;
   min-width: fit-content;
-  margin: 0 0.1rem;
-  box-shadow: ${props => props.active ? '0 4px 12px rgba(126, 87, 194, 0.15)' : 'none'};
+  margin: 0.2rem;
+  box-shadow: ${props => props.active ? '0 4px 15px rgba(160, 118, 249, 0.2)' : '0 2px 8px rgba(0, 0, 0, 0.1)'};
   box-sizing: border-box;
+  position: relative;
+  flex-shrink: 0;
   
   &:hover {
-    background: ${props => props.active ? 'rgba(160, 118, 249, 0.2)' : 'rgba(40, 40, 45, 0.6)'};
-    color: ${props => props.active ? '#A076F9' : '#d0d0d0'};
-    border-color: ${props => props.active ? '#A076F9' : 'rgba(160, 118, 249, 0.3)'};
+    background: ${props => props.active ? 'rgba(160, 118, 249, 0.25)' : 'rgba(45, 45, 50, 0.9)'};
+    color: ${props => props.active ? '#A076F9' : '#e0e0e0'};
+    border-color: ${props => props.active ? '#A076F9' : 'rgba(160, 118, 249, 0.4)'};
+    transform: translateY(-1px);
+    box-shadow: ${props => props.active ? '0 6px 20px rgba(160, 118, 249, 0.25)' : '0 4px 12px rgba(0, 0, 0, 0.15)'};
+  }
+  
+  &:active {
+    transform: translateY(0);
   }
   
   @media (max-width: 768px) {
-    padding: 0.6rem 1.2rem;
+    padding: 0.6rem 1.1rem;
     font-size: 0.8rem;
+    margin: 0.15rem;
+    flex: 1;
+    min-width: 110px;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 0.5rem 0.9rem;
+    font-size: 0.75rem;
+    margin: 0.1rem;
+    min-width: 90px;
+    flex: 1;
   }
 `;
 

@@ -2,20 +2,20 @@ import React, { useState, useEffect, useRef } from "react";
 import styled, { createGlobalStyle } from "styled-components";
 import { motion } from "framer-motion";
 import {
-    FaUserFriends,
-    FaSearch,
-    FaEllipsisV,
-    FaPaperPlane,
-    FaSmile,
-    FaVideo,
-    FaPhone,
-    FaUserPlus,
-    FaUsers,
-    FaCircle,
-    FaPaperclip,
-    FaMicrophone,
-    FaImage,
-    FaTimes
+  FaUserFriends,
+  FaSearch,
+  FaEllipsisV,
+  FaPaperPlane,
+  FaSmile,
+  FaVideo,
+  FaPhone,
+  FaUserPlus,
+  FaUsers,
+  FaCircle,
+  FaPaperclip,
+  FaMicrophone,
+  FaImage,
+  FaTimes
 } from "react-icons/fa";
 
 // Global styles to ensure proper viewport fitting
@@ -632,559 +632,559 @@ const ModalContent = styled(motion.div)`
 
 // Sample classmates data
 const classmatesData = [
-    {
+  {
+    id: 1,
+    name: "Kunj Patel",
+    avatar: "AJ",
+    status: "online",
+    lastMessage: "Did you complete the assignment?",
+    lastMessageTime: "10:30 AM",
+    messages: [
+      {
         id: 1,
-        name: "Alex Johnson",
-        avatar: "AJ",
-        status: "online",
-        lastMessage: "Did you complete the assignment?",
-        lastMessageTime: "10:30 AM",
-        messages: [
-            {
-                id: 1,
-                content: "Hey, how's the study going?",
-                timestamp: "10:15 AM",
-                outgoing: false
-            },
-            {
-                id: 2,
-                content: "Pretty good, just finishing up the math problems.",
-                timestamp: "10:18 AM",
-                outgoing: true
-            },
-            {
-                id: 3,
-                content: "Did you complete the assignment?",
-                timestamp: "10:30 AM",
-                outgoing: false
-            }
-        ]
-    },
-    {
+        content: "Hey, how's the study going?",
+        timestamp: "10:15 AM",
+        outgoing: false
+      },
+      {
         id: 2,
-        name: "Emma Wilson",
-        avatar: "EW",
-        status: "busy",
-        lastMessage: "Can you send me your notes from yesterday?",
-        lastMessageTime: "Yesterday",
-        messages: [
-            {
-                id: 1,
-                content: "Hi Emma, do you have time to study together?",
-                timestamp: "Yesterday, 3:45 PM",
-                outgoing: true
-            },
-            {
-                id: 2,
-                content: "I'm busy with piano lessons until 6, can we do it after that?",
-                timestamp: "Yesterday, 4:00 PM",
-                outgoing: false
-            },
-            {
-                id: 3,
-                content: "Can you send me your notes from yesterday?",
-                timestamp: "Yesterday, 4:05 PM",
-                outgoing: false
-            }
-        ]
-    },
-    {
+        content: "Pretty good, just finishing up the math problems.",
+        timestamp: "10:18 AM",
+        outgoing: true
+      },
+      {
         id: 3,
-        name: "Michael Chen",
-        avatar: "MC",
-        status: "online",
-        lastMessage: "Thanks for helping with the project",
-        lastMessageTime: "Yesterday",
-        messages: [
-            {
-                id: 1,
-                content: "I've completed the presentation slides",
-                timestamp: "Yesterday, 2:15 PM",
-                outgoing: false
-            },
-            {
-                id: 2,
-                content: "Great! I'll review them and add my section",
-                timestamp: "Yesterday, 2:20 PM",
-                outgoing: true
-            },
-            {
-                id: 3,
-                content: "Thanks for helping with the project",
-                timestamp: "Yesterday, 2:30 PM",
-                outgoing: false
-            }
-        ]
-    },
-    {
-        id: 4,
-        name: "Sarah Davis",
-        avatar: "SD",
-        status: "offline",
-        lastMessage: "See you tomorrow in class",
-        lastMessageTime: "Monday",
-        messages: [
-            {
-                id: 1,
-                content: "Did you understand the physics homework?",
-                timestamp: "Monday, 8:30 PM",
-                outgoing: true
-            },
-            {
-                id: 2,
-                content: "Yes, problem 3 was tricky but I figured it out",
-                timestamp: "Monday, 9:00 PM",
-                outgoing: false
-            },
-            {
-                id: 3,
-                content: "See you tomorrow in class",
-                timestamp: "Monday, 9:15 PM",
-                outgoing: false
-            }
-        ]
-    },
-    {
-        id: 5,
-        name: "Study Group",
-        avatar: "SG",
-        status: "online",
-        lastMessage: "Jason: Let's meet at the library at 4pm",
-        lastMessageTime: "2 days ago",
-        isGroup: true,
-        messages: [
-            {
-                id: 1,
-                content: "Who's free to study for the midterm this weekend?",
-                timestamp: "2 days ago, 3:15 PM",
-                outgoing: true
-            },
-            {
-                id: 2,
-                sender: "Emily",
-                content: "I can do Saturday afternoon",
-                timestamp: "2 days ago, 3:20 PM",
-                outgoing: false
-            },
-            {
-                id: 3,
-                sender: "Jason",
-                content: "Let's meet at the library at 4pm",
-                timestamp: "2 days ago, 3:45 PM",
-                outgoing: false
-            }
-        ]
-    }
+        content: "Did you complete the assignment?",
+        timestamp: "10:30 AM",
+        outgoing: false
+      }
+    ]
+  },
+  {
+    id: 2,
+    name: "Pranav Panara",
+    avatar: "EW",
+    status: "busy",
+    lastMessage: "Can you send me your notes from yesterday?",
+    lastMessageTime: "Yesterday",
+    messages: [
+      {
+        id: 1,
+        content: "Hi Emma, do you have time to study together?",
+        timestamp: "Yesterday, 3:45 PM",
+        outgoing: true
+      },
+      {
+        id: 2,
+        content: "I'm busy with piano lessons until 6, can we do it after that?",
+        timestamp: "Yesterday, 4:00 PM",
+        outgoing: false
+      },
+      {
+        id: 3,
+        content: "Can you send me your notes from yesterday?",
+        timestamp: "Yesterday, 4:05 PM",
+        outgoing: false
+      }
+    ]
+  },
+  {
+    id: 3,
+    name: "Nirav Mathukiya",
+    avatar: "MC",
+    status: "online",
+    lastMessage: "Thanks for helping with the project",
+    lastMessageTime: "Yesterday",
+    messages: [
+      {
+        id: 1,
+        content: "I've completed the presentation slides",
+        timestamp: "Yesterday, 2:15 PM",
+        outgoing: false
+      },
+      {
+        id: 2,
+        content: "Great! I'll review them and add my section",
+        timestamp: "Yesterday, 2:20 PM",
+        outgoing: true
+      },
+      {
+        id: 3,
+        content: "Thanks for helping with the project",
+        timestamp: "Yesterday, 2:30 PM",
+        outgoing: false
+      }
+    ]
+  },
+  {
+    id: 4,
+    name: "Dixit Patel",
+    avatar: "SD",
+    status: "offline",
+    lastMessage: "See you tomorrow in class",
+    lastMessageTime: "Monday",
+    messages: [
+      {
+        id: 1,
+        content: "Did you understand the physics homework?",
+        timestamp: "Monday, 8:30 PM",
+        outgoing: true
+      },
+      {
+        id: 2,
+        content: "Yes, problem 3 was tricky but I figured it out",
+        timestamp: "Monday, 9:00 PM",
+        outgoing: false
+      },
+      {
+        id: 3,
+        content: "See you tomorrow in class",
+        timestamp: "Monday, 9:15 PM",
+        outgoing: false
+      }
+    ]
+  },
+  {
+    id: 5,
+    name: "Study Group",
+    avatar: "SG",
+    status: "online",
+    lastMessage: "Jason: Let's meet at the library at 4pm",
+    lastMessageTime: "2 days ago",
+    isGroup: true,
+    messages: [
+      {
+        id: 1,
+        content: "Who's free to study for the midterm this weekend?",
+        timestamp: "2 days ago, 3:15 PM",
+        outgoing: true
+      },
+      {
+        id: 2,
+        sender: "Emily",
+        content: "I can do Saturday afternoon",
+        timestamp: "2 days ago, 3:20 PM",
+        outgoing: false
+      },
+      {
+        id: 3,
+        sender: "Jason",
+        content: "Let's meet at the library at 4pm",
+        timestamp: "2 days ago, 3:45 PM",
+        outgoing: false
+      }
+    ]
+  }
 ];
 
 const Classmates = () => {
-    const [searchTerm, setSearchTerm] = useState("");
-    const [selectedClassmate, setSelectedClassmate] = useState(null);
-    const [messageInput, setMessageInput] = useState("");
-    const [messages, setMessages] = useState([]);
-    const [showAddModal, setShowAddModal] = useState(false);
-    const [newContact, setNewContact] = useState({ name: "", email: "" });
-    const [classmates, setClassmates] = useState(classmatesData);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedClassmate, setSelectedClassmate] = useState(null);
+  const [messageInput, setMessageInput] = useState("");
+  const [messages, setMessages] = useState([]);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [newContact, setNewContact] = useState({ name: "", email: "" });
+  const [classmates, setClassmates] = useState(classmatesData);
 
-    const chatContentRef = useRef(null);
+  const chatContentRef = useRef(null);
 
-    // Effect to scroll chat to bottom when messages change
-    useEffect(() => {
-        if (chatContentRef.current) {
-            chatContentRef.current.scrollTop = chatContentRef.current.scrollHeight;
-        }
-    }, [messages]);
+  // Effect to scroll chat to bottom when messages change
+  useEffect(() => {
+    if (chatContentRef.current) {
+      chatContentRef.current.scrollTop = chatContentRef.current.scrollHeight;
+    }
+  }, [messages]);
 
-    // Set messages when selected classmate changes
-    useEffect(() => {
-        if (selectedClassmate) {
-            setMessages(selectedClassmate.messages || []);
-        } else {
-            setMessages([]);
-        }
-    }, [selectedClassmate]);
+  // Set messages when selected classmate changes
+  useEffect(() => {
+    if (selectedClassmate) {
+      setMessages(selectedClassmate.messages || []);
+    } else {
+      setMessages([]);
+    }
+  }, [selectedClassmate]);
 
-    // Filter classmates based on search term
-    const filteredClassmates = classmates.filter(classmate =>
-        classmate.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+  // Filter classmates based on search term
+  const filteredClassmates = classmates.filter(classmate =>
+    classmate.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
-    // Handle sending a new message
-    const handleSendMessage = () => {
-        if (!messageInput.trim() || !selectedClassmate) return;
+  // Handle sending a new message
+  const handleSendMessage = () => {
+    if (!messageInput.trim() || !selectedClassmate) return;
 
-        const newMessage = {
-            id: messages.length + 1,
-            content: messageInput,
-            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-            outgoing: true
+    const newMessage = {
+      id: messages.length + 1,
+      content: messageInput,
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      outgoing: true
+    };
+
+    // Update messages state
+    const updatedMessages = [...messages, newMessage];
+    setMessages(updatedMessages);
+
+    // Update classmates with new message
+    const updatedClassmates = classmates.map(classmate => {
+      if (classmate.id === selectedClassmate.id) {
+        return {
+          ...classmate,
+          messages: updatedMessages,
+          lastMessage: messageInput,
+          lastMessageTime: "Just now"
+        };
+      }
+      return classmate;
+    });
+
+    setClassmates(updatedClassmates);
+
+    // Update selected classmate
+    setSelectedClassmate({
+      ...selectedClassmate,
+      messages: updatedMessages,
+      lastMessage: messageInput,
+      lastMessageTime: "Just now"
+    });
+
+    // Clear input
+    setMessageInput("");
+
+    // Simulate response after 1-3 seconds
+    if (Math.random() > 0.3) { // 70% chance of getting a response
+      const delay = 1000 + Math.random() * 2000;
+
+      setTimeout(() => {
+        const responses = [
+          "Got it, thanks!",
+          "I'll check that out.",
+          "That makes sense.",
+          "Cool! Let me know if you need anything else.",
+          "Thanks for the info!",
+          "I'll get back to you on that soon.",
+          "Perfect, that works for me.",
+          "I appreciate your help!",
+        ];
+
+        const responseMessage = {
+          id: updatedMessages.length + 1,
+          content: responses[Math.floor(Math.random() * responses.length)],
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          outgoing: false
         };
 
+        const newUpdatedMessages = [...updatedMessages, responseMessage];
+
         // Update messages state
-        const updatedMessages = [...messages, newMessage];
-        setMessages(updatedMessages);
+        setMessages(newUpdatedMessages);
 
         // Update classmates with new message
-        const updatedClassmates = classmates.map(classmate => {
-            if (classmate.id === selectedClassmate.id) {
-                return {
-                    ...classmate,
-                    messages: updatedMessages,
-                    lastMessage: messageInput,
-                    lastMessageTime: "Just now"
-                };
-            }
-            return classmate;
+        const newUpdatedClassmates = classmates.map(classmate => {
+          if (classmate.id === selectedClassmate.id) {
+            return {
+              ...classmate,
+              messages: newUpdatedMessages,
+              lastMessage: responseMessage.content,
+              lastMessageTime: "Just now"
+            };
+          }
+          return classmate;
         });
 
-        setClassmates(updatedClassmates);
+        setClassmates(newUpdatedClassmates);
 
         // Update selected classmate
         setSelectedClassmate({
-            ...selectedClassmate,
-            messages: updatedMessages,
-            lastMessage: messageInput,
-            lastMessageTime: "Just now"
+          ...selectedClassmate,
+          messages: newUpdatedMessages,
+          lastMessage: responseMessage.content,
+          lastMessageTime: "Just now"
         });
+      }, delay);
+    }
+  };
 
-        // Clear input
-        setMessageInput("");
+  // Handle adding a new contact
+  const handleAddContact = () => {
+    if (!newContact.name.trim()) return;
 
-        // Simulate response after 1-3 seconds
-        if (Math.random() > 0.3) { // 70% chance of getting a response
-            const delay = 1000 + Math.random() * 2000;
-
-            setTimeout(() => {
-                const responses = [
-                    "Got it, thanks!",
-                    "I'll check that out.",
-                    "That makes sense.",
-                    "Cool! Let me know if you need anything else.",
-                    "Thanks for the info!",
-                    "I'll get back to you on that soon.",
-                    "Perfect, that works for me.",
-                    "I appreciate your help!",
-                ];
-
-                const responseMessage = {
-                    id: updatedMessages.length + 1,
-                    content: responses[Math.floor(Math.random() * responses.length)],
-                    timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-                    outgoing: false
-                };
-
-                const newUpdatedMessages = [...updatedMessages, responseMessage];
-
-                // Update messages state
-                setMessages(newUpdatedMessages);
-
-                // Update classmates with new message
-                const newUpdatedClassmates = classmates.map(classmate => {
-                    if (classmate.id === selectedClassmate.id) {
-                        return {
-                            ...classmate,
-                            messages: newUpdatedMessages,
-                            lastMessage: responseMessage.content,
-                            lastMessageTime: "Just now"
-                        };
-                    }
-                    return classmate;
-                });
-
-                setClassmates(newUpdatedClassmates);
-
-                // Update selected classmate
-                setSelectedClassmate({
-                    ...selectedClassmate,
-                    messages: newUpdatedMessages,
-                    lastMessage: responseMessage.content,
-                    lastMessageTime: "Just now"
-                });
-            }, delay);
-        }
+    const newClassmate = {
+      id: classmates.length + 1,
+      name: newContact.name,
+      avatar: newContact.name.split(" ").map(n => n[0]).join("").toUpperCase(),
+      status: "offline",
+      lastMessage: "New contact added",
+      lastMessageTime: "Just now",
+      messages: []
     };
 
-    // Handle adding a new contact
-    const handleAddContact = () => {
-        if (!newContact.name.trim()) return;
+    setClassmates([...classmates, newClassmate]);
+    setNewContact({ name: "", email: "" });
+    setShowAddModal(false);
+  };
 
-        const newClassmate = {
-            id: classmates.length + 1,
-            name: newContact.name,
-            avatar: newContact.name.split(" ").map(n => n[0]).join("").toUpperCase(),
-            status: "offline",
-            lastMessage: "New contact added",
-            lastMessageTime: "Just now",
-            messages: []
-        };
+  return (
+    <ClassmatesContainer>
+      <GlobalStyles />
 
-        setClassmates([...classmates, newClassmate]);
-        setNewContact({ name: "", email: "" });
-        setShowAddModal(false);
-    };
+      <Header>
+        <h1><FaUserFriends /> Classmates</h1>
+        <SearchInputWrapper>
+          <FaSearch />
+          <input
+            type="text"
+            placeholder="Search classmates..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </SearchInputWrapper>
+      </Header>
 
-    return (
-        <ClassmatesContainer>
-            <GlobalStyles />
+      <ContentWrapper>
+        <ContactsList>
+          <ContactsHeader>
+            <h2><FaUserFriends /> Chats</h2>
+            <div className="actions">
+              <button onClick={() => setShowAddModal(true)}>
+                <FaUserPlus />
+              </button>
+              <button>
+                <FaEllipsisV />
+              </button>
+            </div>
+          </ContactsHeader>
 
-            <Header>
-                <h1><FaUserFriends /> Classmates</h1>
-                <SearchInputWrapper>
-                    <FaSearch />
-                    <input
-                        type="text"
-                        placeholder="Search classmates..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                </SearchInputWrapper>
-            </Header>
+          <ContactsSearchBox>
+            <input
+              type="text"
+              placeholder="Search conversations..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </ContactsSearchBox>
 
-            <ContentWrapper>
-                <ContactsList>
-                    <ContactsHeader>
-                        <h2><FaUserFriends /> Chats</h2>
-                        <div className="actions">
-                            <button onClick={() => setShowAddModal(true)}>
-                                <FaUserPlus />
-                            </button>
-                            <button>
-                                <FaEllipsisV />
-                            </button>
-                        </div>
-                    </ContactsHeader>
+          <ContactsListContent>
+            {filteredClassmates.map((classmate) => (
+              <ContactItem
+                key={classmate.id}
+                active={selectedClassmate && selectedClassmate.id === classmate.id}
+                onClick={() => setSelectedClassmate(classmate)}
+                whileHover={{ x: 3 }}
+              >
+                <div className="avatar">
+                  {classmate.isGroup ? <FaUsers /> : classmate.avatar}
+                  <div className={`status ${classmate.status}`}></div>
+                </div>
+                <div className="info">
+                  <div className="name">{classmate.name}</div>
+                  <div className="last-message">{classmate.lastMessage}</div>
+                </div>
+                <div className="time">{classmate.lastMessageTime}</div>
+              </ContactItem>
+            ))}
 
-                    <ContactsSearchBox>
-                        <input
-                            type="text"
-                            placeholder="Search conversations..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                        />
-                    </ContactsSearchBox>
-
-                    <ContactsListContent>
-                        {filteredClassmates.map((classmate) => (
-                            <ContactItem
-                                key={classmate.id}
-                                active={selectedClassmate && selectedClassmate.id === classmate.id}
-                                onClick={() => setSelectedClassmate(classmate)}
-                                whileHover={{ x: 3 }}
-                            >
-                                <div className="avatar">
-                                    {classmate.isGroup ? <FaUsers /> : classmate.avatar}
-                                    <div className={`status ${classmate.status}`}></div>
-                                </div>
-                                <div className="info">
-                                    <div className="name">{classmate.name}</div>
-                                    <div className="last-message">{classmate.lastMessage}</div>
-                                </div>
-                                <div className="time">{classmate.lastMessageTime}</div>
-                            </ContactItem>
-                        ))}
-
-                        {filteredClassmates.length === 0 && (
-                            <div style={{ padding: '2rem 1rem', textAlign: 'center', color: '#a0a0a0' }}>
-                                No conversations found
-                            </div>
-                        )}
-                    </ContactsListContent>
-                </ContactsList>
-
-                <ChatArea>
-                    {selectedClassmate ? (
-                        <>
-                            <ChatHeader>
-                                <div className="user-info">
-                                    <div className="avatar">
-                                        {selectedClassmate.isGroup ? <FaUsers /> : selectedClassmate.avatar}
-                                        <div className={`status ${selectedClassmate.status}`}></div>
-                                    </div>
-                                    <div className="info">
-                                        <div className="name">{selectedClassmate.name}</div>
-                                        <div className="status-text">
-                                            {selectedClassmate.status === "online" && (
-                                                <>
-                                                    <FaCircle /> Online
-                                                </>
-                                            )}
-                                            {selectedClassmate.status === "busy" && "Busy"}
-                                            {selectedClassmate.status === "offline" && "Offline"}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="actions">
-                                    <button>
-                                        <FaPhone />
-                                    </button>
-                                    <button>
-                                        <FaVideo />
-                                    </button>
-                                    <button>
-                                        <FaEllipsisV />
-                                    </button>
-                                </div>
-                            </ChatHeader>
-
-                            <ChatContent ref={chatContentRef}>
-                                <DateDivider>
-                                    <div className="date">Today</div>
-                                </DateDivider>
-
-                                {messages.map((message) => (
-                                    <MessageBubble
-                                        key={message.id}
-                                        className={message.outgoing ? "outgoing" : "incoming"}
-                                    >
-                                        {message.sender && !message.outgoing && (
-                                            <div style={{
-                                                fontSize: '0.7rem',
-                                                fontWeight: '600',
-                                                marginBottom: '0.2rem',
-                                                color: '#A076F9'
-                                            }}>
-                                                {message.sender}
-                                            </div>
-                                        )}
-                                        <div className="message-content">{message.content}</div>
-                                        <div className="time">{message.timestamp}</div>
-                                    </MessageBubble>
-                                ))}
-                            </ChatContent>
-
-                            <ChatInputArea>
-                                <ChatInput>
-                                    <div className="attachments">
-                                        <button>
-                                            <FaPaperclip />
-                                        </button>
-                                        <button>
-                                            <FaImage />
-                                        </button>
-                                    </div>
-                                    <div className="input-wrapper">
-                                        <input
-                                            type="text"
-                                            placeholder="Type a message..."
-                                            value={messageInput}
-                                            onChange={(e) => setMessageInput(e.target.value)}
-                                            onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                                        />
-                                    </div>
-                                    <button className="send-button" onClick={handleSendMessage}>
-                                        <FaPaperPlane />
-                                    </button>
-                                </ChatInput>
-                            </ChatInputArea>
-                        </>
-                    ) : (
-                        <div style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            height: '100%',
-                            padding: '2rem'
-                        }}>
-                            <FaUserFriends style={{ fontSize: '3rem', color: '#A076F9', marginBottom: '1rem' }} />
-                            <h2>Select a classmate to start chatting</h2>
-                            <p style={{ color: '#a0a0a0', textAlign: 'center' }}>
-                                Connect with your classmates, share study resources, and collaborate on projects.
-                            </p>
-                            <Button
-                                primary
-                                whileHover={{ scale: 1.03 }}
-                                whileTap={{ scale: 0.97 }}
-                                style={{ marginTop: '1.5rem' }}
-                                onClick={() => setShowAddModal(true)}
-                            >
-                                <FaUserPlus /> Add New Classmate
-                            </Button>
-                        </div>
-                    )}
-                </ChatArea>
-            </ContentWrapper>
-
-            {/* Add Contact Modal */}
-            {showAddModal && (
-                <ModalBackdrop
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    onClick={() => setShowAddModal(false)}
-                >
-                    <ModalContent
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.3 }}
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                            <h2><FaUserPlus /> Add New Classmate</h2>
-                            <Button
-                                style={{ padding: '0.5rem', minWidth: 'unset', width: '32px', height: '32px' }}
-                                onClick={() => setShowAddModal(false)}
-                            >
-                                <FaTimes />
-                            </Button>
-                        </div>
-
-                        <div className="form-group">
-                            <label>Name</label>
-                            <input
-                                type="text"
-                                value={newContact.name}
-                                onChange={(e) => setNewContact({ ...newContact, name: e.target.value })}
-                                placeholder="Enter classmate's name"
-                            />
-                        </div>
-
-                        <div className="form-group">
-                            <label>Email (Optional)</label>
-                            <input
-                                type="email"
-                                value={newContact.email}
-                                onChange={(e) => setNewContact({ ...newContact, email: e.target.value })}
-                                placeholder="Enter classmate's email"
-                            />
-                        </div>
-
-                        <div className="form-group">
-                            <label>Class</label>
-                            <select>
-                                <option value="">Select shared class</option>
-                                <option value="math">Mathematics</option>
-                                <option value="science">Science</option>
-                                <option value="history">History</option>
-                                <option value="literature">Literature</option>
-                                <option value="programming">Programming</option>
-                            </select>
-                        </div>
-
-                        <div className="modal-actions">
-                            <Button
-                                whileHover={{ scale: 1.03 }}
-                                whileTap={{ scale: 0.97 }}
-                                onClick={() => setShowAddModal(false)}
-                            >
-                                Cancel
-                            </Button>
-                            <Button
-                                primary
-                                whileHover={{ scale: 1.03 }}
-                                whileTap={{ scale: 0.97 }}
-                                onClick={handleAddContact}
-                                disabled={!newContact.name.trim()}
-                                style={{ opacity: !newContact.name.trim() ? 0.7 : 1 }}
-                            >
-                                <FaUserPlus /> Add Classmate
-                            </Button>
-                        </div>
-                    </ModalContent>
-                </ModalBackdrop>
+            {filteredClassmates.length === 0 && (
+              <div style={{ padding: '2rem 1rem', textAlign: 'center', color: '#a0a0a0' }}>
+                No conversations found
+              </div>
             )}
-        </ClassmatesContainer>
-    );
+          </ContactsListContent>
+        </ContactsList>
+
+        <ChatArea>
+          {selectedClassmate ? (
+            <>
+              <ChatHeader>
+                <div className="user-info">
+                  <div className="avatar">
+                    {selectedClassmate.isGroup ? <FaUsers /> : selectedClassmate.avatar}
+                    <div className={`status ${selectedClassmate.status}`}></div>
+                  </div>
+                  <div className="info">
+                    <div className="name">{selectedClassmate.name}</div>
+                    <div className="status-text">
+                      {selectedClassmate.status === "online" && (
+                        <>
+                          <FaCircle /> Online
+                        </>
+                      )}
+                      {selectedClassmate.status === "busy" && "Busy"}
+                      {selectedClassmate.status === "offline" && "Offline"}
+                    </div>
+                  </div>
+                </div>
+                <div className="actions">
+                  <button>
+                    <FaPhone />
+                  </button>
+                  <button>
+                    <FaVideo />
+                  </button>
+                  <button>
+                    <FaEllipsisV />
+                  </button>
+                </div>
+              </ChatHeader>
+
+              <ChatContent ref={chatContentRef}>
+                <DateDivider>
+                  <div className="date">Today</div>
+                </DateDivider>
+
+                {messages.map((message) => (
+                  <MessageBubble
+                    key={message.id}
+                    className={message.outgoing ? "outgoing" : "incoming"}
+                  >
+                    {message.sender && !message.outgoing && (
+                      <div style={{
+                        fontSize: '0.7rem',
+                        fontWeight: '600',
+                        marginBottom: '0.2rem',
+                        color: '#A076F9'
+                      }}>
+                        {message.sender}
+                      </div>
+                    )}
+                    <div className="message-content">{message.content}</div>
+                    <div className="time">{message.timestamp}</div>
+                  </MessageBubble>
+                ))}
+              </ChatContent>
+
+              <ChatInputArea>
+                <ChatInput>
+                  <div className="attachments">
+                    <button>
+                      <FaPaperclip />
+                    </button>
+                    <button>
+                      <FaImage />
+                    </button>
+                  </div>
+                  <div className="input-wrapper">
+                    <input
+                      type="text"
+                      placeholder="Type a message..."
+                      value={messageInput}
+                      onChange={(e) => setMessageInput(e.target.value)}
+                      onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                    />
+                  </div>
+                  <button className="send-button" onClick={handleSendMessage}>
+                    <FaPaperPlane />
+                  </button>
+                </ChatInput>
+              </ChatInputArea>
+            </>
+          ) : (
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              height: '100%',
+              padding: '2rem'
+            }}>
+              <FaUserFriends style={{ fontSize: '3rem', color: '#A076F9', marginBottom: '1rem' }} />
+              <h2>Select a classmate to start chatting</h2>
+              <p style={{ color: '#a0a0a0', textAlign: 'center' }}>
+                Connect with your classmates, share study resources, and collaborate on projects.
+              </p>
+              <Button
+                primary
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                style={{ marginTop: '1.5rem' }}
+                onClick={() => setShowAddModal(true)}
+              >
+                <FaUserPlus /> Add New Classmate
+              </Button>
+            </div>
+          )}
+        </ChatArea>
+      </ContentWrapper>
+
+      {/* Add Contact Modal */}
+      {showAddModal && (
+        <ModalBackdrop
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={() => setShowAddModal(false)}
+        >
+          <ModalContent
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3 }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+              <h2><FaUserPlus /> Add New Classmate</h2>
+              <Button
+                style={{ padding: '0.5rem', minWidth: 'unset', width: '32px', height: '32px' }}
+                onClick={() => setShowAddModal(false)}
+              >
+                <FaTimes />
+              </Button>
+            </div>
+
+            <div className="form-group">
+              <label>Name</label>
+              <input
+                type="text"
+                value={newContact.name}
+                onChange={(e) => setNewContact({ ...newContact, name: e.target.value })}
+                placeholder="Enter classmate's name"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Email (Optional)</label>
+              <input
+                type="email"
+                value={newContact.email}
+                onChange={(e) => setNewContact({ ...newContact, email: e.target.value })}
+                placeholder="Enter classmate's email"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Class</label>
+              <select>
+                <option value="">Select shared class</option>
+                <option value="math">Mathematics</option>
+                <option value="science">Science</option>
+                <option value="history">History</option>
+                <option value="literature">Literature</option>
+                <option value="programming">Programming</option>
+              </select>
+            </div>
+
+            <div className="modal-actions">
+              <Button
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={() => setShowAddModal(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                primary
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={handleAddContact}
+                disabled={!newContact.name.trim()}
+                style={{ opacity: !newContact.name.trim() ? 0.7 : 1 }}
+              >
+                <FaUserPlus /> Add Classmate
+              </Button>
+            </div>
+          </ModalContent>
+        </ModalBackdrop>
+      )}
+    </ClassmatesContainer>
+  );
 };
 
 export default Classmates;

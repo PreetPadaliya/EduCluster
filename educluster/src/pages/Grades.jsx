@@ -80,101 +80,136 @@ const Header = styled.header`
 
 const ToolBar = styled.div`
   display: flex;
-  gap: 1.2rem;
+  gap: 1.5rem;
   align-items: center;
   flex-wrap: wrap;
   width: 100%;
+  min-height: 60px;
+  padding: 0.5rem 0;
   
   @media (max-width: 768px) {
     width: 100%;
-    justify-content: space-between;
-    gap: 0.8rem;
+    justify-content: flex-start;
+    gap: 1rem;
     margin-top: 0.5rem;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    min-height: 50px;
+  }
+  
+  @media (max-width: 480px) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.8rem;
   }
 `;
 
 const SearchInputWrapper = styled.div`
   position: relative;
-  max-width: 300px;
+  max-width: 320px;
   width: 100%;
   flex-shrink: 1;
-  margin-right: 0.5rem;
+  margin-right: 1rem;
   
   input {
     width: 100%;
-    padding: 0.6rem 1rem 0.6rem 2.5rem;
+    padding: 0.7rem 1rem 0.7rem 2.8rem;
     border-radius: 50px;
-    background: rgba(30, 30, 35, 0.6);
-    border: 1px solid rgba(160, 118, 249, 0.2);
+    background: rgba(30, 30, 35, 0.8);
+    border: 1px solid rgba(160, 118, 249, 0.3);
     color: #e0e0e0;
     font-size: 0.9rem;
-    height: 38px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    height: 42px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
     
     &:focus {
       outline: none;
-      border-color: rgba(160, 118, 249, 0.5);
-      box-shadow: 0 0 0 2px rgba(160, 118, 249, 0.2);
+      border-color: rgba(160, 118, 249, 0.6);
+      box-shadow: 0 0 0 3px rgba(160, 118, 249, 0.2);
+      background: rgba(35, 35, 40, 0.9);
     }
     
     &::placeholder {
-      color: #808080;
+      color: #909090;
     }
   }
   
   svg {
     position: absolute;
-    left: 0.8rem;
+    left: 1rem;
     top: 50%;
     transform: translateY(-50%);
-    color: #808080;
-    font-size: 1rem;
+    color: #909090;
+    font-size: 1.1rem;
+    transition: color 0.3s ease;
+  }
+  
+  &:focus-within svg {
+    color: #A076F9;
   }
   
   @media (max-width: 768px) {
-    flex-basis: 100%;
     max-width: 100%;
     margin-right: 0;
+    margin-bottom: 0;
+    flex-basis: auto;
+  }
+  
+  @media (max-width: 480px) {
     margin-bottom: 0.8rem;
+    width: 100%;
   }
 `;
 
 const Button = styled(motion.button)`
-  padding: 0.6rem 1.2rem;
-  background: ${props => props.primary ? 'linear-gradient(135deg, #A076F9, #7E57C2)' : 'rgba(30, 30, 35, 0.6)'};
-  color: ${props => props.primary ? 'white' : '#d0d0d0'};
-  border: ${props => props.primary ? 'none' : '1px solid rgba(160, 118, 249, 0.3)'};
+  padding: 0.7rem 1.4rem;
+  background: ${props => props.primary ? 'linear-gradient(135deg, #A076F9, #7E57C2)' : 'rgba(30, 30, 35, 0.8)'};
+  color: ${props => props.primary ? 'white' : '#e0e0e0'};
+  border: ${props => props.primary ? 'none' : '1px solid rgba(160, 118, 249, 0.4)'};
   border-radius: 50px;
   cursor: pointer;
   font-size: 0.9rem;
-  font-weight: ${props => props.primary ? '600' : '400'};
+  font-weight: ${props => props.primary ? '600' : '500'};
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.6rem;
-  box-shadow: ${props => props.primary ? '0 4px 15px rgba(126, 87, 194, 0.3)' : '0 4px 8px rgba(0, 0, 0, 0.15)'};
+  box-shadow: ${props => props.primary ? '0 4px 15px rgba(126, 87, 194, 0.3)' : '0 4px 8px rgba(0, 0, 0, 0.2)'};
   transition: all 0.3s ease;
-  min-width: ${props => props.icon ? '42px' : '120px'};
-  height: 38px;
+  min-width: ${props => props.icon ? '44px' : '130px'};
+  height: 42px;
   flex-shrink: 0;
   margin: 0;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  overflow: visible;
+  position: relative;
+  z-index: 1;
   
   &:hover {
-    box-shadow: ${props => props.primary ? '0 6px 20px rgba(126, 87, 194, 0.4)' : '0 4px 12px rgba(0, 0, 0, 0.2)'};
-    background: ${props => props.primary ? 'linear-gradient(135deg, #b18aff, #9065db)' : 'rgba(40, 40, 45, 0.6)'};
+    transform: translateY(-1px);
+    box-shadow: ${props => props.primary ? '0 6px 20px rgba(126, 87, 194, 0.4)' : '0 6px 15px rgba(0, 0, 0, 0.25)'};
+    background: ${props => props.primary ? 'linear-gradient(135deg, #b18aff, #9065db)' : 'rgba(45, 45, 50, 0.9)'};
+    border-color: ${props => props.primary ? 'none' : 'rgba(160, 118, 249, 0.6)'};
+  }
+  
+  &:active {
+    transform: translateY(0);
   }
   
   @media (max-width: 768px) {
-    min-width: ${props => props.icon ? '38px' : '90px'};
-    padding: 0.6rem ${props => props.icon ? '0.8rem' : '1rem'};
+    min-width: ${props => props.icon ? '40px' : '110px'};
+    padding: 0.7rem ${props => props.icon ? '0.9rem' : '1.2rem'};
     font-size: 0.85rem;
+    height: 40px;
   }
   
   @media (max-width: 480px) {
-    min-width: ${props => props.icon ? '36px' : '80px'};
+    min-width: ${props => props.icon ? '38px' : '100px'};
+    padding: 0.6rem ${props => props.icon ? '0.8rem' : '1rem'};
+    font-size: 0.8rem;
+    height: 38px;
   }
 `;
 
@@ -183,69 +218,94 @@ const TabsContainer = styled.div`
   gap: 1rem;
   margin-bottom: 1.5rem;
   border-bottom: 1px solid rgba(50, 50, 60, 0.4);
-  padding: 0.25rem 0 0.5rem 0;
-  overflow-x: auto;
-  flex-wrap: nowrap;
-  flex: 1;
+  padding: 0.5rem 0 1rem 0;
+  overflow: visible;
+  flex-wrap: wrap;
   width: 100%;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
-  
-  &::-webkit-scrollbar {
-    height: 4px;
-  }
-  
-  &::-webkit-scrollbar-thumb {
-    background-color: rgba(160, 118, 249, 0.3);
-    border-radius: 10px;
-  }
+  justify-content: flex-start;
+  align-items: center;
   
   @media (max-width: 768px) {
-    gap: 0.5rem;
-    padding: 0.25rem 0 0.8rem 0;
+    gap: 0.8rem;
+    padding: 0.5rem 0 1.2rem 0;
     margin-bottom: 1rem;
+    justify-content: center;
+  }
+  
+  @media (max-width: 480px) {
+    gap: 0.6rem;
+    justify-content: flex-start;
   }
 `;
 
 const Tab = styled(motion.button)`
-  padding: 0.7rem 1.5rem;
-  background: ${props => props.active ? 'rgba(160, 118, 249, 0.15)' : 'rgba(30, 30, 35, 0.6)'};
-  color: ${props => props.active ? '#A076F9' : '#a0a0a0'};
-  border: ${props => props.active ? '2px solid #A076F9' : '2px solid transparent'};
-  border-radius: 8px;
+  padding: 0.8rem 1.6rem;
+  background: ${props => props.active ? 'rgba(160, 118, 249, 0.15)' : 'rgba(30, 30, 35, 0.8)'};
+  color: ${props => props.active ? '#A076F9' : '#b0b0b0'};
+  border: ${props => props.active ? '2px solid #A076F9' : '2px solid rgba(160, 118, 249, 0.2)'};
+  border-radius: 10px;
   cursor: pointer;
-  font-size: 0.85rem;
-  font-weight: ${props => props.active ? '600' : '400'};
+  font-size: 0.9rem;
+  font-weight: ${props => props.active ? '600' : '500'};
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.7rem;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
   white-space: nowrap;
   min-width: fit-content;
-  margin: 0 0.1rem;
-  box-shadow: ${props => props.active ? '0 4px 12px rgba(126, 87, 194, 0.15)' : 'none'};
+  margin: 0.2rem;
+  box-shadow: ${props => props.active ? '0 4px 15px rgba(160, 118, 249, 0.2)' : '0 2px 8px rgba(0, 0, 0, 0.1)'};
   box-sizing: border-box;
+  position: relative;
+  flex-shrink: 0;
   
   &:hover {
-    background: ${props => props.active ? 'rgba(160, 118, 249, 0.2)' : 'rgba(40, 40, 45, 0.6)'};
-    color: ${props => props.active ? '#A076F9' : '#d0d0d0'};
-    border-color: ${props => props.active ? '#A076F9' : 'rgba(160, 118, 249, 0.3)'};
+    background: ${props => props.active ? 'rgba(160, 118, 249, 0.25)' : 'rgba(45, 45, 50, 0.9)'};
+    color: ${props => props.active ? '#A076F9' : '#e0e0e0'};
+    border-color: ${props => props.active ? '#A076F9' : 'rgba(160, 118, 249, 0.4)'};
+    transform: translateY(-1px);
+    box-shadow: ${props => props.active ? '0 6px 20px rgba(160, 118, 249, 0.25)' : '0 4px 12px rgba(0, 0, 0, 0.15)'};
+  }
+  
+  &:active {
+    transform: translateY(0);
   }
   
   @media (max-width: 768px) {
-    padding: 0.6rem 1.2rem;
+    padding: 0.7rem 1.3rem;
+    font-size: 0.85rem;
+    margin: 0.15rem;
+    flex: 1;
+    min-width: 120px;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 0.6rem 1rem;
     font-size: 0.8rem;
+    margin: 0.1rem;
+    min-width: 100px;
+    flex: 1;
   }
 `;
 
 const ButtonGroup = styled.div`
   display: flex;
-  gap: 0.8rem;
+  gap: 1rem;
   align-items: center;
+  flex-wrap: wrap;
+  min-height: 42px;
   
   @media (max-width: 768px) {
-    gap: 0.5rem;
+    gap: 0.8rem;
+    width: 100%;
+    justify-content: flex-start;
+  }
+  
+  @media (max-width: 480px) {
+    gap: 0.6rem;
+    flex-direction: row;
+    flex-wrap: wrap;
   }
 `;
 

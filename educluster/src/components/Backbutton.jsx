@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { FaArrowLeft } from 'react-icons/fa';
+import { FaHome } from 'react-icons/fa';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const BackButtonContainer = styled(motion.button)`
@@ -109,8 +109,8 @@ const BackButton = ({ defaultPath = "/" }) => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
         >
-            <FaArrowLeft />
-            <TooltipText>Go Back</TooltipText>
+            <FaHome />
+            <TooltipText>Go Home</TooltipText>
         </BackButtonContainer>
     );
 };
