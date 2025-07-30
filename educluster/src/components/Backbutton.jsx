@@ -7,7 +7,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 const BackButtonContainer = styled(motion.button)`
   position: fixed;
   bottom: 30px;
-  left: 20px;
+  left: 40px;
   width: 50px;
   height: 50px;
   border-radius: 50%;
@@ -37,7 +37,7 @@ const BackButtonContainer = styled(motion.button)`
 
   @media (max-width: 768px) {
     bottom: 20px;
-    left: 15px;
+    left: 25px;
     width: 45px;
     height: 45px;
     

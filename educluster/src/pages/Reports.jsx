@@ -196,7 +196,7 @@ const TabsContainer = styled.div`
   margin-bottom: 1.8rem;
   margin-top: 0.5rem;
   border-bottom: 1px solid rgba(50, 50, 60, 0.4);
-  padding-bottom: 0.8rem;
+  padding: 0.25rem 0 0.8rem 0;
   overflow-x: auto;
   flex-wrap: nowrap;
   flex: 1;
@@ -215,7 +215,7 @@ const TabsContainer = styled.div`
   
   @media (max-width: 768px) {
     gap: 0.5rem;
-    padding-bottom: 0.8rem;
+    padding: 0.25rem 0 0.8rem 0;
     margin-bottom: 1rem;
   }
 `;
@@ -224,7 +224,7 @@ const Tab = styled(motion.button)`
   padding: 0.7rem 1.5rem;
   background: ${props => props.active ? 'rgba(160, 118, 249, 0.15)' : 'rgba(30, 30, 35, 0.6)'};
   color: ${props => props.active ? '#A076F9' : '#a0a0a0'};
-  border: ${props => props.active ? '1px solid rgba(160, 118, 249, 0.3)' : '1px solid rgba(50, 50, 60, 0.4)'};
+  border: ${props => props.active ? '2px solid #A076F9' : '2px solid transparent'};
   border-radius: 8px;
   cursor: pointer;
   font-size: 0.85rem;
@@ -238,10 +238,12 @@ const Tab = styled(motion.button)`
   min-width: fit-content;
   margin: 0 0.1rem;
   box-shadow: ${props => props.active ? '0 4px 12px rgba(126, 87, 194, 0.15)' : 'none'};
+  box-sizing: border-box;
   
   &:hover {
     background: ${props => props.active ? 'rgba(160, 118, 249, 0.2)' : 'rgba(40, 40, 45, 0.6)'};
     color: ${props => props.active ? '#A076F9' : '#d0d0d0'};
+    border-color: ${props => props.active ? '#A076F9' : 'rgba(160, 118, 249, 0.3)'};
   }
   
   @media (max-width: 768px) {

@@ -2,29 +2,29 @@ import React, { useState, useEffect } from "react";
 import styled, { createGlobalStyle } from "styled-components";
 import { motion } from "framer-motion";
 import {
-    FaClipboardList,
-    FaSearch,
-    FaFilter,
-    FaFileAlt,
-    FaCalendarAlt,
-    FaCheckCircle,
-    FaTimesCircle,
-    FaHourglassHalf,
-    FaChalkboardTeacher,
-    FaBook,
-    FaFileUpload,
-    FaDownload,
-    FaExclamationTriangle,
-    FaPlus,
-    FaTags,
-    FaSortAmountDown,
-    FaSortAmountUp,
-    FaChartBar,
-    FaClock,
-    FaEye,
-    FaEdit,
-    FaTrash,
-    FaPaperPlane
+  FaClipboardList,
+  FaSearch,
+  FaFilter,
+  FaFileAlt,
+  FaCalendarAlt,
+  FaCheckCircle,
+  FaTimesCircle,
+  FaHourglassHalf,
+  FaChalkboardTeacher,
+  FaBook,
+  FaFileUpload,
+  FaDownload,
+  FaExclamationTriangle,
+  FaPlus,
+  FaTags,
+  FaSortAmountDown,
+  FaSortAmountUp,
+  FaChartBar,
+  FaClock,
+  FaEye,
+  FaEdit,
+  FaTrash,
+  FaPaperPlane
 } from "react-icons/fa";
 
 // Global styles to ensure proper viewport fitting
@@ -154,7 +154,7 @@ const TabsContainer = styled.div`
   gap: 0.5rem;
   margin-bottom: 0.5rem;
   border-bottom: 1px solid rgba(50, 50, 60, 0.4);
-  padding-bottom: 0.5rem;
+  padding: 0.25rem 0 0.5rem 0;
   overflow-x: auto;
   flex-wrap: nowrap;
   flex: 1;
@@ -177,7 +177,7 @@ const Tab = styled(motion.button)`
   padding: 0.6rem 1.2rem;
   background: ${props => props.active ? 'rgba(160, 118, 249, 0.15)' : 'transparent'};
   color: ${props => props.active ? '#A076F9' : '#a0a0a0'};
-  border: none;
+  border: ${props => props.active ? '2px solid #A076F9' : '2px solid transparent'};
   border-radius: 8px;
   cursor: pointer;
   font-size: 0.85rem;
@@ -188,10 +188,12 @@ const Tab = styled(motion.button)`
   transition: all 0.2s ease;
   white-space: nowrap;
   min-width: fit-content;
+  box-sizing: border-box;
   
   &:hover {
     background: rgba(160, 118, 249, 0.1);
     color: ${props => props.active ? '#A076F9' : '#d0d0d0'};
+    border-color: ${props => props.active ? '#A076F9' : 'rgba(160, 118, 249, 0.3)'};
   }
   
   @media (max-width: 768px) {
@@ -829,811 +831,811 @@ const ModalContent = styled(motion.div)`
 
 // Sample assignment data
 const assignmentsData = [
-    {
-        id: 1,
-        title: "Research Paper on Artificial Intelligence",
-        course: "Introduction to Computer Science",
-        courseCode: "CS101",
-        status: "pending",
-        dueDate: "2025-07-25", // Two days from July 23, 2025
-        assignedDate: "2025-07-15",
-        instructor: "Dr. Sarah Johnson",
-        points: 100,
-        earnedPoints: 0,
-        progress: 65,
-        description: "Write a research paper discussing the current state of artificial intelligence and its future implications. Include sections on machine learning, neural networks, and potential ethical concerns.",
-        attachments: [
-            { name: "Research_Paper_Guidelines.pdf", type: "pdf", size: "1.2 MB" },
-            { name: "AI_Research_Resources.docx", type: "doc", size: "824 KB" }
-        ],
-        submissionType: "Document upload",
-        category: "Research Paper"
+  {
+    id: 1,
+    title: "Research Paper on Artificial Intelligence",
+    course: "Introduction to Computer Science",
+    courseCode: "CS101",
+    status: "pending",
+    dueDate: "2025-07-25", // Two days from July 23, 2025
+    assignedDate: "2025-07-15",
+    instructor: "Dr. Sarah Johnson",
+    points: 100,
+    earnedPoints: 0,
+    progress: 65,
+    description: "Write a research paper discussing the current state of artificial intelligence and its future implications. Include sections on machine learning, neural networks, and potential ethical concerns.",
+    attachments: [
+      { name: "Research_Paper_Guidelines.pdf", type: "pdf", size: "1.2 MB" },
+      { name: "AI_Research_Resources.docx", type: "doc", size: "824 KB" }
+    ],
+    submissionType: "Document upload",
+    category: "Research Paper"
+  },
+  {
+    id: 2,
+    title: "Data Structures Implementation",
+    course: "Data Structures and Algorithms",
+    courseCode: "CS210",
+    status: "submitted",
+    dueDate: "2025-07-20", // Already passed from July 23, 2025
+    assignedDate: "2025-07-05",
+    submittedDate: "2025-07-19",
+    instructor: "Prof. Michael Chen",
+    points: 50,
+    earnedPoints: 0,
+    progress: 100,
+    description: "Implement various data structures including linked lists, stacks, queues, and binary trees using a programming language of your choice. Include proper documentation and test cases.",
+    attachments: [
+      { name: "Data_Structures_Assignment.pdf", type: "pdf", size: "956 KB" }
+    ],
+    submission: {
+      files: [{ name: "DataStructures_Implementation.zip", type: "zip", size: "1.8 MB" }],
+      comment: "I've implemented all required data structures using Python with comprehensive documentation and test cases for each implementation."
     },
-    {
-        id: 2,
-        title: "Data Structures Implementation",
-        course: "Data Structures and Algorithms",
-        courseCode: "CS210",
-        status: "submitted",
-        dueDate: "2025-07-20", // Already passed from July 23, 2025
-        assignedDate: "2025-07-05",
-        submittedDate: "2025-07-19",
-        instructor: "Prof. Michael Chen",
-        points: 50,
-        earnedPoints: 0,
-        progress: 100,
-        description: "Implement various data structures including linked lists, stacks, queues, and binary trees using a programming language of your choice. Include proper documentation and test cases.",
-        attachments: [
-            { name: "Data_Structures_Assignment.pdf", type: "pdf", size: "956 KB" }
-        ],
-        submission: {
-            files: [{ name: "DataStructures_Implementation.zip", type: "zip", size: "1.8 MB" }],
-            comment: "I've implemented all required data structures using Python with comprehensive documentation and test cases for each implementation."
-        },
-        submissionType: "Code submission",
-        category: "Programming"
+    submissionType: "Code submission",
+    category: "Programming"
+  },
+  {
+    id: 3,
+    title: "Website Design Project",
+    course: "Web Development Fundamentals",
+    courseCode: "IT205",
+    status: "graded",
+    dueDate: "2025-07-10", // Already passed from July 23, 2025
+    assignedDate: "2025-06-25",
+    submittedDate: "2025-07-09",
+    gradedDate: "2025-07-15",
+    instructor: "Emma Rodriguez",
+    points: 75,
+    earnedPoints: 68,
+    progress: 100,
+    description: "Design and develop a responsive personal portfolio website using HTML, CSS, and JavaScript. The website should include home, about, portfolio, and contact sections.",
+    attachments: [
+      { name: "Website_Project_Requirements.pdf", type: "pdf", size: "1.1 MB" },
+      { name: "Portfolio_Examples.zip", type: "zip", size: "3.5 MB" }
+    ],
+    submission: {
+      files: [
+        { name: "portfolio_project_code.zip", type: "zip", size: "2.2 MB" },
+        { name: "website_screenshots.pdf", type: "pdf", size: "1.5 MB" }
+      ],
+      comment: "I've created a responsive portfolio website with all required sections. The site includes animations and works well on all device sizes."
     },
-    {
-        id: 3,
-        title: "Website Design Project",
-        course: "Web Development Fundamentals",
-        courseCode: "IT205",
-        status: "graded",
-        dueDate: "2025-07-10", // Already passed from July 23, 2025
-        assignedDate: "2025-06-25",
-        submittedDate: "2025-07-09",
-        gradedDate: "2025-07-15",
-        instructor: "Emma Rodriguez",
-        points: 75,
-        earnedPoints: 68,
-        progress: 100,
-        description: "Design and develop a responsive personal portfolio website using HTML, CSS, and JavaScript. The website should include home, about, portfolio, and contact sections.",
-        attachments: [
-            { name: "Website_Project_Requirements.pdf", type: "pdf", size: "1.1 MB" },
-            { name: "Portfolio_Examples.zip", type: "zip", size: "3.5 MB" }
-        ],
-        submission: {
-            files: [
-                { name: "portfolio_project_code.zip", type: "zip", size: "2.2 MB" },
-                { name: "website_screenshots.pdf", type: "pdf", size: "1.5 MB" }
-            ],
-            comment: "I've created a responsive portfolio website with all required sections. The site includes animations and works well on all device sizes."
-        },
-        feedback: "Great design and responsive implementation. The code is well-structured and commented. Could improve on the contact form validation and cross-browser compatibility.",
-        submissionType: "Code + Documentation",
-        category: "Project"
+    feedback: "Great design and responsive implementation. The code is well-structured and commented. Could improve on the contact form validation and cross-browser compatibility.",
+    submissionType: "Code + Documentation",
+    category: "Project"
+  },
+  {
+    id: 4,
+    title: "SQL Database Design",
+    course: "Database Systems",
+    courseCode: "IS220",
+    status: "late",
+    dueDate: "2025-07-18", // Already passed from July 23, 2025
+    assignedDate: "2025-07-05",
+    submittedDate: "2025-07-21",
+    instructor: "Dr. Robert Taylor",
+    points: 50,
+    earnedPoints: 0,
+    progress: 100,
+    description: "Design a relational database for a library management system. Include entity-relationship diagrams, SQL scripts for table creation, and sample queries for common operations.",
+    attachments: [
+      { name: "Database_Assignment_Instructions.pdf", type: "pdf", size: "875 KB" }
+    ],
+    submission: {
+      files: [
+        { name: "Library_DB_Design.pdf", type: "pdf", size: "1.3 MB" },
+        { name: "SQL_Scripts.sql", type: "sql", size: "45 KB" }
+      ],
+      comment: "I apologize for the late submission. I've included comprehensive ER diagrams and all required SQL scripts for the library management system."
     },
-    {
-        id: 4,
-        title: "SQL Database Design",
-        course: "Database Systems",
-        courseCode: "IS220",
-        status: "late",
-        dueDate: "2025-07-18", // Already passed from July 23, 2025
-        assignedDate: "2025-07-05",
-        submittedDate: "2025-07-21",
-        instructor: "Dr. Robert Taylor",
-        points: 50,
-        earnedPoints: 0,
-        progress: 100,
-        description: "Design a relational database for a library management system. Include entity-relationship diagrams, SQL scripts for table creation, and sample queries for common operations.",
-        attachments: [
-            { name: "Database_Assignment_Instructions.pdf", type: "pdf", size: "875 KB" }
-        ],
-        submission: {
-            files: [
-                { name: "Library_DB_Design.pdf", type: "pdf", size: "1.3 MB" },
-                { name: "SQL_Scripts.sql", type: "sql", size: "45 KB" }
-            ],
-            comment: "I apologize for the late submission. I've included comprehensive ER diagrams and all required SQL scripts for the library management system."
-        },
-        submissionType: "SQL + Documentation",
-        category: "Database Design"
-    },
-    {
-        id: 5,
-        title: "Machine Learning Quiz",
-        course: "Artificial Intelligence",
-        courseCode: "CS350",
-        status: "pending",
-        dueDate: "2025-07-30", // Coming up from July 23, 2025
-        assignedDate: "2025-07-20",
-        instructor: "Dr. Lisa Wong",
-        points: 25,
-        earnedPoints: 0,
-        progress: 0,
-        description: "Complete the online quiz covering fundamental concepts of machine learning, including supervised and unsupervised learning, neural networks, and evaluation metrics.",
-        submissionType: "Online Quiz",
-        category: "Quiz"
-    },
-    {
-        id: 6,
-        title: "Mobile App Prototype",
-        course: "Mobile App Development",
-        courseCode: "SE310",
-        status: "pending",
-        dueDate: "2025-08-05", // Coming up from July 23, 2025
-        assignedDate: "2025-07-15",
-        instructor: "James Wilson",
-        points: 100,
-        earnedPoints: 0,
-        progress: 30,
-        description: "Design and develop a prototype mobile application for a fitness tracking system. Include wireframes, UI/UX design, and a working prototype using a framework of your choice.",
-        attachments: [
-            { name: "App_Prototype_Guidelines.pdf", type: "pdf", size: "1.5 MB" },
-            { name: "UI_Kit_Resources.zip", type: "zip", size: "4.2 MB" }
-        ],
-        submissionType: "Prototype + Documentation",
-        category: "Project"
-    }
+    submissionType: "SQL + Documentation",
+    category: "Database Design"
+  },
+  {
+    id: 5,
+    title: "Machine Learning Quiz",
+    course: "Artificial Intelligence",
+    courseCode: "CS350",
+    status: "pending",
+    dueDate: "2025-07-30", // Coming up from July 23, 2025
+    assignedDate: "2025-07-20",
+    instructor: "Dr. Lisa Wong",
+    points: 25,
+    earnedPoints: 0,
+    progress: 0,
+    description: "Complete the online quiz covering fundamental concepts of machine learning, including supervised and unsupervised learning, neural networks, and evaluation metrics.",
+    submissionType: "Online Quiz",
+    category: "Quiz"
+  },
+  {
+    id: 6,
+    title: "Mobile App Prototype",
+    course: "Mobile App Development",
+    courseCode: "SE310",
+    status: "pending",
+    dueDate: "2025-08-05", // Coming up from July 23, 2025
+    assignedDate: "2025-07-15",
+    instructor: "James Wilson",
+    points: 100,
+    earnedPoints: 0,
+    progress: 30,
+    description: "Design and develop a prototype mobile application for a fitness tracking system. Include wireframes, UI/UX design, and a working prototype using a framework of your choice.",
+    attachments: [
+      { name: "App_Prototype_Guidelines.pdf", type: "pdf", size: "1.5 MB" },
+      { name: "UI_Kit_Resources.zip", type: "zip", size: "4.2 MB" }
+    ],
+    submissionType: "Prototype + Documentation",
+    category: "Project"
+  }
 ];
 
 const Assignment = () => {
-    const [activeTab, setActiveTab] = useState("all");
-    const [showFilter, setShowFilter] = useState(false);
-    const [searchTerm, setSearchTerm] = useState("");
-    const [activeFilter, setActiveFilter] = useState("all");
-    const [sortOrder, setSortOrder] = useState("dueDate");
-    const [sortDirection, setSortDirection] = useState("asc");
-    const [selectedAssignment, setSelectedAssignment] = useState(null);
-    const [showSubmitModal, setShowSubmitModal] = useState(false);
-    const [uploadedFiles, setUploadedFiles] = useState([]);
-    const [submissionComment, setSubmissionComment] = useState("");
-    const [showStatistics, setShowStatistics] = useState(false);
+  const [activeTab, setActiveTab] = useState("all");
+  const [showFilter, setShowFilter] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [activeFilter, setActiveFilter] = useState("all");
+  const [sortOrder, setSortOrder] = useState("dueDate");
+  const [sortDirection, setSortDirection] = useState("asc");
+  const [selectedAssignment, setSelectedAssignment] = useState(null);
+  const [showSubmitModal, setShowSubmitModal] = useState(false);
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [submissionComment, setSubmissionComment] = useState("");
+  const [showStatistics, setShowStatistics] = useState(false);
 
-    // Calculate statistics
-    const stats = {
-        pending: assignmentsData.filter(a => a.status === "pending").length,
-        submitted: assignmentsData.filter(a => a.status === "submitted").length,
-        late: assignmentsData.filter(a => a.status === "late").length,
-        graded: assignmentsData.filter(a => a.status === "graded").length
+  // Calculate statistics
+  const stats = {
+    pending: assignmentsData.filter(a => a.status === "pending").length,
+    submitted: assignmentsData.filter(a => a.status === "submitted").length,
+    late: assignmentsData.filter(a => a.status === "late").length,
+    graded: assignmentsData.filter(a => a.status === "graded").length
+  };
+
+  // Get today's date
+  const today = new Date("2025-07-23");
+
+  // Filter and sort assignments
+  const filteredAssignments = assignmentsData.filter(assignment => {
+    // Filter by search term
+    if (searchTerm && !assignment.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      !assignment.course.toLowerCase().includes(searchTerm.toLowerCase())) {
+      return false;
+    }
+
+    // Filter by tab
+    if (activeTab === "pending" && assignment.status !== "pending") return false;
+    if (activeTab === "submitted" && assignment.status !== "submitted") return false;
+    if (activeTab === "late" && assignment.status !== "late") return false;
+    if (activeTab === "graded" && assignment.status !== "graded") return false;
+
+    // Filter by active filter
+    if (activeFilter === "upcoming") {
+      const dueDate = new Date(assignment.dueDate);
+      return dueDate >= today && assignment.status === "pending";
+    } else if (activeFilter === "overdue") {
+      const dueDate = new Date(assignment.dueDate);
+      return dueDate < today && assignment.status === "pending";
+    } else if (activeFilter === "thisWeek") {
+      const dueDate = new Date(assignment.dueDate);
+      const oneWeekLater = new Date(today);
+      oneWeekLater.setDate(today.getDate() + 7);
+      return dueDate >= today && dueDate <= oneWeekLater;
+    }
+
+    return true;
+  }).sort((a, b) => {
+    // Sort logic
+    if (sortOrder === "dueDate") {
+      if (sortDirection === "asc") {
+        return new Date(a.dueDate) - new Date(b.dueDate);
+      } else {
+        return new Date(b.dueDate) - new Date(a.dueDate);
+      }
+    } else if (sortOrder === "title") {
+      if (sortDirection === "asc") {
+        return a.title.localeCompare(b.title);
+      } else {
+        return b.title.localeCompare(a.title);
+      }
+    } else if (sortOrder === "course") {
+      if (sortDirection === "asc") {
+        return a.course.localeCompare(b.course);
+      } else {
+        return b.course.localeCompare(a.course);
+      }
+    } else if (sortOrder === "points") {
+      if (sortDirection === "asc") {
+        return a.points - b.points;
+      } else {
+        return b.points - a.points;
+      }
+    }
+
+    return 0;
+  });
+
+  // Handle assignment selection
+  const handleAssignmentSelect = (assignment) => {
+    setSelectedAssignment(assignment);
+  };
+
+  // Check if assignment is due soon (within 3 days)
+  const isDueSoon = (dueDate) => {
+    const due = new Date(dueDate);
+    const threeDaysFromNow = new Date(today);
+    threeDaysFromNow.setDate(today.getDate() + 3);
+    return due <= threeDaysFromNow && due >= today;
+  };
+
+  // Check if assignment is overdue
+  const isOverdue = (dueDate) => {
+    return new Date(dueDate) < today;
+  };
+
+  // Handle file upload
+  const handleFileUpload = () => {
+    // In a real app, this would open a file picker
+    // For demo purposes, we'll simulate adding a file
+    const newFile = {
+      name: `Assignment_Submission_${Math.floor(Math.random() * 1000)}.pdf`,
+      type: "pdf",
+      size: "1.5 MB"
     };
 
-    // Get today's date
-    const today = new Date("2025-07-23");
+    setUploadedFiles([...uploadedFiles, newFile]);
+  };
 
-    // Filter and sort assignments
-    const filteredAssignments = assignmentsData.filter(assignment => {
-        // Filter by search term
-        if (searchTerm && !assignment.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
-            !assignment.course.toLowerCase().includes(searchTerm.toLowerCase())) {
-            return false;
-        }
+  // Handle file deletion
+  const handleFileDelete = (index) => {
+    const newFiles = [...uploadedFiles];
+    newFiles.splice(index, 1);
+    setUploadedFiles(newFiles);
+  };
 
-        // Filter by tab
-        if (activeTab === "pending" && assignment.status !== "pending") return false;
-        if (activeTab === "submitted" && assignment.status !== "submitted") return false;
-        if (activeTab === "late" && assignment.status !== "late") return false;
-        if (activeTab === "graded" && assignment.status !== "graded") return false;
-
-        // Filter by active filter
-        if (activeFilter === "upcoming") {
-            const dueDate = new Date(assignment.dueDate);
-            return dueDate >= today && assignment.status === "pending";
-        } else if (activeFilter === "overdue") {
-            const dueDate = new Date(assignment.dueDate);
-            return dueDate < today && assignment.status === "pending";
-        } else if (activeFilter === "thisWeek") {
-            const dueDate = new Date(assignment.dueDate);
-            const oneWeekLater = new Date(today);
-            oneWeekLater.setDate(today.getDate() + 7);
-            return dueDate >= today && dueDate <= oneWeekLater;
-        }
-
-        return true;
-    }).sort((a, b) => {
-        // Sort logic
-        if (sortOrder === "dueDate") {
-            if (sortDirection === "asc") {
-                return new Date(a.dueDate) - new Date(b.dueDate);
-            } else {
-                return new Date(b.dueDate) - new Date(a.dueDate);
+  // Handle submission
+  const handleSubmit = () => {
+    // In a real app, this would submit the files and comment to the server
+    // For demo purposes, we'll just update the local state
+    if (selectedAssignment) {
+      const updatedAssignments = assignmentsData.map(assignment => {
+        if (assignment.id === selectedAssignment.id) {
+          return {
+            ...assignment,
+            status: "submitted",
+            submittedDate: "2025-07-23", // Today
+            progress: 100,
+            submission: {
+              files: uploadedFiles,
+              comment: submissionComment
             }
-        } else if (sortOrder === "title") {
-            if (sortDirection === "asc") {
-                return a.title.localeCompare(b.title);
-            } else {
-                return b.title.localeCompare(a.title);
-            }
-        } else if (sortOrder === "course") {
-            if (sortDirection === "asc") {
-                return a.course.localeCompare(b.course);
-            } else {
-                return b.course.localeCompare(a.course);
-            }
-        } else if (sortOrder === "points") {
-            if (sortDirection === "asc") {
-                return a.points - b.points;
-            } else {
-                return b.points - a.points;
-            }
+          };
         }
+        return assignment;
+      });
 
-        return 0;
-    });
+      // Update the selected assignment
+      const updatedAssignment = updatedAssignments.find(a => a.id === selectedAssignment.id);
+      setSelectedAssignment(updatedAssignment);
 
-    // Handle assignment selection
-    const handleAssignmentSelect = (assignment) => {
-        setSelectedAssignment(assignment);
-    };
+      // Close the modal
+      setShowSubmitModal(false);
+      setUploadedFiles([]);
+      setSubmissionComment("");
 
-    // Check if assignment is due soon (within 3 days)
-    const isDueSoon = (dueDate) => {
-        const due = new Date(dueDate);
-        const threeDaysFromNow = new Date(today);
-        threeDaysFromNow.setDate(today.getDate() + 3);
-        return due <= threeDaysFromNow && due >= today;
-    };
+      // In a real app, this would also update the server
+    }
+  };
 
-    // Check if assignment is overdue
-    const isOverdue = (dueDate) => {
-        return new Date(dueDate) < today;
-    };
+  // Toggle sort direction
+  const toggleSortDirection = () => {
+    setSortDirection(prev => prev === "asc" ? "desc" : "asc");
+  };
 
-    // Handle file upload
-    const handleFileUpload = () => {
-        // In a real app, this would open a file picker
-        // For demo purposes, we'll simulate adding a file
-        const newFile = {
-            name: `Assignment_Submission_${Math.floor(Math.random() * 1000)}.pdf`,
-            type: "pdf",
-            size: "1.5 MB"
-        };
+  return (
+    <AssignmentContainer>
+      <GlobalStyles />
 
-        setUploadedFiles([...uploadedFiles, newFile]);
-    };
+      <Header>
+        <h1><FaClipboardList /> Assignments</h1>
+        <ToolBar>
+          <SearchInputWrapper>
+            <FaSearch />
+            <input
+              type="text"
+              placeholder="Search assignments..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </SearchInputWrapper>
 
-    // Handle file deletion
-    const handleFileDelete = (index) => {
-        const newFiles = [...uploadedFiles];
-        newFiles.splice(index, 1);
-        setUploadedFiles(newFiles);
-    };
+          <div style={{ position: 'relative' }}>
+            <Button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => setShowFilter(!showFilter)}
+            >
+              <FaFilter /> Filter: {activeFilter === 'all' ? 'All' : activeFilter}
+            </Button>
 
-    // Handle submission
-    const handleSubmit = () => {
-        // In a real app, this would submit the files and comment to the server
-        // For demo purposes, we'll just update the local state
-        if (selectedAssignment) {
-            const updatedAssignments = assignmentsData.map(assignment => {
-                if (assignment.id === selectedAssignment.id) {
-                    return {
-                        ...assignment,
-                        status: "submitted",
-                        submittedDate: "2025-07-23", // Today
-                        progress: 100,
-                        submission: {
-                            files: uploadedFiles,
-                            comment: submissionComment
-                        }
-                    };
-                }
-                return assignment;
-            });
+            {showFilter && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{
+                  position: 'absolute',
+                  top: '100%',
+                  right: 0,
+                  marginTop: '0.5rem',
+                  background: 'rgba(25, 25, 30, 0.95)',
+                  borderRadius: '8px',
+                  overflow: 'hidden',
+                  width: '180px',
+                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
+                  border: '1px solid rgba(50, 50, 60, 0.4)',
+                  zIndex: 100
+                }}
+              >
+                {['all', 'upcoming', 'overdue', 'thisWeek'].map((filter) => (
+                  <div
+                    key={filter}
+                    onClick={() => {
+                      setActiveFilter(filter);
+                      setShowFilter(false);
+                    }}
+                    style={{
+                      padding: '0.8rem 1rem',
+                      cursor: 'pointer',
+                      backgroundColor: activeFilter === filter ? 'rgba(160, 118, 249, 0.15)' : 'transparent',
+                      borderBottom: '1px solid rgba(50, 50, 60, 0.4)',
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    {filter === 'all' ? 'All Assignments' :
+                      filter === 'upcoming' ? 'Upcoming Due Dates' :
+                        filter === 'overdue' ? 'Overdue' :
+                          filter === 'thisWeek' ? 'Due This Week' :
+                            filter.charAt(0).toUpperCase() + filter.slice(1)}
+                  </div>
+                ))}
+              </motion.div>
+            )}
+          </div>
 
-            // Update the selected assignment
-            const updatedAssignment = updatedAssignments.find(a => a.id === selectedAssignment.id);
-            setSelectedAssignment(updatedAssignment);
+          <Button
+            onClick={toggleSortDirection}
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+          >
+            {sortDirection === "asc" ? <FaSortAmountDown /> : <FaSortAmountUp />}
+            Sort: {sortOrder.charAt(0).toUpperCase() + sortOrder.slice(1)}
+          </Button>
+        </ToolBar>
+      </Header>
 
-            // Close the modal
-            setShowSubmitModal(false);
-            setUploadedFiles([]);
-            setSubmissionComment("");
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: '1rem'
+      }}>
+        <TabsContainer style={{ marginBottom: '0' }}>
+          <Tab active={activeTab === "all"} onClick={() => setActiveTab("all")}>
+            <FaClipboardList /> All Assignments
+          </Tab>
+          <Tab active={activeTab === "pending"} onClick={() => setActiveTab("pending")}>
+            <FaHourglassHalf /> Pending ({stats.pending})
+          </Tab>
+          <Tab active={activeTab === "submitted"} onClick={() => setActiveTab("submitted")}>
+            <FaCheckCircle /> Submitted ({stats.submitted})
+          </Tab>
+          <Tab active={activeTab === "late"} onClick={() => setActiveTab("late")}>
+            <FaExclamationTriangle /> Late ({stats.late})
+          </Tab>
+          <Tab active={activeTab === "graded"} onClick={() => setActiveTab("graded")}>
+            <FaChartBar /> Graded ({stats.graded})
+          </Tab>
+        </TabsContainer>
 
-            // In a real app, this would also update the server
-        }
-    };
+        <Button
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.97 }}
+          onClick={() => setShowStatistics(!showStatistics)}
+          style={{ marginLeft: '10px' }}
+        >
+          <FaChartBar /> {showStatistics ? 'Hide Stats' : 'Show Stats'}
+        </Button>
+      </div>
 
-    // Toggle sort direction
-    const toggleSortDirection = () => {
-        setSortDirection(prev => prev === "asc" ? "desc" : "asc");
-    };
+      {showStatistics && (
+        <StatsCard
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.5 }}
+        >
+          <h3><FaChartBar /> Assignment Statistics</h3>
+          <div className="stats-grid">
+            <div className="stat-item">
+              <div className="stat-icon pending">
+                <FaHourglassHalf />
+              </div>
+              <div className="stat-value">{stats.pending}</div>
+              <div className="stat-label">Pending</div>
+            </div>
+            <div className="stat-item">
+              <div className="stat-icon completed">
+                <FaCheckCircle />
+              </div>
+              <div className="stat-value">{stats.submitted}</div>
+              <div className="stat-label">Submitted</div>
+            </div>
+            <div className="stat-item">
+              <div className="stat-icon late">
+                <FaExclamationTriangle />
+              </div>
+              <div className="stat-value">{stats.late}</div>
+              <div className="stat-label">Late</div>
+            </div>
+            <div className="stat-item">
+              <div className="stat-icon graded">
+                <FaChartBar />
+              </div>
+              <div className="stat-value">{stats.graded}</div>
+              <div className="stat-label">Graded</div>
+            </div>
+          </div>
+        </StatsCard>
+      )}
 
-    return (
-        <AssignmentContainer>
-            <GlobalStyles />
+      <ContentWrapper>
+        <AssignmentList>
+          {filteredAssignments.map(assignment => (
+            <AssignmentCard
+              key={assignment.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+              onClick={() => handleAssignmentSelect(assignment)}
+              style={{
+                borderLeft: selectedAssignment && selectedAssignment.id === assignment.id ?
+                  '4px solid #A076F9' : '1px solid rgba(50, 50, 60, 0.4)'
+              }}
+            >
+              <div className="card-header">
+                <div className="title-section">
+                  <h3>
+                    <FaFileAlt /> {assignment.title}
+                  </h3>
+                  <div className="course-name">
+                    <FaBook /> {assignment.course} ({assignment.courseCode})
+                  </div>
+                </div>
 
-            <Header>
-                <h1><FaClipboardList /> Assignments</h1>
-                <ToolBar>
-                    <SearchInputWrapper>
-                        <FaSearch />
-                        <input
-                            type="text"
-                            placeholder="Search assignments..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                        />
-                    </SearchInputWrapper>
+                <div className={`status-badge ${assignment.status}`}>
+                  {assignment.status === "pending" && <FaHourglassHalf />}
+                  {assignment.status === "submitted" && <FaCheckCircle />}
+                  {assignment.status === "late" && <FaExclamationTriangle />}
+                  {assignment.status === "graded" && <FaChartBar />}
 
-                    <div style={{ position: 'relative' }}>
-                        <Button
-                            whileHover={{ scale: 1.03 }}
-                            whileTap={{ scale: 0.97 }}
-                            onClick={() => setShowFilter(!showFilter)}
-                        >
-                            <FaFilter /> Filter: {activeFilter === 'all' ? 'All' : activeFilter}
-                        </Button>
+                  {assignment.status === "pending" && "Pending"}
+                  {assignment.status === "submitted" && "Submitted"}
+                  {assignment.status === "late" && "Late"}
+                  {assignment.status === "graded" && "Graded"}
+                </div>
+              </div>
 
-                        {showFilter && (
-                            <motion.div
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                style={{
-                                    position: 'absolute',
-                                    top: '100%',
-                                    right: 0,
-                                    marginTop: '0.5rem',
-                                    background: 'rgba(25, 25, 30, 0.95)',
-                                    borderRadius: '8px',
-                                    overflow: 'hidden',
-                                    width: '180px',
-                                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
-                                    border: '1px solid rgba(50, 50, 60, 0.4)',
-                                    zIndex: 100
-                                }}
-                            >
-                                {['all', 'upcoming', 'overdue', 'thisWeek'].map((filter) => (
-                                    <div
-                                        key={filter}
-                                        onClick={() => {
-                                            setActiveFilter(filter);
-                                            setShowFilter(false);
-                                        }}
-                                        style={{
-                                            padding: '0.8rem 1rem',
-                                            cursor: 'pointer',
-                                            backgroundColor: activeFilter === filter ? 'rgba(160, 118, 249, 0.15)' : 'transparent',
-                                            borderBottom: '1px solid rgba(50, 50, 60, 0.4)',
-                                            transition: 'all 0.2s ease'
-                                        }}
-                                    >
-                                        {filter === 'all' ? 'All Assignments' :
-                                            filter === 'upcoming' ? 'Upcoming Due Dates' :
-                                                filter === 'overdue' ? 'Overdue' :
-                                                    filter === 'thisWeek' ? 'Due This Week' :
-                                                        filter.charAt(0).toUpperCase() + filter.slice(1)}
-                                    </div>
-                                ))}
-                            </motion.div>
-                        )}
-                    </div>
+              <div className="card-content">
+                <div className="info-section">
+                  <div className={`info-item ${isDueSoon(assignment.dueDate) ? 'deadline-soon' :
+                    isOverdue(assignment.dueDate) ? 'overdue' : ''}`}>
+                    <FaCalendarAlt /> Due: {new Date(assignment.dueDate).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'short',
+                      day: 'numeric'
+                    })}
+                    {isDueSoon(assignment.dueDate) && " (Soon)"}
+                    {isOverdue(assignment.dueDate) && assignment.status === "pending" && " (Overdue)"}
+                  </div>
 
-                    <Button
-                        onClick={toggleSortDirection}
-                        whileHover={{ scale: 1.03 }}
-                        whileTap={{ scale: 0.97 }}
-                    >
-                        {sortDirection === "asc" ? <FaSortAmountDown /> : <FaSortAmountUp />}
-                        Sort: {sortOrder.charAt(0).toUpperCase() + sortOrder.slice(1)}
-                    </Button>
-                </ToolBar>
-            </Header>
+                  <div className="info-item">
+                    <FaChalkboardTeacher /> {assignment.instructor}
+                  </div>
 
+                  <div className="info-item">
+                    <FaTags /> {assignment.category}
+                  </div>
+                </div>
+
+                <div className="action-buttons">
+                  <button onClick={(e) => { e.stopPropagation(); }}>
+                    <FaEye />
+                  </button>
+                  {assignment.status === "pending" && (
+                    <button onClick={(e) => { e.stopPropagation(); setShowSubmitModal(true); setSelectedAssignment(assignment); }}>
+                      <FaFileUpload />
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              <div className="progress-section">
+                <div className="progress-bar">
+                  <div
+                    className="progress-fill"
+                    style={{ width: `${assignment.progress}%` }}
+                  ></div>
+                </div>
+                <div className="progress-info">
+                  <div className="progress-percent">{assignment.progress}% Complete</div>
+                  <div>{assignment.points} Points</div>
+                </div>
+              </div>
+            </AssignmentCard>
+          ))}
+
+          {filteredAssignments.length === 0 && (
             <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginBottom: '1rem'
+              textAlign: 'center',
+              padding: '3rem',
+              color: '#a0a0a0',
+              background: 'rgba(25, 25, 30, 0.8)',
+              borderRadius: '12px',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
+              border: '1px solid rgba(50, 50, 60, 0.4)',
             }}>
-                <TabsContainer style={{ marginBottom: '0' }}>
-                    <Tab active={activeTab === "all"} onClick={() => setActiveTab("all")}>
-                        <FaClipboardList /> All Assignments
-                    </Tab>
-                    <Tab active={activeTab === "pending"} onClick={() => setActiveTab("pending")}>
-                        <FaHourglassHalf /> Pending ({stats.pending})
-                    </Tab>
-                    <Tab active={activeTab === "submitted"} onClick={() => setActiveTab("submitted")}>
-                        <FaCheckCircle /> Submitted ({stats.submitted})
-                    </Tab>
-                    <Tab active={activeTab === "late"} onClick={() => setActiveTab("late")}>
-                        <FaExclamationTriangle /> Late ({stats.late})
-                    </Tab>
-                    <Tab active={activeTab === "graded"} onClick={() => setActiveTab("graded")}>
-                        <FaChartBar /> Graded ({stats.graded})
-                    </Tab>
-                </TabsContainer>
+              <FaClipboardList style={{ fontSize: '3rem', color: '#A076F9', marginBottom: '1rem' }} />
+              <h2>No assignments found</h2>
+              <p>Try adjusting your search or filter criteria</p>
+            </div>
+          )}
+        </AssignmentList>
 
-                <Button
-                    whileHover={{ scale: 1.03 }}
-                    whileTap={{ scale: 0.97 }}
-                    onClick={() => setShowStatistics(!showStatistics)}
-                    style={{ marginLeft: '10px' }}
-                >
-                    <FaChartBar /> {showStatistics ? 'Hide Stats' : 'Show Stats'}
-                </Button>
+        <AssignmentDetailSection>
+          {selectedAssignment ? (
+            <>
+              <AssignmentDetail
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <h3><FaClipboardList /> Assignment Details</h3>
+
+                <div className="detail-section">
+                  <h4>{selectedAssignment.title}</h4>
+                  <div className="detail-list">
+                    <div className="detail-item">
+                      <FaBook /> Course: {selectedAssignment.course} ({selectedAssignment.courseCode})
+                    </div>
+                    <div className="detail-item">
+                      <FaChalkboardTeacher /> Instructor: {selectedAssignment.instructor}
+                    </div>
+                    <div className={`detail-item ${isDueSoon(selectedAssignment.dueDate) ? 'highlight' : ''}`}>
+                      <FaCalendarAlt /> Due Date: {new Date(selectedAssignment.dueDate).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                      })}
+                    </div>
+                    <div className="detail-item">
+                      <FaCalendarAlt /> Assigned: {new Date(selectedAssignment.assignedDate).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                      })}
+                    </div>
+                    {selectedAssignment.submittedDate && (
+                      <div className="detail-item">
+                        <FaCheckCircle /> Submitted: {new Date(selectedAssignment.submittedDate).toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric'
+                        })}
+                      </div>
+                    )}
+                    {selectedAssignment.gradedDate && (
+                      <div className="detail-item">
+                        <FaChartBar /> Graded: {new Date(selectedAssignment.gradedDate).toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric'
+                        })}
+                      </div>
+                    )}
+                    <div className="detail-item">
+                      <FaTags /> Category: {selectedAssignment.category}
+                    </div>
+                    <div className="detail-item">
+                      <FaFileUpload /> Submission Type: {selectedAssignment.submissionType}
+                    </div>
+                    <div className="detail-item highlight">
+                      <FaChartBar /> Points: {selectedAssignment.earnedPoints > 0 ?
+                        `${selectedAssignment.earnedPoints}/${selectedAssignment.points}` :
+                        `${selectedAssignment.points} possible`}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="detail-section">
+                  <h4>Description</h4>
+                  <p>{selectedAssignment.description}</p>
+                </div>
+
+                {selectedAssignment.attachments && selectedAssignment.attachments.length > 0 && (
+                  <div className="detail-section">
+                    <h4>Attachments</h4>
+                    <div className="file-attachments">
+                      {selectedAssignment.attachments.map((attachment, index) => (
+                        <div className="attachment" key={index}>
+                          <div className="file-info">
+                            <FaFileAlt />
+                            <div className="file-name">{attachment.name} ({attachment.size})</div>
+                          </div>
+                          <div className="download-btn">
+                            <FaDownload />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {selectedAssignment.status === "graded" && selectedAssignment.feedback && (
+                  <div className="detail-section">
+                    <h4>Instructor Feedback</h4>
+                    <p>{selectedAssignment.feedback}</p>
+                  </div>
+                )}
+
+                <div className="button-container">
+                  {selectedAssignment.status === "pending" && (
+                    <Button primary whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} onClick={() => setShowSubmitModal(true)}>
+                      <FaFileUpload /> Submit Assignment
+                    </Button>
+                  )}
+                  <Button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                    <FaDownload /> Download Materials
+                  </Button>
+                </div>
+              </AssignmentDetail>
+
+              {(selectedAssignment.status === "submitted" || selectedAssignment.status === "late" || selectedAssignment.status === "graded") && (
+                <AssignmentSubmission>
+                  <h3><FaCheckCircle /> Your Submission</h3>
+
+                  <div className="detail-section">
+                    <h4>Submitted Files</h4>
+                    <div className="file-attachments">
+                      {selectedAssignment.submission.files.map((file, index) => (
+                        <div className="attachment" key={index}>
+                          <div className="file-info">
+                            <FaFileAlt />
+                            <div className="file-name">{file.name} ({file.size})</div>
+                          </div>
+                          <div className="download-btn">
+                            <FaDownload />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {selectedAssignment.submission.comment && (
+                    <div className="detail-section">
+                      <h4>Your Comment</h4>
+                      <p>{selectedAssignment.submission.comment}</p>
+                    </div>
+                  )}
+
+                  {selectedAssignment.status !== "graded" && (
+                    <div className="button-container">
+                      <Button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                        <FaEdit /> Edit Submission
+                      </Button>
+                    </div>
+                  )}
+                </AssignmentSubmission>
+              )}
+            </>
+          ) : (
+            <AssignmentDetail
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <h3><FaClipboardList /> Assignment Details</h3>
+              <p style={{ color: '#a0a0a0', textAlign: 'center', margin: '2rem 0' }}>
+                Select an assignment to view details
+              </p>
+            </AssignmentDetail>
+          )}
+        </AssignmentDetailSection>
+      </ContentWrapper>
+
+      {/* Submit Modal */}
+      {showSubmitModal && selectedAssignment && (
+        <ModalBackdrop
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={() => setShowSubmitModal(false)}
+        >
+          <ModalContent
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3 }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2><FaFileUpload /> Submit Assignment</h2>
+
+            <div className="form-group">
+              <label>Assignment</label>
+              <input
+                type="text"
+                value={selectedAssignment.title}
+                disabled
+              />
             </div>
 
-            {showStatistics && (
-                <StatsCard
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.5 }}
-                >
-                    <h3><FaChartBar /> Assignment Statistics</h3>
-                    <div className="stats-grid">
-                        <div className="stat-item">
-                            <div className="stat-icon pending">
-                                <FaHourglassHalf />
-                            </div>
-                            <div className="stat-value">{stats.pending}</div>
-                            <div className="stat-label">Pending</div>
-                        </div>
-                        <div className="stat-item">
-                            <div className="stat-icon completed">
-                                <FaCheckCircle />
-                            </div>
-                            <div className="stat-value">{stats.submitted}</div>
-                            <div className="stat-label">Submitted</div>
-                        </div>
-                        <div className="stat-item">
-                            <div className="stat-icon late">
-                                <FaExclamationTriangle />
-                            </div>
-                            <div className="stat-value">{stats.late}</div>
-                            <div className="stat-label">Late</div>
-                        </div>
-                        <div className="stat-item">
-                            <div className="stat-icon graded">
-                                <FaChartBar />
-                            </div>
-                            <div className="stat-value">{stats.graded}</div>
-                            <div className="stat-label">Graded</div>
-                        </div>
+            <div className="upload-area" onClick={handleFileUpload}>
+              <FaFileUpload />
+              <p>Click to upload files or <strong>drag & drop</strong> them here</p>
+              <p style={{ fontSize: '0.8rem', marginTop: '0.5rem' }}>
+                Accepted file types: PDF, DOC, DOCX, ZIP (Max: 20MB)
+              </p>
+            </div>
+
+            {uploadedFiles.length > 0 && (
+              <div className="uploaded-files">
+                {uploadedFiles.map((file, index) => (
+                  <div className="file-item" key={index}>
+                    <div className="file-info">
+                      <FaFileAlt />
+                      <div className="file-name">{file.name} ({file.size})</div>
                     </div>
-                </StatsCard>
+                    <div className="file-actions">
+                      <button className="delete" onClick={() => handleFileDelete(index)}>
+                        <FaTrash />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
             )}
 
-            <ContentWrapper>
-                <AssignmentList>
-                    {filteredAssignments.map(assignment => (
-                        <AssignmentCard
-                            key={assignment.id}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.3 }}
-                            onClick={() => handleAssignmentSelect(assignment)}
-                            style={{
-                                borderLeft: selectedAssignment && selectedAssignment.id === assignment.id ?
-                                    '4px solid #A076F9' : '1px solid rgba(50, 50, 60, 0.4)'
-                            }}
-                        >
-                            <div className="card-header">
-                                <div className="title-section">
-                                    <h3>
-                                        <FaFileAlt /> {assignment.title}
-                                    </h3>
-                                    <div className="course-name">
-                                        <FaBook /> {assignment.course} ({assignment.courseCode})
-                                    </div>
-                                </div>
+            <div className="form-group">
+              <label htmlFor="comment">Comment (Optional)</label>
+              <textarea
+                id="comment"
+                value={submissionComment}
+                onChange={(e) => setSubmissionComment(e.target.value)}
+                placeholder="Add a comment about your submission..."
+              />
+            </div>
 
-                                <div className={`status-badge ${assignment.status}`}>
-                                    {assignment.status === "pending" && <FaHourglassHalf />}
-                                    {assignment.status === "submitted" && <FaCheckCircle />}
-                                    {assignment.status === "late" && <FaExclamationTriangle />}
-                                    {assignment.status === "graded" && <FaChartBar />}
-
-                                    {assignment.status === "pending" && "Pending"}
-                                    {assignment.status === "submitted" && "Submitted"}
-                                    {assignment.status === "late" && "Late"}
-                                    {assignment.status === "graded" && "Graded"}
-                                </div>
-                            </div>
-
-                            <div className="card-content">
-                                <div className="info-section">
-                                    <div className={`info-item ${isDueSoon(assignment.dueDate) ? 'deadline-soon' :
-                                        isOverdue(assignment.dueDate) ? 'overdue' : ''}`}>
-                                        <FaCalendarAlt /> Due: {new Date(assignment.dueDate).toLocaleDateString('en-US', {
-                                            year: 'numeric',
-                                            month: 'short',
-                                            day: 'numeric'
-                                        })}
-                                        {isDueSoon(assignment.dueDate) && " (Soon)"}
-                                        {isOverdue(assignment.dueDate) && assignment.status === "pending" && " (Overdue)"}
-                                    </div>
-
-                                    <div className="info-item">
-                                        <FaChalkboardTeacher /> {assignment.instructor}
-                                    </div>
-
-                                    <div className="info-item">
-                                        <FaTags /> {assignment.category}
-                                    </div>
-                                </div>
-
-                                <div className="action-buttons">
-                                    <button onClick={(e) => { e.stopPropagation(); }}>
-                                        <FaEye />
-                                    </button>
-                                    {assignment.status === "pending" && (
-                                        <button onClick={(e) => { e.stopPropagation(); setShowSubmitModal(true); setSelectedAssignment(assignment); }}>
-                                            <FaFileUpload />
-                                        </button>
-                                    )}
-                                </div>
-                            </div>
-
-                            <div className="progress-section">
-                                <div className="progress-bar">
-                                    <div
-                                        className="progress-fill"
-                                        style={{ width: `${assignment.progress}%` }}
-                                    ></div>
-                                </div>
-                                <div className="progress-info">
-                                    <div className="progress-percent">{assignment.progress}% Complete</div>
-                                    <div>{assignment.points} Points</div>
-                                </div>
-                            </div>
-                        </AssignmentCard>
-                    ))}
-
-                    {filteredAssignments.length === 0 && (
-                        <div style={{
-                            textAlign: 'center',
-                            padding: '3rem',
-                            color: '#a0a0a0',
-                            background: 'rgba(25, 25, 30, 0.8)',
-                            borderRadius: '12px',
-                            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
-                            border: '1px solid rgba(50, 50, 60, 0.4)',
-                        }}>
-                            <FaClipboardList style={{ fontSize: '3rem', color: '#A076F9', marginBottom: '1rem' }} />
-                            <h2>No assignments found</h2>
-                            <p>Try adjusting your search or filter criteria</p>
-                        </div>
-                    )}
-                </AssignmentList>
-
-                <AssignmentDetailSection>
-                    {selectedAssignment ? (
-                        <>
-                            <AssignmentDetail
-                                initial={{ opacity: 0, x: 20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ duration: 0.3 }}
-                            >
-                                <h3><FaClipboardList /> Assignment Details</h3>
-
-                                <div className="detail-section">
-                                    <h4>{selectedAssignment.title}</h4>
-                                    <div className="detail-list">
-                                        <div className="detail-item">
-                                            <FaBook /> Course: {selectedAssignment.course} ({selectedAssignment.courseCode})
-                                        </div>
-                                        <div className="detail-item">
-                                            <FaChalkboardTeacher /> Instructor: {selectedAssignment.instructor}
-                                        </div>
-                                        <div className={`detail-item ${isDueSoon(selectedAssignment.dueDate) ? 'highlight' : ''}`}>
-                                            <FaCalendarAlt /> Due Date: {new Date(selectedAssignment.dueDate).toLocaleDateString('en-US', {
-                                                year: 'numeric',
-                                                month: 'long',
-                                                day: 'numeric'
-                                            })}
-                                        </div>
-                                        <div className="detail-item">
-                                            <FaCalendarAlt /> Assigned: {new Date(selectedAssignment.assignedDate).toLocaleDateString('en-US', {
-                                                year: 'numeric',
-                                                month: 'long',
-                                                day: 'numeric'
-                                            })}
-                                        </div>
-                                        {selectedAssignment.submittedDate && (
-                                            <div className="detail-item">
-                                                <FaCheckCircle /> Submitted: {new Date(selectedAssignment.submittedDate).toLocaleDateString('en-US', {
-                                                    year: 'numeric',
-                                                    month: 'long',
-                                                    day: 'numeric'
-                                                })}
-                                            </div>
-                                        )}
-                                        {selectedAssignment.gradedDate && (
-                                            <div className="detail-item">
-                                                <FaChartBar /> Graded: {new Date(selectedAssignment.gradedDate).toLocaleDateString('en-US', {
-                                                    year: 'numeric',
-                                                    month: 'long',
-                                                    day: 'numeric'
-                                                })}
-                                            </div>
-                                        )}
-                                        <div className="detail-item">
-                                            <FaTags /> Category: {selectedAssignment.category}
-                                        </div>
-                                        <div className="detail-item">
-                                            <FaFileUpload /> Submission Type: {selectedAssignment.submissionType}
-                                        </div>
-                                        <div className="detail-item highlight">
-                                            <FaChartBar /> Points: {selectedAssignment.earnedPoints > 0 ?
-                                                `${selectedAssignment.earnedPoints}/${selectedAssignment.points}` :
-                                                `${selectedAssignment.points} possible`}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="detail-section">
-                                    <h4>Description</h4>
-                                    <p>{selectedAssignment.description}</p>
-                                </div>
-
-                                {selectedAssignment.attachments && selectedAssignment.attachments.length > 0 && (
-                                    <div className="detail-section">
-                                        <h4>Attachments</h4>
-                                        <div className="file-attachments">
-                                            {selectedAssignment.attachments.map((attachment, index) => (
-                                                <div className="attachment" key={index}>
-                                                    <div className="file-info">
-                                                        <FaFileAlt />
-                                                        <div className="file-name">{attachment.name} ({attachment.size})</div>
-                                                    </div>
-                                                    <div className="download-btn">
-                                                        <FaDownload />
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
-
-                                {selectedAssignment.status === "graded" && selectedAssignment.feedback && (
-                                    <div className="detail-section">
-                                        <h4>Instructor Feedback</h4>
-                                        <p>{selectedAssignment.feedback}</p>
-                                    </div>
-                                )}
-
-                                <div className="button-container">
-                                    {selectedAssignment.status === "pending" && (
-                                        <Button primary whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} onClick={() => setShowSubmitModal(true)}>
-                                            <FaFileUpload /> Submit Assignment
-                                        </Button>
-                                    )}
-                                    <Button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                                        <FaDownload /> Download Materials
-                                    </Button>
-                                </div>
-                            </AssignmentDetail>
-
-                            {(selectedAssignment.status === "submitted" || selectedAssignment.status === "late" || selectedAssignment.status === "graded") && (
-                                <AssignmentSubmission>
-                                    <h3><FaCheckCircle /> Your Submission</h3>
-
-                                    <div className="detail-section">
-                                        <h4>Submitted Files</h4>
-                                        <div className="file-attachments">
-                                            {selectedAssignment.submission.files.map((file, index) => (
-                                                <div className="attachment" key={index}>
-                                                    <div className="file-info">
-                                                        <FaFileAlt />
-                                                        <div className="file-name">{file.name} ({file.size})</div>
-                                                    </div>
-                                                    <div className="download-btn">
-                                                        <FaDownload />
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-
-                                    {selectedAssignment.submission.comment && (
-                                        <div className="detail-section">
-                                            <h4>Your Comment</h4>
-                                            <p>{selectedAssignment.submission.comment}</p>
-                                        </div>
-                                    )}
-
-                                    {selectedAssignment.status !== "graded" && (
-                                        <div className="button-container">
-                                            <Button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                                                <FaEdit /> Edit Submission
-                                            </Button>
-                                        </div>
-                                    )}
-                                </AssignmentSubmission>
-                            )}
-                        </>
-                    ) : (
-                        <AssignmentDetail
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.3 }}
-                        >
-                            <h3><FaClipboardList /> Assignment Details</h3>
-                            <p style={{ color: '#a0a0a0', textAlign: 'center', margin: '2rem 0' }}>
-                                Select an assignment to view details
-                            </p>
-                        </AssignmentDetail>
-                    )}
-                </AssignmentDetailSection>
-            </ContentWrapper>
-
-            {/* Submit Modal */}
-            {showSubmitModal && selectedAssignment && (
-                <ModalBackdrop
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    onClick={() => setShowSubmitModal(false)}
-                >
-                    <ModalContent
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.3 }}
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <h2><FaFileUpload /> Submit Assignment</h2>
-
-                        <div className="form-group">
-                            <label>Assignment</label>
-                            <input
-                                type="text"
-                                value={selectedAssignment.title}
-                                disabled
-                            />
-                        </div>
-
-                        <div className="upload-area" onClick={handleFileUpload}>
-                            <FaFileUpload />
-                            <p>Click to upload files or <strong>drag & drop</strong> them here</p>
-                            <p style={{ fontSize: '0.8rem', marginTop: '0.5rem' }}>
-                                Accepted file types: PDF, DOC, DOCX, ZIP (Max: 20MB)
-                            </p>
-                        </div>
-
-                        {uploadedFiles.length > 0 && (
-                            <div className="uploaded-files">
-                                {uploadedFiles.map((file, index) => (
-                                    <div className="file-item" key={index}>
-                                        <div className="file-info">
-                                            <FaFileAlt />
-                                            <div className="file-name">{file.name} ({file.size})</div>
-                                        </div>
-                                        <div className="file-actions">
-                                            <button className="delete" onClick={() => handleFileDelete(index)}>
-                                                <FaTrash />
-                                            </button>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-
-                        <div className="form-group">
-                            <label htmlFor="comment">Comment (Optional)</label>
-                            <textarea
-                                id="comment"
-                                value={submissionComment}
-                                onChange={(e) => setSubmissionComment(e.target.value)}
-                                placeholder="Add a comment about your submission..."
-                            />
-                        </div>
-
-                        <div className="modal-actions">
-                            <Button
-                                whileHover={{ scale: 1.03 }}
-                                whileTap={{ scale: 0.97 }}
-                                onClick={() => setShowSubmitModal(false)}
-                            >
-                                Cancel
-                            </Button>
-                            <Button
-                                primary
-                                whileHover={{ scale: 1.03 }}
-                                whileTap={{ scale: 0.97 }}
-                                onClick={handleSubmit}
-                                disabled={uploadedFiles.length === 0}
-                                style={{ opacity: uploadedFiles.length === 0 ? 0.7 : 1 }}
-                            >
-                                <FaPaperPlane /> Submit
-                            </Button>
-                        </div>
-                    </ModalContent>
-                </ModalBackdrop>
-            )}
-        </AssignmentContainer>
-    );
+            <div className="modal-actions">
+              <Button
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={() => setShowSubmitModal(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                primary
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={handleSubmit}
+                disabled={uploadedFiles.length === 0}
+                style={{ opacity: uploadedFiles.length === 0 ? 0.7 : 1 }}
+              >
+                <FaPaperPlane /> Submit
+              </Button>
+            </div>
+          </ModalContent>
+        </ModalBackdrop>
+      )}
+    </AssignmentContainer>
+  );
 };
 
 export default Assignment;

@@ -2,22 +2,22 @@ import React, { useState, useEffect } from "react";
 import styled, { createGlobalStyle } from "styled-components";
 import { motion } from "framer-motion";
 import {
-    FaGraduationCap,
-    FaSearch,
-    FaSortAmountDown,
-    FaSortAmountUp,
-    FaFilter,
-    FaChartBar,
-    FaDownload,
-    FaCheckCircle,
-    FaTimesCircle,
-    FaExclamationCircle,
-    FaStar,
-    FaClock,
-    FaBook,
-    FaChartLine,
-    FaChevronDown,
-    FaChevronUp
+  FaGraduationCap,
+  FaSearch,
+  FaSortAmountDown,
+  FaSortAmountUp,
+  FaFilter,
+  FaChartBar,
+  FaDownload,
+  FaCheckCircle,
+  FaTimesCircle,
+  FaExclamationCircle,
+  FaStar,
+  FaClock,
+  FaBook,
+  FaChartLine,
+  FaChevronDown,
+  FaChevronUp
 } from "react-icons/fa";
 
 // Global styles to ensure proper viewport fitting
@@ -183,7 +183,7 @@ const TabsContainer = styled.div`
   gap: 1rem;
   margin-bottom: 1.5rem;
   border-bottom: 1px solid rgba(50, 50, 60, 0.4);
-  padding-bottom: 0.5rem;
+  padding: 0.25rem 0 0.5rem 0;
   overflow-x: auto;
   flex-wrap: nowrap;
   flex: 1;
@@ -202,7 +202,7 @@ const TabsContainer = styled.div`
   
   @media (max-width: 768px) {
     gap: 0.5rem;
-    padding-bottom: 0.8rem;
+    padding: 0.25rem 0 0.8rem 0;
     margin-bottom: 1rem;
   }
 `;
@@ -211,7 +211,7 @@ const Tab = styled(motion.button)`
   padding: 0.7rem 1.5rem;
   background: ${props => props.active ? 'rgba(160, 118, 249, 0.15)' : 'rgba(30, 30, 35, 0.6)'};
   color: ${props => props.active ? '#A076F9' : '#a0a0a0'};
-  border: ${props => props.active ? '1px solid rgba(160, 118, 249, 0.3)' : '1px solid rgba(50, 50, 60, 0.4)'};
+  border: ${props => props.active ? '2px solid #A076F9' : '2px solid transparent'};
   border-radius: 8px;
   cursor: pointer;
   font-size: 0.85rem;
@@ -225,10 +225,12 @@ const Tab = styled(motion.button)`
   min-width: fit-content;
   margin: 0 0.1rem;
   box-shadow: ${props => props.active ? '0 4px 12px rgba(126, 87, 194, 0.15)' : 'none'};
+  box-sizing: border-box;
   
   &:hover {
     background: ${props => props.active ? 'rgba(160, 118, 249, 0.2)' : 'rgba(40, 40, 45, 0.6)'};
     color: ${props => props.active ? '#A076F9' : '#d0d0d0'};
+    border-color: ${props => props.active ? '#A076F9' : 'rgba(160, 118, 249, 0.3)'};
   }
   
   @media (max-width: 768px) {
@@ -601,213 +603,213 @@ const ActivityLabels = styled.div`
 
 // Sample courses data
 const coursesData = [
-    {
+  {
+    id: 1,
+    name: "Advanced Mathematics",
+    code: "MATH301",
+    grade: "A",
+    percentage: 92,
+    assignments: [
+      {
         id: 1,
-        name: "Advanced Mathematics",
-        code: "MATH301",
-        grade: "A",
-        percentage: 92,
-        assignments: [
-            {
-                id: 1,
-                name: "Calculus Assignment 1",
-                dueDate: "2025-06-10",
-                score: "48/50",
-                percentage: 96,
-                status: "completed"
-            },
-            {
-                id: 2,
-                name: "Linear Algebra Quiz",
-                dueDate: "2025-06-15",
-                score: "28/30",
-                percentage: 93,
-                status: "completed"
-            },
-            {
-                id: 3,
-                name: "Midterm Examination",
-                dueDate: "2025-06-25",
-                score: "88/100",
-                percentage: 88,
-                status: "completed"
-            },
-            {
-                id: 4,
-                name: "Differential Equations Project",
-                dueDate: "2025-07-30",
-                score: "N/A",
-                percentage: null,
-                status: "pending"
-            }
-        ],
-        professor: "Dr. Sarah Miller"
-    },
-    {
+        name: "Calculus Assignment 1",
+        dueDate: "2025-06-10",
+        score: "48/50",
+        percentage: 96,
+        status: "completed"
+      },
+      {
         id: 2,
-        name: "Introduction to Programming",
-        code: "CS101",
-        grade: "A+",
-        percentage: 98,
-        assignments: [
-            {
-                id: 1,
-                name: "Hello World Program",
-                dueDate: "2025-06-05",
-                score: "10/10",
-                percentage: 100,
-                status: "completed"
-            },
-            {
-                id: 2,
-                name: "Variables and Data Types",
-                dueDate: "2025-06-12",
-                score: "20/20",
-                percentage: 100,
-                status: "completed"
-            },
-            {
-                id: 3,
-                name: "Control Structures",
-                dueDate: "2025-06-20",
-                score: "19/20",
-                percentage: 95,
-                status: "completed"
-            },
-            {
-                id: 4,
-                name: "Arrays and Functions",
-                dueDate: "2025-06-27",
-                score: "28/30",
-                percentage: 93,
-                status: "completed"
-            },
-            {
-                id: 5,
-                name: "Final Project",
-                dueDate: "2025-07-15",
-                score: "97/100",
-                percentage: 97,
-                status: "completed"
-            }
-        ],
-        professor: "Prof. Michael Chen"
-    },
-    {
+        name: "Linear Algebra Quiz",
+        dueDate: "2025-06-15",
+        score: "28/30",
+        percentage: 93,
+        status: "completed"
+      },
+      {
         id: 3,
-        name: "World History",
-        code: "HIST201",
-        grade: "B+",
-        percentage: 87,
-        assignments: [
-            {
-                id: 1,
-                name: "Ancient Civilizations Essay",
-                dueDate: "2025-06-08",
-                score: "45/50",
-                percentage: 90,
-                status: "completed"
-            },
-            {
-                id: 2,
-                name: "Medieval Europe Quiz",
-                dueDate: "2025-06-18",
-                score: "18/25",
-                percentage: 72,
-                status: "completed"
-            },
-            {
-                id: 3,
-                name: "Industrial Revolution Presentation",
-                dueDate: "2025-06-22",
-                score: "92/100",
-                percentage: 92,
-                status: "completed"
-            },
-            {
-                id: 4,
-                name: "World War II Analysis",
-                dueDate: "2025-07-02",
-                score: "43/50",
-                percentage: 86,
-                status: "completed"
-            },
-            {
-                id: 5,
-                name: "Modern History Research Paper",
-                dueDate: "2025-07-20",
-                score: "N/A",
-                percentage: null,
-                status: "pending"
-            }
-        ],
-        professor: "Dr. James Wilson"
-    },
-    {
+        name: "Midterm Examination",
+        dueDate: "2025-06-25",
+        score: "88/100",
+        percentage: 88,
+        status: "completed"
+      },
+      {
         id: 4,
-        name: "Organic Chemistry",
-        code: "CHEM302",
-        grade: "C",
+        name: "Differential Equations Project",
+        dueDate: "2025-07-30",
+        score: "N/A",
+        percentage: null,
+        status: "pending"
+      }
+    ],
+    professor: "Dr. Sarah Miller"
+  },
+  {
+    id: 2,
+    name: "Introduction to Programming",
+    code: "CS101",
+    grade: "A+",
+    percentage: 98,
+    assignments: [
+      {
+        id: 1,
+        name: "Hello World Program",
+        dueDate: "2025-06-05",
+        score: "10/10",
+        percentage: 100,
+        status: "completed"
+      },
+      {
+        id: 2,
+        name: "Variables and Data Types",
+        dueDate: "2025-06-12",
+        score: "20/20",
+        percentage: 100,
+        status: "completed"
+      },
+      {
+        id: 3,
+        name: "Control Structures",
+        dueDate: "2025-06-20",
+        score: "19/20",
+        percentage: 95,
+        status: "completed"
+      },
+      {
+        id: 4,
+        name: "Arrays and Functions",
+        dueDate: "2025-06-27",
+        score: "28/30",
+        percentage: 93,
+        status: "completed"
+      },
+      {
+        id: 5,
+        name: "Final Project",
+        dueDate: "2025-07-15",
+        score: "97/100",
+        percentage: 97,
+        status: "completed"
+      }
+    ],
+    professor: "Prof. Michael Chen"
+  },
+  {
+    id: 3,
+    name: "World History",
+    code: "HIST201",
+    grade: "B+",
+    percentage: 87,
+    assignments: [
+      {
+        id: 1,
+        name: "Ancient Civilizations Essay",
+        dueDate: "2025-06-08",
+        score: "45/50",
+        percentage: 90,
+        status: "completed"
+      },
+      {
+        id: 2,
+        name: "Medieval Europe Quiz",
+        dueDate: "2025-06-18",
+        score: "18/25",
+        percentage: 72,
+        status: "completed"
+      },
+      {
+        id: 3,
+        name: "Industrial Revolution Presentation",
+        dueDate: "2025-06-22",
+        score: "92/100",
+        percentage: 92,
+        status: "completed"
+      },
+      {
+        id: 4,
+        name: "World War II Analysis",
+        dueDate: "2025-07-02",
+        score: "43/50",
+        percentage: 86,
+        status: "completed"
+      },
+      {
+        id: 5,
+        name: "Modern History Research Paper",
+        dueDate: "2025-07-20",
+        score: "N/A",
+        percentage: null,
+        status: "pending"
+      }
+    ],
+    professor: "Dr. James Wilson"
+  },
+  {
+    id: 4,
+    name: "Organic Chemistry",
+    code: "CHEM302",
+    grade: "C",
+    percentage: 75,
+    assignments: [
+      {
+        id: 1,
+        name: "Nomenclature Quiz",
+        dueDate: "2025-06-07",
+        score: "15/20",
         percentage: 75,
-        assignments: [
-            {
-                id: 1,
-                name: "Nomenclature Quiz",
-                dueDate: "2025-06-07",
-                score: "15/20",
-                percentage: 75,
-                status: "completed"
-            },
-            {
-                id: 2,
-                name: "Reaction Mechanisms",
-                dueDate: "2025-06-14",
-                score: "25/30",
-                percentage: 83,
-                status: "completed"
-            },
-            {
-                id: 3,
-                name: "Lab Report: Synthesis",
-                dueDate: "2025-06-21",
-                score: "N/A",
-                percentage: null,
-                status: "missed"
-            },
-            {
-                id: 4,
-                name: "Stereochemistry Assignment",
-                dueDate: "2025-06-30",
-                score: "18/25",
-                percentage: 72,
-                status: "completed"
-            },
-            {
-                id: 5,
-                name: "Final Examination",
-                dueDate: "2025-07-10",
-                score: "70/100",
-                percentage: 70,
-                status: "completed"
-            }
-        ],
-        professor: "Prof. Emma Rodriguez"
-    }
+        status: "completed"
+      },
+      {
+        id: 2,
+        name: "Reaction Mechanisms",
+        dueDate: "2025-06-14",
+        score: "25/30",
+        percentage: 83,
+        status: "completed"
+      },
+      {
+        id: 3,
+        name: "Lab Report: Synthesis",
+        dueDate: "2025-06-21",
+        score: "N/A",
+        percentage: null,
+        status: "missed"
+      },
+      {
+        id: 4,
+        name: "Stereochemistry Assignment",
+        dueDate: "2025-06-30",
+        score: "18/25",
+        percentage: 72,
+        status: "completed"
+      },
+      {
+        id: 5,
+        name: "Final Examination",
+        dueDate: "2025-07-10",
+        score: "70/100",
+        percentage: 70,
+        status: "completed"
+      }
+    ],
+    professor: "Prof. Emma Rodriguez"
+  }
 ];
 
 // Sample grade distribution for statistics
 const gradeDistribution = {
-    "A+": 3,
-    "A": 5,
-    "A-": 4,
-    "B+": 7,
-    "B": 10,
-    "B-": 6,
-    "C+": 5,
-    "C": 4,
-    "C-": 2,
-    "D": 1,
-    "F": 0
+  "A+": 3,
+  "A": 5,
+  "A-": 4,
+  "B+": 7,
+  "B": 10,
+  "B-": 6,
+  "C+": 5,
+  "C": 4,
+  "C-": 2,
+  "D": 1,
+  "F": 0
 };
 
 // Sample activities data
@@ -815,333 +817,333 @@ const activitiesData = [60, 45, 75, 40, 80, 90, 65];
 const activityLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 const Grades = () => {
-    const [activeTab, setActiveTab] = useState("all");
-    const [searchTerm, setSearchTerm] = useState("");
-    const [sortOrder, setSortOrder] = useState("name");
-    const [sortDirection, setSortDirection] = useState("asc");
-    const [expandedCourses, setExpandedCourses] = useState({});
-    const [courses, setCourses] = useState(coursesData);
+  const [activeTab, setActiveTab] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortOrder, setSortOrder] = useState("name");
+  const [sortDirection, setSortDirection] = useState("asc");
+  const [expandedCourses, setExpandedCourses] = useState({});
+  const [courses, setCourses] = useState(coursesData);
 
-    // Toggle sort direction
-    const toggleSortDirection = () => {
-        setSortDirection(prev => prev === "asc" ? "desc" : "asc");
+  // Toggle sort direction
+  const toggleSortDirection = () => {
+    setSortDirection(prev => prev === "asc" ? "desc" : "asc");
+  };
+
+  // Toggle expanded state of a course
+  const toggleCourseExpanded = (courseId) => {
+    setExpandedCourses(prev => ({
+      ...prev,
+      [courseId]: !prev[courseId]
+    }));
+  };
+
+  // Calculate overall GPA
+  const calculateGPA = () => {
+    const gradePoints = {
+      "A+": 4.0, "A": 4.0, "A-": 3.7,
+      "B+": 3.3, "B": 3.0, "B-": 2.7,
+      "C+": 2.3, "C": 2.0, "C-": 1.7,
+      "D+": 1.3, "D": 1.0, "F": 0.0
     };
 
-    // Toggle expanded state of a course
-    const toggleCourseExpanded = (courseId) => {
-        setExpandedCourses(prev => ({
-            ...prev,
-            [courseId]: !prev[courseId]
-        }));
-    };
+    const totalPoints = courses.reduce((sum, course) => sum + gradePoints[course.grade], 0);
+    return (totalPoints / courses.length).toFixed(2);
+  };
 
-    // Calculate overall GPA
-    const calculateGPA = () => {
-        const gradePoints = {
-            "A+": 4.0, "A": 4.0, "A-": 3.7,
-            "B+": 3.3, "B": 3.0, "B-": 2.7,
-            "C+": 2.3, "C": 2.0, "C-": 1.7,
-            "D+": 1.3, "D": 1.0, "F": 0.0
-        };
+  // Calculate overall percentage
+  const calculateAveragePercentage = () => {
+    const totalPercentage = courses.reduce((sum, course) => sum + course.percentage, 0);
+    return (totalPercentage / courses.length).toFixed(1);
+  };
 
-        const totalPoints = courses.reduce((sum, course) => sum + gradePoints[course.grade], 0);
-        return (totalPoints / courses.length).toFixed(2);
-    };
+  // Filter and sort courses
+  const filteredCourses = courses.filter(course => {
+    if (searchTerm && !course.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      !course.code.toLowerCase().includes(searchTerm.toLowerCase())) {
+      return false;
+    }
 
-    // Calculate overall percentage
-    const calculateAveragePercentage = () => {
-        const totalPercentage = courses.reduce((sum, course) => sum + course.percentage, 0);
-        return (totalPercentage / courses.length).toFixed(1);
-    };
+    if (activeTab === "highGrades" && course.percentage < 90) return false;
+    if (activeTab === "lowGrades" && course.percentage >= 70) return false;
 
-    // Filter and sort courses
-    const filteredCourses = courses.filter(course => {
-        if (searchTerm && !course.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-            !course.code.toLowerCase().includes(searchTerm.toLowerCase())) {
-            return false;
-        }
+    return true;
+  }).sort((a, b) => {
+    if (sortOrder === "name") {
+      return sortDirection === "asc"
+        ? a.name.localeCompare(b.name)
+        : b.name.localeCompare(a.name);
+    } else if (sortOrder === "grade") {
+      const gradeOrder = ["A+", "A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D+", "D", "D-", "F"];
+      const indexA = gradeOrder.indexOf(a.grade);
+      const indexB = gradeOrder.indexOf(b.grade);
+      return sortDirection === "asc" ? indexA - indexB : indexB - indexA;
+    } else if (sortOrder === "percentage") {
+      return sortDirection === "asc"
+        ? a.percentage - b.percentage
+        : b.percentage - a.percentage;
+    }
+    return 0;
+  });
 
-        if (activeTab === "highGrades" && course.percentage < 90) return false;
-        if (activeTab === "lowGrades" && course.percentage >= 70) return false;
+  return (
+    <GradesContainer>
+      <GlobalStyles />
 
-        return true;
-    }).sort((a, b) => {
-        if (sortOrder === "name") {
-            return sortDirection === "asc"
-                ? a.name.localeCompare(b.name)
-                : b.name.localeCompare(a.name);
-        } else if (sortOrder === "grade") {
-            const gradeOrder = ["A+", "A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D+", "D", "D-", "F"];
-            const indexA = gradeOrder.indexOf(a.grade);
-            const indexB = gradeOrder.indexOf(b.grade);
-            return sortDirection === "asc" ? indexA - indexB : indexB - indexA;
-        } else if (sortOrder === "percentage") {
-            return sortDirection === "asc"
-                ? a.percentage - b.percentage
-                : b.percentage - a.percentage;
-        }
-        return 0;
-    });
+      <Header>
+        <h1><FaGraduationCap /> Grades</h1>
+        <ToolBar>
+          <SearchInputWrapper>
+            <FaSearch />
+            <input
+              type="text"
+              placeholder="Search courses..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </SearchInputWrapper>
 
-    return (
-        <GradesContainer>
-            <GlobalStyles />
+          <ButtonGroup>
+            <Button
+              onClick={() => setSortOrder(sortOrder === "name" ? "percentage" : "name")}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              aria-label="Change sort order"
+            >
+              Sort: {sortOrder === "name" ? "Name" : sortOrder === "grade" ? "Grade" : "%"}
+            </Button>
 
-            <Header>
-                <h1><FaGraduationCap /> Grades</h1>
-                <ToolBar>
-                    <SearchInputWrapper>
-                        <FaSearch />
-                        <input
-                            type="text"
-                            placeholder="Search courses..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                        />
-                    </SearchInputWrapper>
+            <Button
+              icon
+              onClick={toggleSortDirection}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              aria-label={`Sort ${sortDirection === "asc" ? "ascending" : "descending"}`}
+            >
+              {sortDirection === "asc" ? <FaSortAmountDown /> : <FaSortAmountUp />}
+            </Button>
+          </ButtonGroup>
 
-                    <ButtonGroup>
-                        <Button
-                            onClick={() => setSortOrder(sortOrder === "name" ? "percentage" : "name")}
-                            whileHover={{ scale: 1.03 }}
-                            whileTap={{ scale: 0.97 }}
-                            aria-label="Change sort order"
-                        >
-                            Sort: {sortOrder === "name" ? "Name" : sortOrder === "grade" ? "Grade" : "%"}
-                        </Button>
+          <Button
+            primary
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+            aria-label="Export grades"
+          >
+            <FaDownload /> Export
+          </Button>
+        </ToolBar>
+      </Header>
 
-                        <Button
-                            icon
-                            onClick={toggleSortDirection}
-                            whileHover={{ scale: 1.03 }}
-                            whileTap={{ scale: 0.97 }}
-                            aria-label={`Sort ${sortDirection === "asc" ? "ascending" : "descending"}`}
-                        >
-                            {sortDirection === "asc" ? <FaSortAmountDown /> : <FaSortAmountUp />}
-                        </Button>
-                    </ButtonGroup>
+      <TabsContainer>
+        <Tab active={activeTab === "all"} onClick={() => setActiveTab("all")}>
+          All Grades
+        </Tab>
+        <Tab active={activeTab === "highGrades"} onClick={() => setActiveTab("highGrades")}>
+          <FaCheckCircle /> High Grades (A & A+)
+        </Tab>
+        <Tab active={activeTab === "lowGrades"} onClick={() => setActiveTab("lowGrades")}>
+          <FaExclamationCircle /> Needs Improvement (Below C)
+        </Tab>
+      </TabsContainer>
 
-                    <Button
-                        primary
-                        whileHover={{ scale: 1.03 }}
-                        whileTap={{ scale: 0.97 }}
-                        aria-label="Export grades"
-                    >
-                        <FaDownload /> Export
-                    </Button>
-                </ToolBar>
-            </Header>
+      <ContentWrapper>
+        <MainContent>
+          {filteredCourses.map((course) => (
+            <GradeCard
+              key={course.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <GradeHeader>
+                <div className="course-info">
+                  <h3 className="course-name">{course.name}</h3>
+                  <div className="course-code">
+                    <FaBook /> {course.code} • {course.professor}
+                  </div>
+                </div>
+                <div className="grade-display">
+                  <div className="grade-value">{course.grade}</div>
+                  <div className="grade-percentage">{course.percentage}%</div>
+                </div>
+              </GradeHeader>
 
-            <TabsContainer>
-                <Tab active={activeTab === "all"} onClick={() => setActiveTab("all")}>
-                    All Grades
-                </Tab>
-                <Tab active={activeTab === "highGrades"} onClick={() => setActiveTab("highGrades")}>
-                    <FaCheckCircle /> High Grades (A & A+)
-                </Tab>
-                <Tab active={activeTab === "lowGrades"} onClick={() => setActiveTab("lowGrades")}>
-                    <FaExclamationCircle /> Needs Improvement (Below C)
-                </Tab>
-            </TabsContainer>
-
-            <ContentWrapper>
-                <MainContent>
-                    {filteredCourses.map((course) => (
-                        <GradeCard
-                            key={course.id}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.3 }}
-                        >
-                            <GradeHeader>
-                                <div className="course-info">
-                                    <h3 className="course-name">{course.name}</h3>
-                                    <div className="course-code">
-                                        <FaBook /> {course.code} • {course.professor}
-                                    </div>
-                                </div>
-                                <div className="grade-display">
-                                    <div className="grade-value">{course.grade}</div>
-                                    <div className="grade-percentage">{course.percentage}%</div>
-                                </div>
-                            </GradeHeader>
-
-                            <GradeContent className={!expandedCourses[course.id] ? "collapsed" : ""}>
-                                <AssignmentTable>
-                                    <thead>
-                                        <tr>
-                                            <th>Assignment</th>
-                                            <th>Due Date</th>
-                                            <th className="score-cell">Score</th>
-                                            <th className="status-cell">Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {course.assignments.map(assignment => (
-                                            <tr key={assignment.id}>
-                                                <td>{assignment.name}</td>
-                                                <td>{new Date(assignment.dueDate).toLocaleDateString('en-US', {
-                                                    year: 'numeric', month: 'short', day: 'numeric'
-                                                })}</td>
-                                                <td className="score-cell">
-                                                    {assignment.score}
-                                                    {assignment.percentage !== null && ` (${assignment.percentage}%)`}
-                                                </td>
-                                                <td className="status-cell">
-                                                    <div className={`status ${assignment.status}`}>
-                                                        {assignment.status === "completed" && <FaCheckCircle />}
-                                                        {assignment.status === "pending" && <FaClock />}
-                                                        {assignment.status === "missed" && <FaTimesCircle />}
-                                                        {assignment.status.charAt(0).toUpperCase() + assignment.status.slice(1)}
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </AssignmentTable>
-                            </GradeContent>
-
-                            <ExpandButton onClick={() => toggleCourseExpanded(course.id)}>
-                                {expandedCourses[course.id] ? (
-                                    <>
-                                        <FaChevronUp /> Hide Details
-                                    </>
-                                ) : (
-                                    <>
-                                        <FaChevronDown /> Show Details
-                                    </>
-                                )}
-                            </ExpandButton>
-                        </GradeCard>
+              <GradeContent className={!expandedCourses[course.id] ? "collapsed" : ""}>
+                <AssignmentTable>
+                  <thead>
+                    <tr>
+                      <th>Assignment</th>
+                      <th>Due Date</th>
+                      <th className="score-cell">Score</th>
+                      <th className="status-cell">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {course.assignments.map(assignment => (
+                      <tr key={assignment.id}>
+                        <td>{assignment.name}</td>
+                        <td>{new Date(assignment.dueDate).toLocaleDateString('en-US', {
+                          year: 'numeric', month: 'short', day: 'numeric'
+                        })}</td>
+                        <td className="score-cell">
+                          {assignment.score}
+                          {assignment.percentage !== null && ` (${assignment.percentage}%)`}
+                        </td>
+                        <td className="status-cell">
+                          <div className={`status ${assignment.status}`}>
+                            {assignment.status === "completed" && <FaCheckCircle />}
+                            {assignment.status === "pending" && <FaClock />}
+                            {assignment.status === "missed" && <FaTimesCircle />}
+                            {assignment.status.charAt(0).toUpperCase() + assignment.status.slice(1)}
+                          </div>
+                        </td>
+                      </tr>
                     ))}
+                  </tbody>
+                </AssignmentTable>
+              </GradeContent>
 
-                    {filteredCourses.length === 0 && (
-                        <div style={{
-                            textAlign: 'center',
-                            padding: '3rem',
-                            color: '#a0a0a0',
-                            background: 'rgba(25, 25, 30, 0.8)',
-                            borderRadius: '12px',
-                            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
-                            border: '1px solid rgba(50, 50, 60, 0.4)',
-                        }}>
-                            <FaGraduationCap style={{ fontSize: '3rem', color: '#A076F9', marginBottom: '1rem' }} />
-                            <h2>No courses found</h2>
-                            <p>Try adjusting your search criteria</p>
-                        </div>
-                    )}
-                </MainContent>
+              <ExpandButton onClick={() => toggleCourseExpanded(course.id)}>
+                {expandedCourses[course.id] ? (
+                  <>
+                    <FaChevronUp /> Hide Details
+                  </>
+                ) : (
+                  <>
+                    <FaChevronDown /> Show Details
+                  </>
+                )}
+              </ExpandButton>
+            </GradeCard>
+          ))}
 
-                <SidebarWrapper>
-                    <StatCard
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.3 }}
-                    >
-                        <h3><FaChartBar /> Grade Summary</h3>
-                        <GradePercentage>
-                            <div className="grade-stat">
-                                <div className="value neutral">{calculateGPA()}</div>
-                                <div className="label">GPA</div>
-                            </div>
-                            <div className="grade-stat">
-                                <div className="value neutral">{calculateAveragePercentage()}%</div>
-                                <div className="label">Average</div>
-                            </div>
-                            <div className="grade-stat">
-                                <div className="value positive">
-                                    <FaChartLine /> +0.2
-                                </div>
-                                <div className="label">From Last Term</div>
-                            </div>
-                            <div className="grade-stat">
-                                <div className="value neutral">{courses.length}</div>
-                                <div className="label">Courses</div>
-                            </div>
-                        </GradePercentage>
-                    </StatCard>
+          {filteredCourses.length === 0 && (
+            <div style={{
+              textAlign: 'center',
+              padding: '3rem',
+              color: '#a0a0a0',
+              background: 'rgba(25, 25, 30, 0.8)',
+              borderRadius: '12px',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
+              border: '1px solid rgba(50, 50, 60, 0.4)',
+            }}>
+              <FaGraduationCap style={{ fontSize: '3rem', color: '#A076F9', marginBottom: '1rem' }} />
+              <h2>No courses found</h2>
+              <p>Try adjusting your search criteria</p>
+            </div>
+          )}
+        </MainContent>
 
-                    <StatCard
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.3, delay: 0.1 }}
-                    >
-                        <h3><FaChartBar /> Grade Distribution</h3>
-                        <GradeDistribution>
-                            {Object.entries(gradeDistribution).map(([grade, count]) => (
-                                <div className="grade-bar" key={grade}>
-                                    <div className="label">{grade}</div>
-                                    <div className="bar-wrapper">
-                                        <div className="bar" style={{ width: `${Math.min(100, count * 10)}%` }}></div>
-                                    </div>
-                                    <div className="count">{count}</div>
-                                </div>
-                            ))}
-                        </GradeDistribution>
-                    </StatCard>
+        <SidebarWrapper>
+          <StatCard
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <h3><FaChartBar /> Grade Summary</h3>
+            <GradePercentage>
+              <div className="grade-stat">
+                <div className="value neutral">{calculateGPA()}</div>
+                <div className="label">GPA</div>
+              </div>
+              <div className="grade-stat">
+                <div className="value neutral">{calculateAveragePercentage()}%</div>
+                <div className="label">Average</div>
+              </div>
+              <div className="grade-stat">
+                <div className="value positive">
+                  <FaChartLine /> +0.2
+                </div>
+                <div className="label">From Last Term</div>
+              </div>
+              <div className="grade-stat">
+                <div className="value neutral">{courses.length}</div>
+                <div className="label">Courses</div>
+              </div>
+            </GradePercentage>
+          </StatCard>
 
-                    <GradeProgressCard
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.3, delay: 0.2 }}
-                    >
-                        <h3><FaChartLine /> Progress Tracker</h3>
-                        <div className="progress-section">
-                            <div className="header">
-                                <div className="title">Semester Completion</div>
-                                <div className="value">75%</div>
-                            </div>
-                            <div className="progress-bar">
-                                <div className="bar" style={{ width: "75%" }}></div>
-                            </div>
-                        </div>
+          <StatCard
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.3, delay: 0.1 }}
+          >
+            <h3><FaChartBar /> Grade Distribution</h3>
+            <GradeDistribution>
+              {Object.entries(gradeDistribution).map(([grade, count]) => (
+                <div className="grade-bar" key={grade}>
+                  <div className="label">{grade}</div>
+                  <div className="bar-wrapper">
+                    <div className="bar" style={{ width: `${Math.min(100, count * 10)}%` }}></div>
+                  </div>
+                  <div className="count">{count}</div>
+                </div>
+              ))}
+            </GradeDistribution>
+          </StatCard>
 
-                        <div className="progress-section">
-                            <div className="header">
-                                <div className="title">Assignments Completed</div>
-                                <div className="value">85%</div>
-                            </div>
-                            <div className="progress-bar">
-                                <div className="bar" style={{ width: "85%" }}></div>
-                            </div>
-                        </div>
+          <GradeProgressCard
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.3, delay: 0.2 }}
+          >
+            <h3><FaChartLine /> Progress Tracker</h3>
+            <div className="progress-section">
+              <div className="header">
+                <div className="title">Semester Completion</div>
+                <div className="value">75%</div>
+              </div>
+              <div className="progress-bar">
+                <div className="bar" style={{ width: "75%" }}></div>
+              </div>
+            </div>
 
-                        <div className="progress-section">
-                            <div className="header">
-                                <div className="title">Overall Performance</div>
-                                <div className="value">92%</div>
-                            </div>
-                            <div className="progress-bar">
-                                <div className="bar" style={{ width: "92%" }}></div>
-                            </div>
-                        </div>
-                    </GradeProgressCard>
+            <div className="progress-section">
+              <div className="header">
+                <div className="title">Assignments Completed</div>
+                <div className="value">85%</div>
+              </div>
+              <div className="progress-bar">
+                <div className="bar" style={{ width: "85%" }}></div>
+              </div>
+            </div>
 
-                    <StatCard
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.3, delay: 0.3 }}
-                    >
-                        <h3><FaChartBar /> Weekly Activity</h3>
-                        <ActivityChart>
-                            {activitiesData.map((value, index) => (
-                                <div
-                                    key={index}
-                                    className={`bar ${value === 0 ? 'inactive' : ''}`}
-                                    style={{ height: `${value}%` }}
-                                ></div>
-                            ))}
-                        </ActivityChart>
-                        <ActivityLabels>
-                            {activityLabels.map((label, index) => (
-                                <div key={index} className="label">{label}</div>
-                            ))}
-                        </ActivityLabels>
-                    </StatCard>
-                </SidebarWrapper>
-            </ContentWrapper>
-        </GradesContainer>
-    );
+            <div className="progress-section">
+              <div className="header">
+                <div className="title">Overall Performance</div>
+                <div className="value">92%</div>
+              </div>
+              <div className="progress-bar">
+                <div className="bar" style={{ width: "92%" }}></div>
+              </div>
+            </div>
+          </GradeProgressCard>
+
+          <StatCard
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.3, delay: 0.3 }}
+          >
+            <h3><FaChartBar /> Weekly Activity</h3>
+            <ActivityChart>
+              {activitiesData.map((value, index) => (
+                <div
+                  key={index}
+                  className={`bar ${value === 0 ? 'inactive' : ''}`}
+                  style={{ height: `${value}%` }}
+                ></div>
+              ))}
+            </ActivityChart>
+            <ActivityLabels>
+              {activityLabels.map((label, index) => (
+                <div key={index} className="label">{label}</div>
+              ))}
+            </ActivityLabels>
+          </StatCard>
+        </SidebarWrapper>
+      </ContentWrapper>
+    </GradesContainer>
+  );
 };
 
 export default Grades;

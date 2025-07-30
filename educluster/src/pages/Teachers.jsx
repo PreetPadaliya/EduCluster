@@ -2,21 +2,21 @@ import React, { useState } from "react";
 import styled, { createGlobalStyle } from "styled-components";
 import { motion } from "framer-motion";
 import {
-    FaClipboardList,
-    FaSearch,
-    FaFilter,
-    FaUserTie,
-    FaCalendarAlt,
-    FaClock,
-    FaCheckCircle,
-    FaTimesCircle,
-    FaChartBar,
-    FaPlus,
-    FaSortAmountDown,
-    FaSortAmountUp,
-    FaEye,
-    FaEdit,
-    FaPaperPlane
+  FaClipboardList,
+  FaSearch,
+  FaFilter,
+  FaUserTie,
+  FaCalendarAlt,
+  FaClock,
+  FaCheckCircle,
+  FaTimesCircle,
+  FaChartBar,
+  FaPlus,
+  FaSortAmountDown,
+  FaSortAmountUp,
+  FaEye,
+  FaEdit,
+  FaPaperPlane
 } from "react-icons/fa";
 
 // Global styles to ensure proper viewport fitting
@@ -146,7 +146,7 @@ const TabsContainer = styled.div`
   gap: 0.5rem;
   margin-bottom: 0.5rem;
   border-bottom: 1px solid rgba(50, 50, 60, 0.4);
-  padding-bottom: 0.5rem;
+  padding: 0.25rem 0 0.5rem 0;
   overflow-x: auto;
   flex-wrap: nowrap;
   flex: 1;
@@ -165,7 +165,7 @@ const Tab = styled(motion.button)`
   padding: 0.6rem 1.2rem;
   background: ${props => props.active ? 'rgba(160, 118, 249, 0.15)' : 'transparent'};
   color: ${props => props.active ? '#A076F9' : '#a0a0a0'};
-  border: none;
+  border: ${props => props.active ? '2px solid #A076F9' : '2px solid transparent'};
   border-radius: 8px;
   cursor: pointer;
   font-size: 0.85rem;
@@ -176,10 +176,12 @@ const Tab = styled(motion.button)`
   transition: all 0.2s ease;
   white-space: nowrap;
   min-width: fit-content;
+  box-sizing: border-box;
   
   &:hover {
     background: rgba(160, 118, 249, 0.1);
     color: ${props => props.active ? '#A076F9' : '#d0d0d0'};
+    border-color: ${props => props.active ? '#A076F9' : 'rgba(160, 118, 249, 0.3)'};
   }
 `;
 
@@ -586,515 +588,515 @@ const ModalContent = styled(motion.div)`
 
 // Sample teacher data
 const teachersData = [
-    {
-        id: 1,
-        name: "Mr.Alok Patel",
-        specialization: "Mathematics",
-        email: "sarah.johnson@example.com",
-        phone: "+1-555-123-4567",
-        status: "available",
-        branch: "Main Branch",
-        appointments: [
-            { id: 1, client: "John Doe", service: "Math Consultation", date: "2025-07-25", time: "10:00 AM" },
-            { id: 2, client: "Jane Smith", service: "Algebra Workshop", date: "2025-07-26", time: "2:00 PM" }
-        ],
-        availability: [
-            { day: "Monday", time: "9:00 AM - 12:00 PM" },
-            { day: "Wednesday", time: "1:00 PM - 4:00 PM" }
-        ],
-        totalClients: 15
-    },
-    {
-        id: 2,
-        name: "Prof. Bhautik Panchal",
-        specialization: "Physics",
-        email: "michael.chen@example.com",
-        phone: "+1-555-987-6543",
-        status: "busy",
-        branch: "North Branch",
-        appointments: [
-            { id: 3, client: "Alice Brown", service: "Physics Tutoring", date: "2025-07-24", time: "11:00 AM" }
-        ],
-        availability: [
-            { day: "Tuesday", time: "10:00 AM - 1:00 PM" },
-            { day: "Friday", time: "2:00 PM - 5:00 PM" }
-        ],
-        totalClients: 8
-    },
-    {
-        id: 3,
-        name: "Madhuri Dixitx",
-        specialization: "Language Arts",
-        email: "emma.rodriguez@example.com",
-        phone: "+1-555-456-7890",
-        status: "available",
-        branch: "Main Branch",
-        appointments: [],
-        availability: [
-            { day: "Monday", time: "1:00 PM - 3:00 PM" },
-            { day: "Thursday", time: "9:00 AM - 11:00 AM" }
-        ],
-        totalClients: 12
-    }
+  {
+    id: 1,
+    name: "Mr.Alok Patel",
+    specialization: "Mathematics",
+    email: "sarah.johnson@example.com",
+    phone: "+1-555-123-4567",
+    status: "available",
+    branch: "Main Branch",
+    appointments: [
+      { id: 1, client: "John Doe", service: "Math Consultation", date: "2025-07-25", time: "10:00 AM" },
+      { id: 2, client: "Jane Smith", service: "Algebra Workshop", date: "2025-07-26", time: "2:00 PM" }
+    ],
+    availability: [
+      { day: "Monday", time: "9:00 AM - 12:00 PM" },
+      { day: "Wednesday", time: "1:00 PM - 4:00 PM" }
+    ],
+    totalClients: 15
+  },
+  {
+    id: 2,
+    name: "Prof. Bhautik Panchal",
+    specialization: "Physics",
+    email: "michael.chen@example.com",
+    phone: "+1-555-987-6543",
+    status: "busy",
+    branch: "North Branch",
+    appointments: [
+      { id: 3, client: "Alice Brown", service: "Physics Tutoring", date: "2025-07-24", time: "11:00 AM" }
+    ],
+    availability: [
+      { day: "Tuesday", time: "10:00 AM - 1:00 PM" },
+      { day: "Friday", time: "2:00 PM - 5:00 PM" }
+    ],
+    totalClients: 8
+  },
+  {
+    id: 3,
+    name: "Madhuri Dixitx",
+    specialization: "Language Arts",
+    email: "emma.rodriguez@example.com",
+    phone: "+1-555-456-7890",
+    status: "available",
+    branch: "Main Branch",
+    appointments: [],
+    availability: [
+      { day: "Monday", time: "1:00 PM - 3:00 PM" },
+      { day: "Thursday", time: "9:00 AM - 11:00 AM" }
+    ],
+    totalClients: 12
+  }
 ];
 
 const Teachers = () => {
-    const [activeTab, setActiveTab] = useState("all");
-    const [showFilter, setShowFilter] = useState(false);
-    const [searchTerm, setSearchTerm] = useState("");
-    const [activeFilter, setActiveFilter] = useState("all");
-    const [sortOrder, setSortOrder] = useState("name");
-    const [sortDirection, setSortDirection] = useState("asc");
-    const [selectedTeacher, setSelectedTeacher] = useState(null);
-    const [showScheduleModal, setShowScheduleModal] = useState(false);
-    const [newAvailability, setNewAvailability] = useState({ day: "", time: "" });
-    const [showStatistics, setShowStatistics] = useState(false);
+  const [activeTab, setActiveTab] = useState("all");
+  const [showFilter, setShowFilter] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [activeFilter, setActiveFilter] = useState("all");
+  const [sortOrder, setSortOrder] = useState("name");
+  const [sortDirection, setSortDirection] = useState("asc");
+  const [selectedTeacher, setSelectedTeacher] = useState(null);
+  const [showScheduleModal, setShowScheduleModal] = useState(false);
+  const [newAvailability, setNewAvailability] = useState({ day: "", time: "" });
+  const [showStatistics, setShowStatistics] = useState(false);
 
-    // Calculate statistics
-    const stats = {
-        available: teachersData.filter(t => t.status === "available").length,
-        busy: teachersData.filter(t => t.status === "busy").length,
-        totalAppointments: teachersData.reduce((sum, t) => sum + t.appointments.length, 0),
-        totalClients: teachersData.reduce((sum, t) => sum + t.totalClients, 0)
-    };
+  // Calculate statistics
+  const stats = {
+    available: teachersData.filter(t => t.status === "available").length,
+    busy: teachersData.filter(t => t.status === "busy").length,
+    totalAppointments: teachersData.reduce((sum, t) => sum + t.appointments.length, 0),
+    totalClients: teachersData.reduce((sum, t) => sum + t.totalClients, 0)
+  };
 
-    // Filter and sort teachers
-    const filteredTeachers = teachersData.filter(teacher => {
-        if (searchTerm && !teacher.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-            !teacher.specialization.toLowerCase().includes(searchTerm.toLowerCase())) {
-            return false;
+  // Filter and sort teachers
+  const filteredTeachers = teachersData.filter(teacher => {
+    if (searchTerm && !teacher.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      !teacher.specialization.toLowerCase().includes(searchTerm.toLowerCase())) {
+      return false;
+    }
+
+    if (activeTab === "available" && teacher.status !== "available") return false;
+    if (activeTab === "busy" && teacher.status !== "busy") return false;
+
+    if (activeFilter === "mainBranch" && teacher.branch !== "Main Branch") return false;
+    if (activeFilter === "northBranch" && teacher.branch !== "North Branch") return false;
+
+    return true;
+  }).sort((a, b) => {
+    if (sortOrder === "name") {
+      return sortDirection === "asc" ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
+    } else if (sortOrder === "specialization") {
+      return sortDirection === "asc" ? a.specialization.localeCompare(b.specialization) : b.specialization.localeCompare(a.specialization);
+    } else if (sortOrder === "appointments") {
+      return sortDirection === "asc" ? a.appointments.length - b.appointments.length : b.appointments.length - a.appointments.length;
+    }
+    return 0;
+  });
+
+  // Handle teacher selection
+  const handleTeacherSelect = (teacher) => {
+    setSelectedTeacher(teacher);
+  };
+
+  // Handle new availability submission
+  const handleAddAvailability = () => {
+    if (newAvailability.day && newAvailability.time) {
+      const updatedTeachers = teachersData.map(teacher => {
+        if (teacher.id === selectedTeacher.id) {
+          return {
+            ...teacher,
+            availability: [...teacher.availability, newAvailability]
+          };
         }
+        return teacher;
+      });
+      setSelectedTeacher({
+        ...selectedTeacher,
+        availability: [...selectedTeacher.availability, newAvailability]
+      });
+      setNewAvailability({ day: "", time: "" });
+      setShowScheduleModal(false);
+    }
+  };
 
-        if (activeTab === "available" && teacher.status !== "available") return false;
-        if (activeTab === "busy" && teacher.status !== "busy") return false;
+  // Toggle sort direction
+  const toggleSortDirection = () => {
+    setSortDirection(prev => prev === "asc" ? "desc" : "asc");
+  };
 
-        if (activeFilter === "mainBranch" && teacher.branch !== "Main Branch") return false;
-        if (activeFilter === "northBranch" && teacher.branch !== "North Branch") return false;
+  return (
+    <TeachersContainer>
+      <GlobalStyles />
 
-        return true;
-    }).sort((a, b) => {
-        if (sortOrder === "name") {
-            return sortDirection === "asc" ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
-        } else if (sortOrder === "specialization") {
-            return sortDirection === "asc" ? a.specialization.localeCompare(b.specialization) : b.specialization.localeCompare(a.specialization);
-        } else if (sortOrder === "appointments") {
-            return sortDirection === "asc" ? a.appointments.length - b.appointments.length : b.appointments.length - a.appointments.length;
-        }
-        return 0;
-    });
+      <Header>
+        <h1><FaUserTie /> Teachers</h1>
+        <ToolBar>
+          <SearchInputWrapper>
+            <FaSearch />
+            <input
+              type="text"
+              placeholder="Search teachers..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </SearchInputWrapper>
 
-    // Handle teacher selection
-    const handleTeacherSelect = (teacher) => {
-        setSelectedTeacher(teacher);
-    };
+          <div style={{ position: 'relative' }}>
+            <Button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => setShowFilter(!showFilter)}
+            >
+              <FaFilter /> Filter: {activeFilter === 'all' ? 'All' : activeFilter === 'mainBranch' ? 'Main Branch' : 'North Branch'}
+            </Button>
 
-    // Handle new availability submission
-    const handleAddAvailability = () => {
-        if (newAvailability.day && newAvailability.time) {
-            const updatedTeachers = teachersData.map(teacher => {
-                if (teacher.id === selectedTeacher.id) {
-                    return {
-                        ...teacher,
-                        availability: [...teacher.availability, newAvailability]
-                    };
-                }
-                return teacher;
-            });
-            setSelectedTeacher({
-                ...selectedTeacher,
-                availability: [...selectedTeacher.availability, newAvailability]
-            });
-            setNewAvailability({ day: "", time: "" });
-            setShowScheduleModal(false);
-        }
-    };
+            {showFilter && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{
+                  position: 'absolute',
+                  top: '100%',
+                  right: 0,
+                  marginTop: '0.5rem',
+                  background: 'rgba(25, 25, 30, 0.95)',
+                  borderRadius: '8px',
+                  overflow: 'hidden',
+                  width: '180px',
+                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
+                  border: '1px solid rgba(50, 50, 60, 0.4)',
+                  zIndex: 100
+                }}
+              >
+                {['all', 'mainBranch', 'northBranch'].map((filter) => (
+                  <div
+                    key={filter}
+                    onClick={() => {
+                      setActiveFilter(filter);
+                      setShowFilter(false);
+                    }}
+                    style={{
+                      padding: '0.8rem 1rem',
+                      cursor: 'pointer',
+                      backgroundColor: activeFilter === filter ? 'rgba(160, 118, 249, 0.15)' : 'transparent',
+                      borderBottom: '1px solid rgba(50, 50, 60, 0.4)',
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    {filter === 'all' ? 'All Teachers' :
+                      filter === 'mainBranch' ? 'Main Branch' :
+                        'North Branch'}
+                  </div>
+                ))}
+              </motion.div>
+            )}
+          </div>
 
-    // Toggle sort direction
-    const toggleSortDirection = () => {
-        setSortDirection(prev => prev === "asc" ? "desc" : "asc");
-    };
+          <Button
+            onClick={toggleSortDirection}
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+          >
+            {sortDirection === "asc" ? <FaSortAmountDown /> : <FaSortAmountUp />}
+            Sort: {sortOrder.charAt(0).toUpperCase() + sortOrder.slice(1)}
+          </Button>
+        </ToolBar>
+      </Header>
 
-    return (
-        <TeachersContainer>
-            <GlobalStyles />
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: '1rem'
+      }}>
+        <TabsContainer style={{ marginBottom: '0' }}>
+          <Tab active={activeTab === "all"} onClick={() => setActiveTab("all")}>
+            <FaClipboardList /> All Teachers
+          </Tab>
+          <Tab active={activeTab === "available"} onClick={() => setActiveTab("available")}>
+            <FaCheckCircle /> Available ({stats.available})
+          </Tab>
+          <Tab active={activeTab === "busy"} onClick={() => setActiveTab("busy")}>
+            <FaTimesCircle /> Busy ({stats.busy})
+          </Tab>
+        </TabsContainer>
 
-            <Header>
-                <h1><FaUserTie /> Teachers</h1>
-                <ToolBar>
-                    <SearchInputWrapper>
-                        <FaSearch />
-                        <input
-                            type="text"
-                            placeholder="Search teachers..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                        />
-                    </SearchInputWrapper>
+        <Button
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.97 }}
+          onClick={() => setShowStatistics(!showStatistics)}
+          style={{ marginLeft: '10px' }}
+        >
+          <FaChartBar /> {showStatistics ? 'Hide Stats' : 'Show Stats'}
+        </Button>
+      </div>
 
-                    <div style={{ position: 'relative' }}>
-                        <Button
-                            whileHover={{ scale: 1.03 }}
-                            whileTap={{ scale: 0.97 }}
-                            onClick={() => setShowFilter(!showFilter)}
-                        >
-                            <FaFilter /> Filter: {activeFilter === 'all' ? 'All' : activeFilter === 'mainBranch' ? 'Main Branch' : 'North Branch'}
-                        </Button>
+      {showStatistics && (
+        <StatsCard
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.5 }}
+        >
+          <h3><FaChartBar /> Teacher Statistics</h3>
+          <div className="stats-grid">
+            <div className="stat-item">
+              <div className="stat-icon appointments">
+                <FaCalendarAlt />
+              </div>
+              <div className="stat-value">{stats.totalAppointments}</div>
+              <div className="stat-label">Total Appointments</div>
+            </div>
+            <div className="stat-item">
+              <div className="stat-icon available">
+                <FaCheckCircle />
+              </div>
+              <div className="stat-value">{stats.available}</div>
+              <div className="stat-label">Available Teachers</div>
+            </div>
+            <div className="stat-item">
+              <div className="stat-icon clients">
+                <FaUserTie />
+              </div>
+              <div className="stat-value">{stats.totalClients}</div>
+              <div className="stat-label">Total Clients</div>
+            </div>
+          </div>
+        </StatsCard>
+      )}
 
-                        {showFilter && (
-                            <motion.div
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                style={{
-                                    position: 'absolute',
-                                    top: '100%',
-                                    right: 0,
-                                    marginTop: '0.5rem',
-                                    background: 'rgba(25, 25, 30, 0.95)',
-                                    borderRadius: '8px',
-                                    overflow: 'hidden',
-                                    width: '180px',
-                                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
-                                    border: '1px solid rgba(50, 50, 60, 0.4)',
-                                    zIndex: 100
-                                }}
-                            >
-                                {['all', 'mainBranch', 'northBranch'].map((filter) => (
-                                    <div
-                                        key={filter}
-                                        onClick={() => {
-                                            setActiveFilter(filter);
-                                            setShowFilter(false);
-                                        }}
-                                        style={{
-                                            padding: '0.8rem 1rem',
-                                            cursor: 'pointer',
-                                            backgroundColor: activeFilter === filter ? 'rgba(160, 118, 249, 0.15)' : 'transparent',
-                                            borderBottom: '1px solid rgba(50, 50, 60, 0.4)',
-                                            transition: 'all 0.2s ease'
-                                        }}
-                                    >
-                                        {filter === 'all' ? 'All Teachers' :
-                                            filter === 'mainBranch' ? 'Main Branch' :
-                                                'North Branch'}
-                                    </div>
-                                ))}
-                            </motion.div>
-                        )}
-                    </div>
+      <ContentWrapper>
+        <TeacherList>
+          {filteredTeachers.map(teacher => (
+            <TeacherCard
+              key={teacher.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+              onClick={() => handleTeacherSelect(teacher)}
+              style={{
+                borderLeft: selectedTeacher && selectedTeacher.id === teacher.id ?
+                  '4px solid #A076F9' : '1px solid rgba(50, 50, 60, 0.4)'
+              }}
+            >
+              <div className="card-header">
+                <div className="title-section">
+                  <h3>
+                    <FaUserTie /> {teacher.name}
+                  </h3>
+                  <div className="specialization">
+                    {teacher.specialization}
+                  </div>
+                </div>
 
-                    <Button
-                        onClick={toggleSortDirection}
-                        whileHover={{ scale: 1.03 }}
-                        whileTap={{ scale: 0.97 }}
-                    >
-                        {sortDirection === "asc" ? <FaSortAmountDown /> : <FaSortAmountUp />}
-                        Sort: {sortOrder.charAt(0).toUpperCase() + sortOrder.slice(1)}
-                    </Button>
-                </ToolBar>
-            </Header>
+                <div className={`status-badge ${teacher.status}`}>
+                  {teacher.status === "available" && <FaCheckCircle />}
+                  {teacher.status === "busy" && <FaTimesCircle />}
+                  {teacher.status.charAt(0).toUpperCase() + teacher.status.slice(1)}
+                </div>
+              </div>
 
+              <div className="card-content">
+                <div className="info-section">
+                  <div className="info-item">
+                    <FaCalendarAlt /> Branch: {teacher.branch}
+                  </div>
+                  <div className="info-item">
+                    <FaClock /> Appointments: {teacher.appointments.length}
+                  </div>
+                  <div className="info-item">
+                    <FaUserTie /> Clients: {teacher.totalClients}
+                  </div>
+                </div>
+
+                <div className="action-buttons">
+                  <button onClick={(e) => { e.stopPropagation(); }}>
+                    <FaEye />
+                  </button>
+                  <button onClick={(e) => { e.stopPropagation(); setShowScheduleModal(true); setSelectedTeacher(teacher); }}>
+                    <FaEdit />
+                  </button>
+                </div>
+              </div>
+            </TeacherCard>
+          ))}
+
+          {filteredTeachers.length === 0 && (
             <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginBottom: '1rem'
+              textAlign: 'center',
+              padding: '3rem',
+              color: '#a0a0a0',
+              background: 'rgba(25, 25, 30, 0.8)',
+              borderRadius: '12px',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
+              border: '1px solid rgba(50, 50, 60, 0.4)',
             }}>
-                <TabsContainer style={{ marginBottom: '0' }}>
-                    <Tab active={activeTab === "all"} onClick={() => setActiveTab("all")}>
-                        <FaClipboardList /> All Teachers
-                    </Tab>
-                    <Tab active={activeTab === "available"} onClick={() => setActiveTab("available")}>
-                        <FaCheckCircle /> Available ({stats.available})
-                    </Tab>
-                    <Tab active={activeTab === "busy"} onClick={() => setActiveTab("busy")}>
-                        <FaTimesCircle /> Busy ({stats.busy})
-                    </Tab>
-                </TabsContainer>
+              <FaUserTie style={{ fontSize: '3rem', color: '#A076F9', marginBottom: '1rem' }} />
+              <h2>No teachers found</h2>
+              <p>Try adjusting your search or filter criteria</p>
+            </div>
+          )}
+        </TeacherList>
 
+        <TeacherDetailSection>
+          {selectedTeacher ? (
+            <TeacherDetail
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <h3><FaUserTie /> Teacher Details</h3>
+
+              <div className="detail-section">
+                <h4>{selectedTeacher.name}</h4>
+                <div className="detail-list">
+                  <div className="detail-item">
+                    <FaUserTie /> Specialization: {selectedTeacher.specialization}
+                  </div>
+                  <div className="detail-item">
+                    <FaCalendarAlt /> Branch: {selectedTeacher.branch}
+                  </div>
+                  <div className="detail-item">
+                    <FaUserTie /> Email: {selectedTeacher.email}
+                  </div>
+                  <div className="detail-item">
+                    <FaUserTie /> Phone: {selectedTeacher.phone}
+                  </div>
+                  <div className="detail-item highlight">
+                    <FaClock /> Status: {selectedTeacher.status.charAt(0).toUpperCase() + selectedTeacher.status.slice(1)}
+                  </div>
+                </div>
+              </div>
+
+              <div className="detail-section">
+                <h4>Upcoming Appointments</h4>
+                <div className="appointment-list">
+                  {selectedTeacher.appointments.length > 0 ? selectedTeacher.appointments.map(appointment => (
+                    <div className="appointment-item" key={appointment.id}>
+                      <div className="appointment-info">
+                        <div className="appointment-title">{appointment.service} with {appointment.client}</div>
+                        <div className="appointment-time">
+                          {new Date(appointment.date).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric'
+                          })} at {appointment.time}
+                        </div>
+                      </div>
+                    </div>
+                  )) : (
+                    <p>No upcoming appointments</p>
+                  )}
+                </div>
+              </div>
+
+              <div className="detail-section">
+                <h4>Availability</h4>
+                <div className="appointment-list">
+                  {selectedTeacher.availability.length > 0 ? selectedTeacher.availability.map((slot, index) => (
+                    <div className="appointment-item" key={index}>
+                      <div className="appointment-info">
+                        <div className="appointment-title">{slot.day}</div>
+                        <div className="appointment-time">{slot.time}</div>
+                      </div>
+                    </div>
+                  )) : (
+                    <p>No availability set</p>
+                  )}
+                </div>
+              </div>
+
+              <div className="button-container">
                 <Button
-                    whileHover={{ scale: 1.03 }}
-                    whileTap={{ scale: 0.97 }}
-                    onClick={() => setShowStatistics(!showStatistics)}
-                    style={{ marginLeft: '10px' }}
+                  primary
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  onClick={() => setShowScheduleModal(true)}
                 >
-                    <FaChartBar /> {showStatistics ? 'Hide Stats' : 'Show Stats'}
+                  <FaPlus /> Add Availability
                 </Button>
+              </div>
+            </TeacherDetail>
+          ) : (
+            <TeacherDetail
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <h3><FaUserTie /> Teacher Details</h3>
+              <p style={{ color: '#a0a0a0', textAlign: 'center', margin: '2rem 0' }}>
+                Select a teacher to view details
+              </p>
+            </TeacherDetail>
+          )}
+        </TeacherDetailSection>
+      </ContentWrapper>
+
+      {/* Schedule Modal */}
+      {showScheduleModal && selectedTeacher && (
+        <ModalBackdrop
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={() => setShowScheduleModal(false)}
+        >
+          <ModalContent
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3 }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2><FaCalendarAlt /> Add Availability</h2>
+
+            <div className="form-group">
+              <label>Teacher</label>
+              <input
+                type="text"
+                value={selectedTeacher.name}
+                disabled
+              />
             </div>
 
-            {showStatistics && (
-                <StatsCard
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.5 }}
+            <div className="form-row">
+              <div className="form-group">
+                <label>Day</label>
+                <select
+                  value={newAvailability.day}
+                  onChange={(e) => setNewAvailability({ ...newAvailability, day: e.target.value })}
                 >
-                    <h3><FaChartBar /> Teacher Statistics</h3>
-                    <div className="stats-grid">
-                        <div className="stat-item">
-                            <div className="stat-icon appointments">
-                                <FaCalendarAlt />
-                            </div>
-                            <div className="stat-value">{stats.totalAppointments}</div>
-                            <div className="stat-label">Total Appointments</div>
-                        </div>
-                        <div className="stat-item">
-                            <div className="stat-icon available">
-                                <FaCheckCircle />
-                            </div>
-                            <div className="stat-value">{stats.available}</div>
-                            <div className="stat-label">Available Teachers</div>
-                        </div>
-                        <div className="stat-item">
-                            <div className="stat-icon clients">
-                                <FaUserTie />
-                            </div>
-                            <div className="stat-value">{stats.totalClients}</div>
-                            <div className="stat-label">Total Clients</div>
-                        </div>
-                    </div>
-                </StatsCard>
-            )}
+                  <option value="">Select Day</option>
+                  {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map(day => (
+                    <option key={day} value={day}>{day}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="form-group">
+                <label>Time Slot</label>
+                <input
+                  type="text"
+                  value={newAvailability.time}
+                  onChange={(e) => setNewAvailability({ ...newAvailability, time: e.target.value })}
+                  placeholder="e.g., 9:00 AM - 12:00 PM"
+                />
+              </div>
+            </div>
 
-            <ContentWrapper>
-                <TeacherList>
-                    {filteredTeachers.map(teacher => (
-                        <TeacherCard
-                            key={teacher.id}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.3 }}
-                            onClick={() => handleTeacherSelect(teacher)}
-                            style={{
-                                borderLeft: selectedTeacher && selectedTeacher.id === teacher.id ?
-                                    '4px solid #A076F9' : '1px solid rgba(50, 50, 60, 0.4)'
-                            }}
-                        >
-                            <div className="card-header">
-                                <div className="title-section">
-                                    <h3>
-                                        <FaUserTie /> {teacher.name}
-                                    </h3>
-                                    <div className="specialization">
-                                        {teacher.specialization}
-                                    </div>
-                                </div>
-
-                                <div className={`status-badge ${teacher.status}`}>
-                                    {teacher.status === "available" && <FaCheckCircle />}
-                                    {teacher.status === "busy" && <FaTimesCircle />}
-                                    {teacher.status.charAt(0).toUpperCase() + teacher.status.slice(1)}
-                                </div>
-                            </div>
-
-                            <div className="card-content">
-                                <div className="info-section">
-                                    <div className="info-item">
-                                        <FaCalendarAlt /> Branch: {teacher.branch}
-                                    </div>
-                                    <div className="info-item">
-                                        <FaClock /> Appointments: {teacher.appointments.length}
-                                    </div>
-                                    <div className="info-item">
-                                        <FaUserTie /> Clients: {teacher.totalClients}
-                                    </div>
-                                </div>
-
-                                <div className="action-buttons">
-                                    <button onClick={(e) => { e.stopPropagation(); }}>
-                                        <FaEye />
-                                    </button>
-                                    <button onClick={(e) => { e.stopPropagation(); setShowScheduleModal(true); setSelectedTeacher(teacher); }}>
-                                        <FaEdit />
-                                    </button>
-                                </div>
-                            </div>
-                        </TeacherCard>
-                    ))}
-
-                    {filteredTeachers.length === 0 && (
-                        <div style={{
-                            textAlign: 'center',
-                            padding: '3rem',
-                            color: '#a0a0a0',
-                            background: 'rgba(25, 25, 30, 0.8)',
-                            borderRadius: '12px',
-                            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
-                            border: '1px solid rgba(50, 50, 60, 0.4)',
-                        }}>
-                            <FaUserTie style={{ fontSize: '3rem', color: '#A076F9', marginBottom: '1rem' }} />
-                            <h2>No teachers found</h2>
-                            <p>Try adjusting your search or filter criteria</p>
-                        </div>
-                    )}
-                </TeacherList>
-
-                <TeacherDetailSection>
-                    {selectedTeacher ? (
-                        <TeacherDetail
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.3 }}
-                        >
-                            <h3><FaUserTie /> Teacher Details</h3>
-
-                            <div className="detail-section">
-                                <h4>{selectedTeacher.name}</h4>
-                                <div className="detail-list">
-                                    <div className="detail-item">
-                                        <FaUserTie /> Specialization: {selectedTeacher.specialization}
-                                    </div>
-                                    <div className="detail-item">
-                                        <FaCalendarAlt /> Branch: {selectedTeacher.branch}
-                                    </div>
-                                    <div className="detail-item">
-                                        <FaUserTie /> Email: {selectedTeacher.email}
-                                    </div>
-                                    <div className="detail-item">
-                                        <FaUserTie /> Phone: {selectedTeacher.phone}
-                                    </div>
-                                    <div className="detail-item highlight">
-                                        <FaClock /> Status: {selectedTeacher.status.charAt(0).toUpperCase() + selectedTeacher.status.slice(1)}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="detail-section">
-                                <h4>Upcoming Appointments</h4>
-                                <div className="appointment-list">
-                                    {selectedTeacher.appointments.length > 0 ? selectedTeacher.appointments.map(appointment => (
-                                        <div className="appointment-item" key={appointment.id}>
-                                            <div className="appointment-info">
-                                                <div className="appointment-title">{appointment.service} with {appointment.client}</div>
-                                                <div className="appointment-time">
-                                                    {new Date(appointment.date).toLocaleDateString('en-US', {
-                                                        year: 'numeric',
-                                                        month: 'short',
-                                                        day: 'numeric'
-                                                    })} at {appointment.time}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )) : (
-                                        <p>No upcoming appointments</p>
-                                    )}
-                                </div>
-                            </div>
-
-                            <div className="detail-section">
-                                <h4>Availability</h4>
-                                <div className="appointment-list">
-                                    {selectedTeacher.availability.length > 0 ? selectedTeacher.availability.map((slot, index) => (
-                                        <div className="appointment-item" key={index}>
-                                            <div className="appointment-info">
-                                                <div className="appointment-title">{slot.day}</div>
-                                                <div className="appointment-time">{slot.time}</div>
-                                            </div>
-                                        </div>
-                                    )) : (
-                                        <p>No availability set</p>
-                                    )}
-                                </div>
-                            </div>
-
-                            <div className="button-container">
-                                <Button
-                                    primary
-                                    whileHover={{ scale: 1.03 }}
-                                    whileTap={{ scale: 0.97 }}
-                                    onClick={() => setShowScheduleModal(true)}
-                                >
-                                    <FaPlus /> Add Availability
-                                </Button>
-                            </div>
-                        </TeacherDetail>
-                    ) : (
-                        <TeacherDetail
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.3 }}
-                        >
-                            <h3><FaUserTie /> Teacher Details</h3>
-                            <p style={{ color: '#a0a0a0', textAlign: 'center', margin: '2rem 0' }}>
-                                Select a teacher to view details
-                            </p>
-                        </TeacherDetail>
-                    )}
-                </TeacherDetailSection>
-            </ContentWrapper>
-
-            {/* Schedule Modal */}
-            {showScheduleModal && selectedTeacher && (
-                <ModalBackdrop
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    onClick={() => setShowScheduleModal(false)}
-                >
-                    <ModalContent
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.3 }}
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <h2><FaCalendarAlt /> Add Availability</h2>
-
-                        <div className="form-group">
-                            <label>Teacher</label>
-                            <input
-                                type="text"
-                                value={selectedTeacher.name}
-                                disabled
-                            />
-                        </div>
-
-                        <div className="form-row">
-                            <div className="form-group">
-                                <label>Day</label>
-                                <select
-                                    value={newAvailability.day}
-                                    onChange={(e) => setNewAvailability({ ...newAvailability, day: e.target.value })}
-                                >
-                                    <option value="">Select Day</option>
-                                    {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map(day => (
-                                        <option key={day} value={day}>{day}</option>
-                                    ))}
-                                </select>
-                            </div>
-                            <div className="form-group">
-                                <label>Time Slot</label>
-                                <input
-                                    type="text"
-                                    value={newAvailability.time}
-                                    onChange={(e) => setNewAvailability({ ...newAvailability, time: e.target.value })}
-                                    placeholder="e.g., 9:00 AM - 12:00 PM"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="modal-actions">
-                            <Button
-                                whileHover={{ scale: 1.03 }}
-                                whileTap={{ scale: 0.97 }}
-                                onClick={() => setShowScheduleModal(false)}
-                            >
-                                Cancel
-                            </Button>
-                            <Button
-                                primary
-                                whileHover={{ scale: 1.03 }}
-                                whileTap={{ scale: 0.97 }}
-                                onClick={handleAddAvailability}
-                                disabled={!newAvailability.day || !newAvailability.time}
-                                style={{ opacity: (!newAvailability.day || !newAvailability.time) ? 0.7 : 1 }}
-                            >
-                                <FaPaperPlane /> Add
-                            </Button>
-                        </div>
-                    </ModalContent>
-                </ModalBackdrop>
-            )}
-        </TeachersContainer>
-    );
+            <div className="modal-actions">
+              <Button
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={() => setShowScheduleModal(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                primary
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={handleAddAvailability}
+                disabled={!newAvailability.day || !newAvailability.time}
+                style={{ opacity: (!newAvailability.day || !newAvailability.time) ? 0.7 : 1 }}
+              >
+                <FaPaperPlane /> Add
+              </Button>
+            </div>
+          </ModalContent>
+        </ModalBackdrop>
+      )}
+    </TeachersContainer>
+  );
 };
 
 export default Teachers;
