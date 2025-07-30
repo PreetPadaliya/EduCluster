@@ -6,7 +6,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 
 const BackButtonContainer = styled(motion.button)`
   position: fixed;
-  top: 80px;
+  bottom: 30px;
   left: 20px;
   width: 50px;
   height: 50px;
@@ -36,7 +36,7 @@ const BackButtonContainer = styled(motion.button)`
   }
 
   @media (max-width: 768px) {
-    top: 70px;
+    bottom: 20px;
     left: 15px;
     width: 45px;
     height: 45px;
@@ -91,19 +91,8 @@ const BackButton = ({ defaultPath = "/" }) => {
     const location = useLocation();
 
     const handleBack = () => {
-        // Check if there's browser history to go back to
-        if (window.history.length > 1) {
-            // Check if we can go back (not the first page)
-            if (window.history.state || document.referrer) {
-                navigate(-1);
-            } else {
-                // If no history, go to default path (home)
-                navigate(defaultPath);
-            }
-        } else {
-            // No history available, go to default path
-            navigate(defaultPath);
-        }
+        // Always navigate to home page
+        navigate(defaultPath);
     };
 
     // Don't show the back button on the home page

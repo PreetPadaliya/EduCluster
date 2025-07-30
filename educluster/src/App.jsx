@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
@@ -29,6 +29,23 @@ const Logo = styled(motion.h1)`
 
 function App() {
   const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Check for stored user data on app initialization
+  useEffect(() => {
+    const storedUser = localStorage.getItem('educluster_current_user');
+    if (storedUser) {
+      try {
+        const userData = JSON.parse(storedUser);
+        console.log("Restored user from localStorage:", userData);
+        setUser(userData);
+      } catch (error) {
+        console.error("Error parsing stored user data:", error);
+        localStorage.removeItem('educluster_current_user');
+      }
+    }
+    setIsLoading(false);
+  }, []);
 
   // Add a debug log to see the current state
   console.log("App render - Current user:", user);
@@ -46,6 +63,8 @@ function App() {
     };
     console.log("User logged in:", loginUser);
     setUser(loginUser);
+    // Store user data in localStorage for persistence
+    localStorage.setItem('educluster_current_user', JSON.stringify(loginUser));
   };
 
   const handleSignUp = (userData) => {
@@ -63,12 +82,26 @@ function App() {
     console.log("User signed up:", newUser);
     // Set the user state to log them in
     setUser(newUser);
+    // Store user data in localStorage for persistence
+    localStorage.setItem('educluster_current_user', JSON.stringify(newUser));
   };
 
   const handleLogout = () => {
     console.log("User logged out");
     setUser(null);
+    // Clear user data from localStorage
+    localStorage.removeItem('educluster_current_user');
   };
+
+  // Show loading state while checking for stored user data
+  if (isLoading) {
+    return (
+      <AppContainer>
+        <AnimatedBackground />
+        <div style={{ color: '#e0e0e0', fontSize: '1.2rem' }}>Loading...</div>
+      </AppContainer>
+    );
+  }
 
   return (
     <Router>
