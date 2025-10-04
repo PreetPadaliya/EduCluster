@@ -1,0 +1,291 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../backend/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String        @id @default(cuid())
+  firstName       String
+  lastName        String
+  email           String        @unique
+  phone           String        @unique
+  employeeId      String?       @unique // For faculty, HOD, principal
+  studentId       String?       @unique // For students
+  password        String
+  role            Role
+  status          AccountStatus @default(PENDING)
+  isActive        Boolean       @default(true)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  lastLogin       DateTime?
+  rejectionReason String?
+
+  // Role-specific relations
+  principalProfile Principal?
+  hodProfile       HOD?
+  facultyProfile   Faculty?
+  studentProfile   Student?
+
+  // Common relations
+  notifications Notification[]
+  auditLogs     AuditLog[]
+
+  @@map("users")
+}
+
+model Principal {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  institution String?
+  startDate   DateTime @default(now())
+
+  @@map("principals")
+}
+
+model Department {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  code        String   @unique
+  description String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  hod      HOD?
+  faculty  Faculty[]
+  courses  Course[]
+  students Student[]
+
+  @@map("departments")
+}
+
+model HOD {
+  id           String     @id @default(cuid())
+  userId       String     @unique
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  departmentId String     @unique
+  department   Department @relation(fields: [departmentId], references: [id])
+  startDate    DateTime   @default(now())
+
+  @@map("hods")
+}
+
+model Faculty {
+  id             String      @id @default(cuid())
+  userId         String      @unique
+  user           User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  departmentId   String?
+  department     Department? @relation(fields: [departmentId], references: [id])
+  designation    String?
+  qualification  String?
+  experience     Int? // years of experience
+  specialization String?
+  isActive       Boolean     @default(true)
+  joinDate       DateTime    @default(now())
+
+  courses       Course[]
+  assignments   Assignment[]
+  announcements Announcement[]
+
+  @@map("faculty")
+}
+
+model Student {
+  id            String      @id @default(cuid())
+  userId        String      @unique
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  departmentId  String?
+  department    Department? @relation(fields: [departmentId], references: [id])
+  semester      Int?
+  academicYear  String?
+  rollNumber    String?     @unique
+  admissionDate DateTime?
+  isActive      Boolean     @default(true)
+
+  enrollments Enrollment[]
+  submissions Submission[]
+  attendance  Attendance[]
+
+  @@map("students")
+}
+
+model Course {
+  id           String      @id @default(cuid())
+  name         String
+  code         String      @unique
+  description  String?
+  credits      Int?
+  semester     Int?
+  departmentId String?
+  department   Department? @relation(fields: [departmentId], references: [id])
+  facultyId    String?
+  faculty      Faculty?    @relation(fields: [facultyId], references: [id])
+  isActive     Boolean     @default(true)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  enrollments   Enrollment[]
+  assignments   Assignment[]
+  attendance    Attendance[]
+  announcements Announcement[]
+
+  @@map("courses")
+}
+
+model Enrollment {
+  id         String           @id @default(cuid())
+  studentId  String
+  student    Student          @relation(fields: [studentId], references: [id])
+  courseId   String
+  course     Course           @relation(fields: [courseId], references: [id])
+  enrolledAt DateTime         @default(now())
+  status     EnrollmentStatus @default(ACTIVE)
+
+  @@unique([studentId, courseId])
+  @@map("enrollments")
+}
+
+model Assignment {
+  id          String    @id @default(cuid())
+  title       String
+  description String?
+  courseId    String?
+  course      Course?   @relation(fields: [courseId], references: [id])
+  facultyId   String?
+  faculty     Faculty?  @relation(fields: [facultyId], references: [id])
+  dueDate     DateTime?
+  maxMarks    Int       @default(100)
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  submissions Submission[]
+
+  @@map("assignments")
+}
+
+model Submission {
+  id           String           @id @default(cuid())
+  assignmentId String
+  assignment   Assignment       @relation(fields: [assignmentId], references: [id])
+  studentId    String
+  student      Student          @relation(fields: [studentId], references: [id])
+  content      String?
+  fileUrl      String?
+  submittedAt  DateTime         @default(now())
+  marks        Int?
+  feedback     String?
+  status       SubmissionStatus @default(SUBMITTED)
+
+  @@unique([assignmentId, studentId])
+  @@map("submissions")
+}
+
+model Attendance {
+  id        String           @id @default(cuid())
+  studentId String
+  student   Student          @relation(fields: [studentId], references: [id])
+  courseId  String
+  course    Course           @relation(fields: [courseId], references: [id])
+  date      DateTime
+  status    AttendanceStatus
+  remarks   String?
+  createdAt DateTime         @default(now())
+
+  @@unique([studentId, courseId, date])
+  @@map("attendance")
+}
+
+model Announcement {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  courseId  String?
+  course    Course?  @relation(fields: [courseId], references: [id])
+  facultyId String?
+  faculty   Faculty? @relation(fields: [facultyId], references: [id])
+  isGlobal  Boolean  @default(false)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("announcements")
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  user      User             @relation(fields: [userId], references: [id])
+  title     String
+  message   String
+  type      NotificationType
+  isRead    Boolean          @default(false)
+  createdAt DateTime         @default(now())
+
+  @@map("notifications")
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  action    String
+  resource  String
+  details   String? // JSON as string for SQLite
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  @@map("audit_logs")
+}
+
+enum Role {
+  PRINCIPAL
+  HOD
+  FACULTY
+  STUDENT
+}
+
+enum AccountStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum EnrollmentStatus {
+  ACTIVE
+  COMPLETED
+  DROPPED
+  SUSPENDED
+}
+
+enum SubmissionStatus {
+  SUBMITTED
+  GRADED
+  LATE
+  PENDING
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+  LATE
+  EXCUSED
+}
+
+enum NotificationType {
+  ASSIGNMENT
+  ANNOUNCEMENT
+  GRADE
+  ATTENDANCE
+  GENERAL
+}

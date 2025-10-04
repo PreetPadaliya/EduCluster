@@ -20,8 +20,9 @@ import {
   FaTrash,
   FaInfoCircle,
   FaDownload,
-  FaShareAlt
+  FaShareAlt,
 } from "react-icons/fa";
+import { API } from "../utils/api";
 
 const GlobalStyles = createGlobalStyle`
   html, body, #root {
@@ -40,7 +41,7 @@ const ScheduleContainer = styled.div`
   background-color: #121214;
   color: #e0e0e0;
   padding: 1rem;
-  
+
   @media (max-width: 768px) {
     padding: 0.5rem;
   }
@@ -51,7 +52,7 @@ const Header = styled.header`
   align-items: center;
   justify-content: space-between;
   margin-bottom: 2rem;
-  
+
   h1 {
     font-size: 1.8rem;
     font-weight: 700;
@@ -63,12 +64,12 @@ const Header = styled.header`
     display: flex;
     align-items: center;
     gap: 0.8rem;
-    
+
     svg {
-      color: #A076F9;
+      color: #a076f9;
     }
   }
-  
+
   @media (max-width: 768px) {
     flex-direction: column;
     align-items: flex-start;
@@ -80,7 +81,7 @@ const ToolBar = styled.div`
   display: flex;
   gap: 1rem;
   align-items: center;
-  
+
   @media (max-width: 768px) {
     width: 100%;
     justify-content: space-between;
@@ -89,22 +90,33 @@ const ToolBar = styled.div`
 
 const Button = styled(motion.button)`
   padding: 0.6rem 1.2rem;
-  background: ${props => props.primary ? 'linear-gradient(135deg, #A076F9, #7E57C2)' : 'rgba(30, 30, 35, 0.6)'};
-  color: ${props => props.primary ? 'white' : '#d0d0d0'};
-  border: ${props => props.primary ? 'none' : '1px solid rgba(160, 118, 249, 0.3)'};
+  background: ${(props) =>
+    props.primary
+      ? "linear-gradient(135deg, #A076F9, #7E57C2)"
+      : "rgba(30, 30, 35, 0.6)"};
+  color: ${(props) => (props.primary ? "white" : "#d0d0d0")};
+  border: ${(props) =>
+    props.primary ? "none" : "1px solid rgba(160, 118, 249, 0.3)"};
   border-radius: 50px;
   cursor: pointer;
   font-size: 0.9rem;
-  font-weight: ${props => props.primary ? '600' : '400'};
+  font-weight: ${(props) => (props.primary ? "600" : "400")};
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  box-shadow: ${props => props.primary ? '0 4px 15px rgba(126, 87, 194, 0.3)' : 'none'};
+  box-shadow: ${(props) =>
+    props.primary ? "0 4px 15px rgba(126, 87, 194, 0.3)" : "none"};
   transition: all 0.3s ease;
-  
+
   &:hover {
-    box-shadow: ${props => props.primary ? '0 6px 20px rgba(126, 87, 194, 0.4)' : '0 4px 12px rgba(0, 0, 0, 0.2)'};
-    background: ${props => props.primary ? 'linear-gradient(135deg, #b18aff, #9065db)' : 'rgba(40, 40, 45, 0.6)'};
+    box-shadow: ${(props) =>
+      props.primary
+        ? "0 6px 20px rgba(126, 87, 194, 0.4)"
+        : "0 4px 12px rgba(0, 0, 0, 0.2)"};
+    background: ${(props) =>
+      props.primary
+        ? "linear-gradient(135deg, #b18aff, #9065db)"
+        : "rgba(40, 40, 45, 0.6)"};
   }
 `;
 
@@ -117,16 +129,16 @@ const TabsContainer = styled.div`
   overflow-x: auto;
   flex-wrap: nowrap;
   flex: 1;
-  
+
   &::-webkit-scrollbar {
     height: 4px;
   }
-  
+
   &::-webkit-scrollbar-thumb {
     background-color: rgba(160, 118, 249, 0.3);
     border-radius: 10px;
   }
-  
+
   @media (max-width: 768px) {
     margin-right: 0.5rem;
   }
@@ -134,13 +146,15 @@ const TabsContainer = styled.div`
 
 const Tab = styled(motion.button)`
   padding: 0.6rem 1.2rem;
-  background: ${props => props.active ? 'rgba(160, 118, 249, 0.15)' : 'transparent'};
-  color: ${props => props.active ? '#A076F9' : '#a0a0a0'};
-  border: ${props => props.active ? '2px solid #A076F9' : '2px solid transparent'};
+  background: ${(props) =>
+    props.active ? "rgba(160, 118, 249, 0.15)" : "transparent"};
+  color: ${(props) => (props.active ? "#A076F9" : "#a0a0a0")};
+  border: ${(props) =>
+    props.active ? "2px solid #A076F9" : "2px solid transparent"};
   border-radius: 8px;
   cursor: pointer;
   font-size: 0.85rem;
-  font-weight: ${props => props.active ? '600' : '400'};
+  font-weight: ${(props) => (props.active ? "600" : "400")};
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -148,13 +162,14 @@ const Tab = styled(motion.button)`
   white-space: nowrap;
   min-width: fit-content;
   box-sizing: border-box;
-  
+
   &:hover {
     background: rgba(160, 118, 249, 0.1);
-    color: ${props => props.active ? '#A076F9' : '#d0d0d0'};
-    border-color: ${props => props.active ? '#A076F9' : 'rgba(160, 118, 249, 0.3)'};
+    color: ${(props) => (props.active ? "#A076F9" : "#d0d0d0")};
+    border-color: ${(props) =>
+      props.active ? "#A076F9" : "rgba(160, 118, 249, 0.3)"};
   }
-  
+
   @media (max-width: 768px) {
     padding: 0.5rem 1rem;
     font-size: 0.8rem;
@@ -166,24 +181,24 @@ const CalendarHeader = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-bottom: 1rem;
-  
+
   h2 {
     font-size: 1.4rem;
     font-weight: 600;
     margin: 0;
   }
-  
+
   .controls {
     display: flex;
     align-items: center;
     gap: 1rem;
-    
+
     .date-display {
       min-width: 150px;
       text-align: center;
       font-weight: 500;
     }
-    
+
     button {
       display: flex;
       align-items: center;
@@ -196,19 +211,19 @@ const CalendarHeader = styled.div`
       color: #e0e0e0;
       cursor: pointer;
       transition: all 0.2s ease;
-      
+
       &:hover {
         background: rgba(160, 118, 249, 0.2);
-        color: #A076F9;
+        color: #a076f9;
       }
     }
   }
-  
+
   @media (max-width: 768px) {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.5rem;
-    
+
     .controls {
       width: 100%;
       justify-content: space-between;
@@ -221,18 +236,18 @@ const CalendarGrid = styled.div`
   grid-template-columns: repeat(7, 1fr);
   gap: 8px;
   margin-bottom: 2rem;
-  
+
   .day-name {
     text-align: center;
     font-weight: 600;
-    color: #A076F9;
+    color: #a076f9;
     padding: 0.5rem 0;
     font-size: 0.9rem;
   }
-  
+
   @media (max-width: 768px) {
     gap: 4px;
-    
+
     .day-name {
       font-size: 0.8rem;
     }
@@ -240,39 +255,42 @@ const CalendarGrid = styled.div`
 `;
 
 const CalendarDay = styled.div`
-  background: ${props => props.isToday ? 'rgba(160, 118, 249, 0.15)' : 'rgba(25, 25, 30, 0.8)'};
-  border: 1px solid ${props => props.isToday ? 'rgba(160, 118, 249, 0.4)' : 'rgba(50, 50, 60, 0.4)'};
+  background: ${(props) =>
+    props.isToday ? "rgba(160, 118, 249, 0.15)" : "rgba(25, 25, 30, 0.8)"};
+  border: 1px solid
+    ${(props) =>
+      props.isToday ? "rgba(160, 118, 249, 0.4)" : "rgba(50, 50, 60, 0.4)"};
   border-radius: 8px;
   padding: 0.5rem;
   min-height: 100px;
   cursor: pointer;
   transition: all 0.2s ease;
-  
+
   &:hover {
     border-color: rgba(160, 118, 249, 0.3);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   }
-  
+
   .day-number {
     text-align: center;
-    font-weight: ${props => props.isToday ? '600' : '400'};
-    color: ${props => props.isToday ? '#A076F9' : '#a0a0a0'};
+    font-weight: ${(props) => (props.isToday ? "600" : "400")};
+    color: ${(props) => (props.isToday ? "#A076F9" : "#a0a0a0")};
     margin-bottom: 0.5rem;
   }
-  
+
   .events {
     display: flex;
     flex-direction: column;
     gap: 4px;
   }
-  
+
   &.other-month {
     opacity: 0.5;
   }
-  
+
   @media (max-width: 768px) {
     min-height: 60px;
-    
+
     .day-number {
       font-size: 0.8rem;
     }
@@ -280,7 +298,7 @@ const CalendarDay = styled.div`
 `;
 
 const EventIndicator = styled.div`
-  background: ${props => props.color || '#A076F9'};
+  background: ${(props) => props.color || "#A076F9"};
   border-radius: 4px;
   padding: 3px 6px;
   font-size: 0.7rem;
@@ -296,7 +314,7 @@ const UpcomingEvents = styled.div`
   padding: 1.5rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(50, 50, 60, 0.4);
-  
+
   h3 {
     margin-top: 0;
     font-size: 1.2rem;
@@ -304,9 +322,9 @@ const UpcomingEvents = styled.div`
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    
+
     svg {
-      color: #A076F9;
+      color: #a076f9;
     }
   }
 `;
@@ -316,54 +334,54 @@ const EventCard = styled(motion.div)`
   border-radius: 8px;
   padding: 1rem;
   margin-bottom: 1rem;
-  border-left: 4px solid ${props => props.color || '#A076F9'};
-  
+  border-left: 4px solid ${(props) => props.color || "#A076F9"};
+
   .event-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: 0.8rem;
-    
+
     h4 {
       margin: 0;
       font-size: 1.1rem;
       color: #e0e0e0;
     }
-    
+
     .event-type {
       font-size: 0.75rem;
       padding: 3px 8px;
       background: rgba(160, 118, 249, 0.2);
       border-radius: 12px;
-      color: #A076F9;
+      color: #a076f9;
     }
   }
-  
+
   .event-details {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    
+
     .detail-item {
       display: flex;
       align-items: center;
       gap: 0.5rem;
       color: #a0a0a0;
       font-size: 0.9rem;
-      
+
       svg {
-        color: #A076F9;
+        color: #a076f9;
         font-size: 0.9rem;
       }
     }
   }
-  
+
   .event-actions {
     display: flex;
     justify-content: flex-end;
     gap: 0.5rem;
     margin-top: 1rem;
-    
+
     button {
       background: transparent;
       border: none;
@@ -376,10 +394,10 @@ const EventCard = styled(motion.div)`
       height: 30px;
       border-radius: 50%;
       transition: all 0.2s ease;
-      
+
       &:hover {
         background: rgba(160, 118, 249, 0.1);
-        color: #A076F9;
+        color: #a076f9;
       }
     }
   }
@@ -392,7 +410,7 @@ const ResourcesSection = styled.div`
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(50, 50, 60, 0.4);
   margin-top: 2rem;
-  
+
   h3 {
     margin-top: 0;
     font-size: 1.2rem;
@@ -400,9 +418,9 @@ const ResourcesSection = styled.div`
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    
+
     svg {
-      color: #A076F9;
+      color: #a076f9;
     }
   }
 `;
@@ -420,44 +438,44 @@ const ResourceCard = styled(motion.div)`
   border: 1px solid rgba(50, 50, 60, 0.4);
   transition: all 0.2s ease;
   cursor: pointer;
-  
+
   &:hover {
     transform: translateY(-5px);
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
     border-color: rgba(160, 118, 249, 0.3);
   }
-  
+
   h4 {
     margin: 0 0 0.8rem 0;
     font-size: 1rem;
     color: #e0e0e0;
   }
-  
+
   p {
     color: #a0a0a0;
     font-size: 0.9rem;
     margin: 0 0 1rem 0;
   }
-  
+
   .resource-actions {
     display: flex;
     justify-content: space-between;
-    
+
     .type {
       font-size: 0.75rem;
       padding: 3px 8px;
       background: rgba(160, 118, 249, 0.15);
       border-radius: 12px;
-      color: #A076F9;
+      color: #a076f9;
       display: flex;
       align-items: center;
       gap: 0.3rem;
     }
-    
+
     .actions {
       display: flex;
       gap: 0.5rem;
-      
+
       button {
         background: transparent;
         border: none;
@@ -470,10 +488,10 @@ const ResourceCard = styled(motion.div)`
         height: 30px;
         border-radius: 50%;
         transition: all 0.2s ease;
-        
+
         &:hover {
           background: rgba(160, 118, 249, 0.1);
-          color: #A076F9;
+          color: #a076f9;
         }
       }
     }
@@ -504,29 +522,31 @@ const ModalContent = styled(motion.div)`
   overflow-y: auto;
   border: 1px solid rgba(160, 118, 249, 0.3);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  
+
   h2 {
     margin-top: 0;
     color: #e0e0e0;
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    
+
     svg {
-      color: #A076F9;
+      color: #a076f9;
     }
   }
-  
+
   .form-group {
     margin-bottom: 1.5rem;
-    
+
     label {
       display: block;
       margin-bottom: 0.5rem;
       color: #c0c0c0;
     }
-    
-    input, select, textarea {
+
+    input,
+    select,
+    textarea {
       width: 100%;
       padding: 0.8rem;
       background: rgba(30, 30, 35, 0.6);
@@ -534,33 +554,33 @@ const ModalContent = styled(motion.div)`
       border-radius: 8px;
       color: #e0e0e0;
       font-size: 0.9rem;
-      
+
       &:focus {
         outline: none;
-        border-color: #A076F9;
+        border-color: #a076f9;
       }
     }
-    
+
     textarea {
       min-height: 100px;
       resize: vertical;
     }
   }
-  
+
   .form-row {
     display: flex;
     gap: 1rem;
-    
+
     .form-group {
       flex: 1;
     }
-    
+
     @media (max-width: 768px) {
       flex-direction: column;
       gap: 0.5rem;
     }
   }
-  
+
   .modal-actions {
     display: flex;
     justify-content: flex-end;
@@ -569,41 +589,251 @@ const ModalContent = styled(motion.div)`
   }
 `;
 
-const Schedule = () => {
+const Schedule = ({ user }) => {
   const [activeTab, setActiveTab] = useState("calendar");
-  const [currentMonth, setCurrentMonth] = useState(new Date(2025, 6, 23));
-
+  const [currentMonth, setCurrentMonth] = useState(new Date());
   const [showFilter, setShowFilter] = useState(false);
   const [activeFilter, setActiveFilter] = useState("all");
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(
+    new Date().toISOString().split("T")[0]
+  );
   const [newEvent, setNewEvent] = useState({
     title: "",
-    type: "Class",
-    date: "2025-07-23",
-    time: "",
-    location: "",
-    participants: "",
-    subject: ""
+    description: "",
+    type: "REGULAR_CLASS",
+    date: new Date().toISOString().split("T")[0],
+    startTime: "",
+    endTime: "",
+    courseId: "",
+    facultyId: "",
   });
+  const [schedule, setSchedule] = useState([]);
+  const [courses, setCourses] = useState([]);
+  const [faculty, setFaculty] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const events = [
-    { id: 1, title: "Introduction to AI", type: "Class", date: "2025-07-23", time: "10:00 AM - 12:00 PM", location: "Room 101", participants: "30 students", subject: "Computer Science" },
-    { id: 2, title: "Data Structures Study Group", type: "Meeting", date: "2025-07-23", time: "2:00 PM - 4:00 PM", location: "Library", participants: "8 students", subject: "Computer Science" },
-    { id: 3, title: "Mathematics Lecture", type: "Class", date: "2025-07-24", time: "10:00 AM - 12:00 PM", location: "Room 101", participants: "30 students", subject: "Mathematics" },
-    { id: 4, title: "Physics Lab", type: "Lab", date: "2025-07-24", time: "2:00 PM - 4:00 PM", location: "Science Building", participants: "20 students", subject: "Physics" },
-    { id: 5, title: "Faculty Meeting", type: "Meeting", date: "2025-07-25", time: "9:00 AM - 10:30 AM", location: "Conference Room", participants: "All faculty", subject: "Academic Planning" },
-    { id: 6, title: "Computer Science Lecture", type: "Class", date: "2025-07-26", time: "11:00 AM - 1:00 PM", location: "Room 203", participants: "35 students", subject: "Computer Science" }
-  ];
+  // Fetch schedule and related data on component mount
+  useEffect(() => {
+    fetchSchedule();
+    if (user?.role !== "STUDENT") {
+      fetchCourses();
+      fetchFaculty();
+    }
+  }, [user, selectedDate]);
+
+  const fetchSchedule = async () => {
+    try {
+      setLoading(true);
+      const userId = user?.id || user?.enrollmentNo;
+      const params = {
+        userId: userId,
+      };
+
+      // Add date filter if viewing specific date
+      if (activeTab === "day" && selectedDate) {
+        params.date = selectedDate;
+      }
+
+      const response = await API.schedule.getSchedules(params);
+
+      // Transform API data to match component expectations
+      const transformedSchedule = response.schedules.map((item) => ({
+        id: item.id,
+        title: item.title,
+        description: item.description,
+        type: item.type,
+        date: new Date(item.startTime).toISOString().split("T")[0],
+        startTime: new Date(item.startTime),
+        endTime: new Date(item.endTime),
+        time: `${new Date(item.startTime).toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        })} - ${new Date(item.endTime).toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        })}`,
+        location: "TBA", // Could be enhanced to include location in schema
+        participants: item.course ? item.course.name : "General",
+        subject: item.course?.name || item.title,
+        instructor: item.faculty?.name || "TBA",
+        dayOfWeek: item.dayOfWeek,
+        course: item.course,
+        faculty: item.faculty,
+        createdBy: item.createdBy,
+        createdAt: item.createdAt,
+        updatedAt: item.updatedAt,
+      }));
+
+      setSchedule(transformedSchedule);
+    } catch (err) {
+      console.error("Error fetching schedule:", err);
+      setError("Failed to load schedule. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchCourses = async () => {
+    try {
+      const userId = user?.id || user?.enrollmentNo;
+      const response = await API.courses.getCourses(
+        userId,
+        user?.role?.toUpperCase()
+      );
+      setCourses(response.courses || []);
+    } catch (err) {
+      console.error("Error fetching courses:", err);
+    }
+  };
+
+  const fetchFaculty = async () => {
+    try {
+      const userId = user?.id || user?.enrollmentNo;
+      const response = await API.faculty.getFaculty(
+        userId,
+        user?.role?.toUpperCase()
+      );
+      setFaculty(response.faculty || []);
+    } catch (err) {
+      console.error("Error fetching faculty:", err);
+    }
+  };
+
+  const handleCreateEvent = async () => {
+    try {
+      // Validate required fields
+      if (
+        !newEvent.title ||
+        !newEvent.startTime ||
+        !newEvent.endTime ||
+        !newEvent.type
+      ) {
+        setError("Please fill in all required fields");
+        return;
+      }
+
+      // Validate user is logged in
+      console.log("User object in Schedule:", user);
+      console.log("User ID:", user?.id);
+      console.log("User enrollmentNo:", user?.enrollmentNo);
+      console.log("User role:", user?.role);
+
+      const userId = user?.id || user?.enrollmentNo;
+      if (!userId) {
+        console.error("User ID is missing:", user);
+        setError("User not authenticated. Please log in again.");
+        return;
+      }
+
+      // Create date-time objects
+      const eventDate = new Date(newEvent.date);
+      const [startHour, startMinute] = newEvent.startTime
+        .split(":")
+        .map(Number);
+      const [endHour, endMinute] = newEvent.endTime.split(":").map(Number);
+
+      const startDateTime = new Date(eventDate);
+      startDateTime.setHours(startHour, startMinute, 0, 0);
+
+      const endDateTime = new Date(eventDate);
+      endDateTime.setHours(endHour, endMinute, 0, 0);
+
+      // Get day of week
+      const dayOfWeek = [
+        "SUNDAY",
+        "MONDAY",
+        "TUESDAY",
+        "WEDNESDAY",
+        "THURSDAY",
+        "FRIDAY",
+        "SATURDAY",
+      ][eventDate.getDay()];
+
+      const scheduleData = {
+        title: newEvent.title,
+        description: newEvent.description,
+        startTime: startDateTime.toISOString(),
+        endTime: endDateTime.toISOString(),
+        dayOfWeek: dayOfWeek,
+        type: newEvent.type,
+        courseId: newEvent.courseId || null,
+        facultyId: newEvent.facultyId || null,
+        createdById: userId,
+      };
+
+      console.log("Schedule data being sent:", scheduleData);
+      console.log("User info:", user);
+
+      await API.schedule.createSchedule(scheduleData);
+
+      // Reset form and close modal
+      setNewEvent({
+        title: "",
+        description: "",
+        type: "REGULAR_CLASS",
+        date: new Date().toISOString().split("T")[0],
+        startTime: "",
+        endTime: "",
+        courseId: "",
+        facultyId: "",
+      });
+      setShowCreateModal(false);
+      setError("");
+
+      // Refresh schedule
+      fetchSchedule();
+    } catch (err) {
+      console.error("Error creating schedule:", err);
+      setError("Failed to create schedule entry. Please try again.");
+    }
+  };
+
+  // Use schedule data instead of static events
+  const events = schedule;
 
   const resources = [
-    { id: 1, title: "Academic Calendar 2025", type: "PDF", description: "Complete academic year schedule with all important dates and events." },
-    { id: 2, title: "Room Allocation Guide", type: "DOC", description: "Guidelines for classroom and meeting room reservations." },
-    { id: 3, title: "How to Schedule Classes", type: "Video", description: "Tutorial on using the scheduling system for faculty members." },
-    { id: 4, title: "Exam Schedule Template", type: "XLS", description: "Template for creating and planning examination schedules." },
-    { id: 5, title: "Event Request Form", type: "PDF", description: "Form to request special events and book venues." },
-    { id: 6, title: "Scheduling Policies", type: "PDF", description: "Official policies regarding class scheduling and room usage." }
+    {
+      id: 1,
+      title: "Academic Calendar 2025",
+      type: "PDF",
+      description:
+        "Complete academic year schedule with all important dates and events.",
+    },
+    {
+      id: 2,
+      title: "Room Allocation Guide",
+      type: "DOC",
+      description: "Guidelines for classroom and meeting room reservations.",
+    },
+    {
+      id: 3,
+      title: "How to Schedule Classes",
+      type: "Video",
+      description:
+        "Tutorial on using the scheduling system for faculty members.",
+    },
+    {
+      id: 4,
+      title: "Exam Schedule Template",
+      type: "XLS",
+      description: "Template for creating and planning examination schedules.",
+    },
+    {
+      id: 5,
+      title: "Event Request Form",
+      type: "PDF",
+      description: "Form to request special events and book venues.",
+    },
+    {
+      id: 6,
+      title: "Scheduling Policies",
+      type: "PDF",
+      description:
+        "Official policies regarding class scheduling and room usage.",
+    },
   ];
-
 
   const generateCalendarDays = () => {
     const year = currentMonth.getFullYear();
@@ -612,7 +842,6 @@ const Schedule = () => {
     const firstDay = new Date(year, month, 1);
 
     const lastDay = new Date(year, month + 1, 0);
-
 
     const daysFromPrevMonth = firstDay.getDay();
 
@@ -625,7 +854,7 @@ const Schedule = () => {
       days.push({
         day: prevMonthLastDay - i,
         currentMonth: false,
-        date: new Date(year, month - 1, prevMonthLastDay - i)
+        date: new Date(year, month - 1, prevMonthLastDay - i),
       });
     }
 
@@ -634,7 +863,9 @@ const Schedule = () => {
         day: i,
         currentMonth: true,
         date: new Date(year, month, i),
-        isToday: new Date(year, month, i).toDateString() === new Date(2025, 6, 23).toDateString()
+        isToday:
+          new Date(year, month, i).toDateString() ===
+          new Date(2025, 6, 23).toDateString(),
       });
     }
 
@@ -643,7 +874,7 @@ const Schedule = () => {
       days.push({
         day: i,
         currentMonth: false,
-        date: new Date(year, month + 1, i)
+        date: new Date(year, month + 1, i),
       });
     }
 
@@ -651,13 +882,12 @@ const Schedule = () => {
   };
 
   const getEventsForDay = (date) => {
-    const dateStr = date.toISOString().split('T')[0];
-    let filteredEvents = events.filter(event => event.date === dateStr);
-
+    const dateStr = date.toISOString().split("T")[0];
+    let filteredEvents = events.filter((event) => event.date === dateStr);
 
     if (activeFilter !== "all") {
-      filteredEvents = filteredEvents.filter(event =>
-        event.type.toLowerCase() === activeFilter.toLowerCase()
+      filteredEvents = filteredEvents.filter(
+        (event) => event.type.toLowerCase() === activeFilter.toLowerCase()
       );
     }
 
@@ -665,15 +895,18 @@ const Schedule = () => {
   };
 
   const nextMonth = () => {
-    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1));
+    setCurrentMonth(
+      new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1)
+    );
   };
 
   const prevMonth = () => {
-    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1));
+    setCurrentMonth(
+      new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1)
+    );
   };
 
   const goToToday = () => {
-
     setCurrentMonth(new Date(2025, 6, 23));
   };
 
@@ -683,27 +916,7 @@ const Schedule = () => {
     const { name, value } = e.target;
     setNewEvent({
       ...newEvent,
-      [name]: value
-    });
-  };
-
-  const handleCreateEvent = () => {
-
-    const newId = events.length + 1;
-    const createdEvent = {
-      id: newId,
-      ...newEvent
-    };
-    events.unshift(createdEvent);
-    setShowCreateModal(false);
-    setNewEvent({
-      title: "",
-      type: "Class",
-      date: "2025-07-23",
-      time: "",
-      location: "",
-      participants: "",
-      subject: ""
+      [name]: value,
     });
   };
 
@@ -712,7 +925,9 @@ const Schedule = () => {
       <GlobalStyles />
 
       <Header>
-        <h1><FaCalendarAlt /> Schedule</h1>
+        <h1>
+          <FaCalendarAlt /> Schedule
+        </h1>
         <ToolBar>
           <Button
             primary
@@ -722,13 +937,14 @@ const Schedule = () => {
           >
             <FaCalendarPlus /> Create Event
           </Button>
-          <div style={{ position: 'relative' }}>
+          <div style={{ position: "relative" }}>
             <Button
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               onClick={() => setShowFilter(!showFilter)}
             >
-              <FaFilter /> Filter: {activeFilter === 'all' ? 'All' : activeFilter}
+              <FaFilter /> Filter:{" "}
+              {activeFilter === "all" ? "All" : activeFilter}
             </Button>
 
             {showFilter && (
@@ -736,20 +952,20 @@ const Schedule = () => {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 style={{
-                  position: 'absolute',
-                  top: '100%',
+                  position: "absolute",
+                  top: "100%",
                   right: 0,
-                  marginTop: '0.5rem',
-                  background: 'rgba(25, 25, 30, 0.95)',
-                  borderRadius: '8px',
-                  overflow: 'hidden',
-                  width: '160px',
-                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
-                  border: '1px solid rgba(50, 50, 60, 0.4)',
-                  zIndex: 100
+                  marginTop: "0.5rem",
+                  background: "rgba(25, 25, 30, 0.95)",
+                  borderRadius: "8px",
+                  overflow: "hidden",
+                  width: "160px",
+                  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+                  border: "1px solid rgba(50, 50, 60, 0.4)",
+                  zIndex: 100,
                 }}
               >
-                {['all', 'class', 'lab', 'meeting'].map((filter) => (
+                {["all", "class", "lab", "meeting"].map((filter) => (
                   <div
                     key={filter}
                     onClick={() => {
@@ -757,14 +973,19 @@ const Schedule = () => {
                       setShowFilter(false);
                     }}
                     style={{
-                      padding: '0.8rem 1rem',
-                      cursor: 'pointer',
-                      backgroundColor: activeFilter === filter ? 'rgba(160, 118, 249, 0.15)' : 'transparent',
-                      borderBottom: '1px solid rgba(50, 50, 60, 0.4)',
-                      transition: 'all 0.2s ease'
+                      padding: "0.8rem 1rem",
+                      cursor: "pointer",
+                      backgroundColor:
+                        activeFilter === filter
+                          ? "rgba(160, 118, 249, 0.15)"
+                          : "transparent",
+                      borderBottom: "1px solid rgba(50, 50, 60, 0.4)",
+                      transition: "all 0.2s ease",
                     }}
                   >
-                    {filter === 'all' ? 'All Events' : filter.charAt(0).toUpperCase() + filter.slice(1) + 's'}
+                    {filter === "all"
+                      ? "All Events"
+                      : filter.charAt(0).toUpperCase() + filter.slice(1) + "s"}
                   </div>
                 ))}
               </motion.div>
@@ -773,42 +994,62 @@ const Schedule = () => {
         </ToolBar>
       </Header>
 
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: '1rem'
-      }}>
-        <TabsContainer style={{ marginBottom: '0' }}>
-          <Tab active={activeTab === "calendar"} onClick={() => setActiveTab("calendar")}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "1rem",
+        }}
+      >
+        <TabsContainer style={{ marginBottom: "0" }}>
+          <Tab
+            active={activeTab === "calendar"}
+            onClick={() => setActiveTab("calendar")}
+          >
             <FaCalendarAlt /> Calendar View
           </Tab>
-          <Tab active={activeTab === "list"} onClick={() => setActiveTab("list")}>
+          <Tab
+            active={activeTab === "list"}
+            onClick={() => setActiveTab("list")}
+          >
             <FaListAlt /> List View
           </Tab>
-          <Tab active={activeTab === "resources"} onClick={() => setActiveTab("resources")}>
+          <Tab
+            active={activeTab === "resources"}
+            onClick={() => setActiveTab("resources")}
+          >
             <FaBook /> Resources
           </Tab>
         </TabsContainer>
       </div>
 
       {activeTab === "calendar" && (
-        <div style={{ marginTop: '1rem' }}>
+        <div style={{ marginTop: "1rem" }}>
           <CalendarHeader>
             <h2>Monthly Calendar</h2>
             <div className="controls">
-              <button onClick={prevMonth}><FaChevronLeft /></button>
+              <button onClick={prevMonth}>
+                <FaChevronLeft />
+              </button>
               <button onClick={goToToday}>Today</button>
               <div className="date-display">
-                {currentMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                {currentMonth.toLocaleDateString("en-US", {
+                  month: "long",
+                  year: "numeric",
+                })}
               </div>
-              <button onClick={nextMonth}><FaChevronRight /></button>
+              <button onClick={nextMonth}>
+                <FaChevronRight />
+              </button>
             </div>
           </CalendarHeader>
 
           <CalendarGrid>
-            {dayNames.map(day => (
-              <div key={day} className="day-name">{day}</div>
+            {dayNames.map((day) => (
+              <div key={day} className="day-name">
+                {day}
+              </div>
             ))}
 
             {generateCalendarDays().map((day, index) => (
@@ -819,7 +1060,7 @@ const Schedule = () => {
                 onClick={() => {
                   // Only allow creating events in the current month
                   if (day.currentMonth) {
-                    const dateStr = day.date.toISOString().split('T')[0];
+                    const dateStr = day.date.toISOString().split("T")[0];
                     setNewEvent({ ...newEvent, date: dateStr });
                     setShowCreateModal(true);
                   }
@@ -827,18 +1068,22 @@ const Schedule = () => {
               >
                 <div className="day-number">{day.day}</div>
                 <div className="events">
-                  {getEventsForDay(day.date).slice(0, 2).map(event => (
-                    <EventIndicator
-                      key={event.id}
-                      color={
-                        event.type === "Class" ? "#7E57C2" :
-                          event.type === "Lab" ? "#2196F3" :
-                            "#4CAF50"
-                      }
-                    >
-                      {event.title}
-                    </EventIndicator>
-                  ))}
+                  {getEventsForDay(day.date)
+                    .slice(0, 2)
+                    .map((event) => (
+                      <EventIndicator
+                        key={event.id}
+                        color={
+                          event.type === "Class"
+                            ? "#7E57C2"
+                            : event.type === "Lab"
+                            ? "#2196F3"
+                            : "#4CAF50"
+                        }
+                      >
+                        {event.title}
+                      </EventIndicator>
+                    ))}
                   {getEventsForDay(day.date).length > 2 && (
                     <EventIndicator color="#808080">
                       +{getEventsForDay(day.date).length - 2} more
@@ -850,17 +1095,25 @@ const Schedule = () => {
           </CalendarGrid>
 
           <UpcomingEvents>
-            <h3><FaCalendarCheck /> Upcoming Events</h3>
+            <h3>
+              <FaCalendarCheck /> Upcoming Events
+            </h3>
 
             {events
-              .filter(event => activeFilter === "all" || event.type.toLowerCase() === activeFilter.toLowerCase())
-              .map(event => (
+              .filter(
+                (event) =>
+                  activeFilter === "all" ||
+                  event.type.toLowerCase() === activeFilter.toLowerCase()
+              )
+              .map((event) => (
                 <EventCard
                   key={event.id}
                   color={
-                    event.type === "Class" ? "#7E57C2" :
-                      event.type === "Lab" ? "#2196F3" :
-                        "#4CAF50"
+                    event.type === "Class"
+                      ? "#7E57C2"
+                      : event.type === "Lab"
+                      ? "#2196F3"
+                      : "#4CAF50"
                   }
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -888,9 +1141,15 @@ const Schedule = () => {
                     </div>
                   </div>
                   <div className="event-actions">
-                    <button><FaEdit /></button>
-                    <button><FaTrash /></button>
-                    <button><FaShareAlt /></button>
+                    <button>
+                      <FaEdit />
+                    </button>
+                    <button>
+                      <FaTrash />
+                    </button>
+                    <button>
+                      <FaShareAlt />
+                    </button>
                   </div>
                 </EventCard>
               ))}
@@ -900,10 +1159,12 @@ const Schedule = () => {
 
       {activeTab === "resources" && (
         <ResourcesSection>
-          <h3><FaBook /> Schedule Resources</h3>
+          <h3>
+            <FaBook /> Schedule Resources
+          </h3>
 
           <ResourceGrid>
-            {resources.map(resource => (
+            {resources.map((resource) => (
               <ResourceCard
                 key={resource.id}
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -920,8 +1181,12 @@ const Schedule = () => {
                     {resource.type === "XLS" && "📊 Spreadsheet"}
                   </div>
                   <div className="actions">
-                    <button><FaInfoCircle /></button>
-                    <button><FaDownload /></button>
+                    <button>
+                      <FaInfoCircle />
+                    </button>
+                    <button>
+                      <FaDownload />
+                    </button>
                   </div>
                 </div>
               </ResourceCard>
@@ -943,106 +1208,187 @@ const Schedule = () => {
             transition={{ duration: 0.3 }}
             onClick={(e) => e.stopPropagation()}
           >
-            <h2><FaCalendarPlus /> Create New Event</h2>
+            <h2>
+              <FaCalendarPlus /> Create New Schedule
+            </h2>
+
+            {error && (
+              <div
+                style={{
+                  background: "rgba(255, 0, 0, 0.1)",
+                  border: "1px solid rgba(255, 0, 0, 0.3)",
+                  borderRadius: "8px",
+                  padding: "0.75rem",
+                  marginBottom: "1rem",
+                  color: "#ff6b6b",
+                }}
+              >
+                {error}
+              </div>
+            )}
 
             <div className="form-group">
-              <label htmlFor="event-title">Event Title</label>
+              <label htmlFor="event-title">Schedule Title *</label>
               <input
                 type="text"
                 id="event-title"
                 name="title"
                 value={newEvent.title}
                 onChange={handleInputChange}
-                placeholder="Enter event title"
+                placeholder="Enter schedule title"
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="event-description">Description</label>
+              <textarea
+                id="event-description"
+                name="description"
+                value={newEvent.description}
+                onChange={handleInputChange}
+                placeholder="Enter description"
+                rows="3"
+                style={{
+                  width: "100%",
+                  padding: "0.75rem",
+                  background: "rgba(30, 30, 35, 0.5)",
+                  border: "1px solid rgba(50, 50, 60, 0.3)",
+                  borderRadius: "8px",
+                  color: "#e0e0e0",
+                  fontSize: "0.9rem",
+                  resize: "vertical",
+                }}
               />
             </div>
 
             <div className="form-row">
               <div className="form-group">
-                <label htmlFor="event-type">Event Type</label>
+                <label htmlFor="event-type">Schedule Type *</label>
                 <select
                   id="event-type"
                   name="type"
                   value={newEvent.type}
                   onChange={handleInputChange}
+                  required
                 >
-                  <option value="Class">Class</option>
-                  <option value="Lab">Lab</option>
-                  <option value="Meeting">Meeting</option>
+                  <option value="REGULAR_CLASS">Regular Class</option>
+                  <option value="LAB">Lab Session</option>
+                  <option value="EXAM">Examination</option>
+                  <option value="SEMINAR">Seminar</option>
+                  <option value="MEETING">Meeting</option>
+                  <option value="SPECIAL_EVENT">Special Event</option>
+                  <option value="ASSIGNMENT_DUE">Assignment Due</option>
+                  <option value="HOLIDAY">Holiday</option>
                 </select>
               </div>
 
               <div className="form-group">
-                <label htmlFor="event-date">Date</label>
+                <label htmlFor="event-date">Date *</label>
                 <input
                   type="date"
                   id="event-date"
                   name="date"
                   value={newEvent.date}
                   onChange={handleInputChange}
-                  min="2025-07-23"
+                  min={new Date().toISOString().split("T")[0]}
+                  required
                 />
               </div>
             </div>
 
             <div className="form-row">
               <div className="form-group">
-                <label htmlFor="event-time">Time</label>
+                <label htmlFor="event-start-time">Start Time *</label>
                 <input
-                  type="text"
-                  id="event-time"
-                  name="time"
-                  value={newEvent.time}
+                  type="time"
+                  id="event-start-time"
+                  name="startTime"
+                  value={newEvent.startTime}
                   onChange={handleInputChange}
-                  placeholder="e.g. 10:00 AM - 12:00 PM"
+                  required
                 />
               </div>
 
               <div className="form-group">
-                <label htmlFor="event-location">Location</label>
+                <label htmlFor="event-end-time">End Time *</label>
                 <input
-                  type="text"
-                  id="event-location"
-                  name="location"
-                  value={newEvent.location}
+                  type="time"
+                  id="event-end-time"
+                  name="endTime"
+                  value={newEvent.endTime}
                   onChange={handleInputChange}
-                  placeholder="Enter location"
+                  required
                 />
               </div>
             </div>
 
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="event-participants">Participants</label>
-                <input
-                  type="text"
-                  id="event-participants"
-                  name="participants"
-                  value={newEvent.participants}
-                  onChange={handleInputChange}
-                  placeholder="e.g. 30 students"
-                />
-              </div>
+            {(user?.role === "FACULTY" ||
+              user?.role === "HOD" ||
+              user?.role === "PRINCIPAL") && (
+              <div className="form-row">
+                <div className="form-group">
+                  <label htmlFor="event-course">Course (Optional)</label>
+                  <select
+                    id="event-course"
+                    name="courseId"
+                    value={newEvent.courseId}
+                    onChange={handleInputChange}
+                  >
+                    <option value="">Select Course</option>
+                    {courses.map((course) => (
+                      <option key={course.id} value={course.id}>
+                        {course.code} - {course.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
-              <div className="form-group">
-                <label htmlFor="event-subject">Subject</label>
-                <input
-                  type="text"
-                  id="event-subject"
-                  name="subject"
-                  value={newEvent.subject}
-                  onChange={handleInputChange}
-                  placeholder="Enter subject"
-                />
+                {user?.role !== "FACULTY" && (
+                  <div className="form-group">
+                    <label htmlFor="event-faculty">Faculty (Optional)</label>
+                    <select
+                      id="event-faculty"
+                      name="facultyId"
+                      value={newEvent.facultyId}
+                      onChange={handleInputChange}
+                    >
+                      <option value="">Select Faculty</option>
+                      {faculty.map((fac) => (
+                        <option key={fac.id} value={fac.userId}>
+                          {fac.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
               </div>
-            </div>
+            )}
 
             <div className="modal-actions">
-              <Button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} onClick={() => setShowCreateModal(false)}>
+              <Button
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={() => {
+                  setShowCreateModal(false);
+                  setError("");
+                }}
+              >
                 Cancel
               </Button>
-              <Button primary whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} onClick={handleCreateEvent}>
-                Create Event
+              <Button
+                primary
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={handleCreateEvent}
+                disabled={
+                  !newEvent.title ||
+                  !newEvent.startTime ||
+                  !newEvent.endTime ||
+                  !newEvent.type
+                }
+              >
+                Create Schedule
               </Button>
             </div>
           </ModalContent>

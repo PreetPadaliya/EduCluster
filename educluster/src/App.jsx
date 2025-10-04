@@ -1,14 +1,20 @@
-import { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { motion } from 'framer-motion';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Login from './components/Login';
-import SignUp from './pages/SignUp';
-import Home from './pages/Home';
-import Schedule from './pages/Schedule';
-import AnimatedBackground from './components/AnimatedBackground';
-import TestComponent from './TestComponent';
-import './App.css';
+import { useState, useEffect } from "react";
+import styled from "styled-components";
+import { motion } from "framer-motion";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import Login from "./components/Login";
+import SignUp from "./pages/SignUp";
+import Home from "./pages/Home";
+import Schedule from "./pages/Schedule";
+import AdminPanel from "./pages/AdminPanel";
+import AnimatedBackground from "./components/AnimatedBackground";
+import TestComponent from "./TestComponent";
+import "./App.css";
 
 const AppContainer = styled.div`
   display: flex;
@@ -33,7 +39,7 @@ function App() {
 
   // Check for stored user data on app initialization
   useEffect(() => {
-    const storedUser = localStorage.getItem('educluster_current_user');
+    const storedUser = localStorage.getItem("educluster_current_user");
     if (storedUser) {
       try {
         const userData = JSON.parse(storedUser);
@@ -41,7 +47,7 @@ function App() {
         setUser(userData);
       } catch (error) {
         console.error("Error parsing stored user data:", error);
-        localStorage.removeItem('educluster_current_user');
+        localStorage.removeItem("educluster_current_user");
       }
     }
     setIsLoading(false);
@@ -59,18 +65,18 @@ function App() {
       lastName: userData.lastName,
       email: userData.email,
       phone: userData.phone,
-      username: userData.username // This is the full name from Login component
+      username: userData.username, // This is the full name from Login component
     };
     console.log("User logged in:", loginUser);
     setUser(loginUser);
     // Store user data in localStorage for persistence
-    localStorage.setItem('educluster_current_user', JSON.stringify(loginUser));
+    localStorage.setItem("educluster_current_user", JSON.stringify(loginUser));
   };
 
   const handleSignUp = (userData) => {
     // Create a new user object with the signup data
     const newUser = {
-      username: userData.firstName + ' ' + userData.lastName,
+      username: userData.firstName + " " + userData.lastName,
       role: userData.role,
       email: userData.email,
       enrollmentNo: userData.id,
@@ -83,14 +89,14 @@ function App() {
     // Set the user state to log them in
     setUser(newUser);
     // Store user data in localStorage for persistence
-    localStorage.setItem('educluster_current_user', JSON.stringify(newUser));
+    localStorage.setItem("educluster_current_user", JSON.stringify(newUser));
   };
 
   const handleLogout = () => {
     console.log("User logged out");
     setUser(null);
     // Clear user data from localStorage
-    localStorage.removeItem('educluster_current_user');
+    localStorage.removeItem("educluster_current_user");
   };
 
   // Show loading state while checking for stored user data
@@ -98,7 +104,7 @@ function App() {
     return (
       <AppContainer>
         <AnimatedBackground />
-        <div style={{ color: '#e0e0e0', fontSize: '1.2rem' }}>Loading...</div>
+        <div style={{ color: "#e0e0e0", fontSize: "1.2rem" }}>Loading...</div>
       </AppContainer>
     );
   }
@@ -107,11 +113,20 @@ function App() {
     <Router>
       {user ? (
         <div>
-          <p style={{ color: 'white', padding: '10px', backgroundColor: 'green' }}>
+          <p
+            style={{
+              color: "white",
+              padding: "10px",
+              backgroundColor: "green",
+            }}
+          >
             User logged in: {user.username || user.enrollmentNo} ({user.role})
           </p>
           <Routes>
-            <Route path="/*" element={<Home user={user} onLogout={handleLogout} />} />
+            <Route
+              path="/*"
+              element={<Home user={user} onLogout={handleLogout} />}
+            />
           </Routes>
         </div>
       ) : (
@@ -119,7 +134,11 @@ function App() {
           <AnimatedBackground />
           <Routes>
             <Route path="/login" element={<Login onLogin={handleLogin} />} />
-            <Route path="/signup" element={<SignUp onSignUp={handleSignUp} />} />
+            <Route
+              path="/signup"
+              element={<SignUp onSignUp={handleSignUp} />}
+            />
+            <Route path="/admin" element={<AdminPanel />} />
             <Route path="/test" element={<TestComponent />} />
             <Route path="/*" element={<Navigate to="/login" replace />} />
           </Routes>

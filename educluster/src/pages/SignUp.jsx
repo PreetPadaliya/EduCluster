@@ -1,9 +1,26 @@
 import React, { useState, useEffect } from "react";
 import styled, { createGlobalStyle } from "styled-components";
 import { motion } from "framer-motion";
-import { FaUser, FaLock, FaEnvelope, FaUserTag, FaIdCard, FaPhone, FaInfoCircle, FaExclamationTriangle } from "react-icons/fa";
+import {
+  FaUser,
+  FaLock,
+  FaEnvelope,
+  FaUserTag,
+  FaIdCard,
+  FaPhone,
+  FaInfoCircle,
+  FaExclamationTriangle,
+} from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-import { validateUsername, validatePassword, validateEmail, validatePhone, validateId, validateConfirmPassword, validateName } from "../utils/validation";
+import {
+  validateUsername,
+  validatePassword,
+  validateEmail,
+  validatePhone,
+  validateId,
+  validateConfirmPassword,
+  validateName,
+} from "../utils/validation";
 
 const GlobalStyles = createGlobalStyle`
   html, body, #root {
@@ -37,12 +54,12 @@ const SignUpBox = styled(motion.div)`
   overflow-y: auto;
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(50, 50, 60, 0.4);
-  
+
   /* Hide scrollbar for Chrome, Safari and Opera */
   &::-webkit-scrollbar {
     display: none;
   }
-  
+
   /* Hide scrollbar for IE, Edge and Firefox */
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -60,7 +77,7 @@ const WelcomeTitle = styled(motion.h1)`
   margin-bottom: 0.5rem;
   text-align: center;
   font-size: 2rem;
-  background: linear-gradient(135deg, #A076F9, #7E57C2);
+  background: linear-gradient(135deg, #a076f9, #7e57c2);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -70,7 +87,7 @@ const Form = styled.form`
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0.8rem;
-  
+
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
   }
@@ -80,7 +97,7 @@ const InputGroup = styled.div`
   position: relative;
   margin-bottom: 1rem;
   width: 100%;
-  grid-column: ${props => props.fullWidth ? "1 / -1" : "auto"};
+  grid-column: ${(props) => (props.fullWidth ? "1 / -1" : "auto")};
 `;
 
 const Input = styled(motion.input)`
@@ -98,13 +115,13 @@ const Input = styled(motion.input)`
   &:focus {
     box-shadow: 0 4px 12px rgba(160, 118, 249, 0.4);
     background-color: rgba(40, 40, 45, 0.9);
-    border-color: #A076F9;
+    border-color: #a076f9;
   }
 
   &::placeholder {
     color: #a0a0a0;
   }
-  
+
   &.error {
     border-color: #ff6b6b;
     box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
@@ -116,7 +133,7 @@ const IconWrapper = styled.div`
   top: 50%;
   left: 1rem;
   transform: translateY(-50%);
-  color: #A076F9;
+  color: #a076f9;
   font-size: 1.2rem;
 `;
 
@@ -148,11 +165,11 @@ const Select = styled(motion.select)`
     box-shadow: 0 4px 12px rgba(160, 118, 249, 0.4);
     background-color: rgba(40, 40, 45, 0.9);
   }
-  
+
   &:hover {
     box-shadow: 0 4px 12px rgba(160, 118, 249, 0.4);
   }
-  
+
   option {
     background-color: #1e1e24;
     color: #e0e0e0;
@@ -170,7 +187,7 @@ const SelectArrow = styled(motion.div)`
   height: 0;
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
-  border-top: 6px solid #A076F9;
+  border-top: 6px solid #a076f9;
   pointer-events: none;
   transition: all 0.3s ease;
 
@@ -185,7 +202,7 @@ const Button = styled(motion.button)`
   padding: 1rem;
   border: none;
   border-radius: 50px;
-  background: linear-gradient(135deg, #A076F9, #7E57C2);
+  background: linear-gradient(135deg, #a076f9, #7e57c2);
   color: white;
   font-size: 1rem;
   font-weight: 600;
@@ -209,7 +226,7 @@ const LoginPrompt = styled(motion.div)`
   grid-column: 1 / -1;
 
   a {
-    color: #A076F9;
+    color: #a076f9;
     text-decoration: none;
     font-weight: 600;
     cursor: pointer;
@@ -232,10 +249,16 @@ const ErrorMessage = styled(motion.div)`
   padding-left: 1rem;
   text-align: left;
   animation: fadeIn 0.3s ease-in-out;
-  
+
   @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-5px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(-5px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 `;
 
@@ -252,34 +275,34 @@ const GeneralError = styled(ErrorMessage)`
 
 const PasswordRequirements = styled(motion.div)`
   background-color: rgba(160, 118, 249, 0.05);
-  border-left: 3px solid #A076F9;
+  border-left: 3px solid #a076f9;
   padding: 0.8rem 1rem;
   margin: 0.5rem 0 1rem 0;
   border-radius: 4px;
   grid-column: 1 / -1;
-  
+
   h4 {
-    color: #A076F9;
+    color: #a076f9;
     margin: 0 0 0.5rem 0;
     font-size: 0.9rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
   }
-  
+
   ul {
     margin: 0;
     padding-left: 1.5rem;
-    
+
     li {
       color: #a0a0a0;
       font-size: 0.8rem;
       margin-bottom: 0.2rem;
-      
+
       &.valid {
-        color: #66BB6A;
+        color: #66bb6a;
       }
-      
+
       &.invalid {
         color: #ff6b6b;
       }
@@ -303,20 +326,21 @@ const SignUp = ({ onSignUp }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [error, setError] = useState("");
-  const [showPasswordRequirements, setShowPasswordRequirements] = useState(false);
+  const [showPasswordRequirements, setShowPasswordRequirements] =
+    useState(false);
   const [validationStates, setValidationStates] = useState({
     length: false,
     upperCase: false,
     lowerCase: false,
     number: false,
     special: false,
-    match: false
+    match: false,
   });
 
   useEffect(() => {
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = "hidden";
     return () => {
-      document.body.style.overflow = 'auto';
+      document.body.style.overflow = "auto";
     };
   }, []);
 
@@ -329,16 +353,18 @@ const SignUp = ({ onSignUp }) => {
         lowerCase: /[a-z]/.test(formData.password),
         number: /[0-9]/.test(formData.password),
         special: /[!@#$%^&*]/.test(formData.password),
-        match: formData.password === formData.confirmPassword && formData.confirmPassword !== ""
+        match:
+          formData.password === formData.confirmPassword &&
+          formData.confirmPassword !== "",
       });
     }
   }, [formData.password, formData.confirmPassword]);
 
   const roleColors = {
-    principal: '#A076F9',
-    hod: '#B38BFF',
-    faculty: '#9C6CFF',
-    student: '#CBA9FF',
+    principal: "#A076F9",
+    hod: "#B38BFF",
+    faculty: "#9C6CFF",
+    student: "#CBA9FF",
   };
 
   const handleChange = (e) => {
@@ -350,7 +376,7 @@ const SignUp = ({ onSignUp }) => {
 
     // Clear field-specific error when user starts typing again
     if (errors[name]) {
-      setErrors({ ...errors, [name]: '' });
+      setErrors({ ...errors, [name]: "" });
     }
 
     // Clear general error
@@ -372,22 +398,27 @@ const SignUp = ({ onSignUp }) => {
     newErrors.phone = validatePhone(formData.phone);
     newErrors.id = validateId(formData.id);
     newErrors.password = validatePassword(formData.password);
-    newErrors.confirmPassword = validateConfirmPassword(formData.password, formData.confirmPassword);
+    newErrors.confirmPassword = validateConfirmPassword(
+      formData.password,
+      formData.confirmPassword
+    );
 
     setErrors(newErrors);
 
     // Check if there are any errors
-    return !Object.values(newErrors).some(error => error);
+    return !Object.values(newErrors).some((error) => error);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!validateForm()) {
       // If validation fails, scroll to first error
-      const firstErrorField = Object.keys(errors).find(key => errors[key]);
+      const firstErrorField = Object.keys(errors).find((key) => errors[key]);
       if (firstErrorField) {
-        document.getElementsByName(firstErrorField)[0]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        document
+          .getElementsByName(firstErrorField)[0]
+          ?.scrollIntoView({ behavior: "smooth", block: "center" });
       }
       return;
     }
@@ -395,54 +426,89 @@ const SignUp = ({ onSignUp }) => {
     setIsLoading(true);
     setError("");
 
-    // Always succeed in demo version, no random failure
-    setTimeout(() => {
-      try {
-        // Call the onSignUp function passed as prop
-        if (onSignUp) {
-          onSignUp(formData);
-          console.log("User registered successfully:", formData);
+    try {
+      const apiUrl =
+        formData.role === "student"
+          ? "http://localhost:3001/api/signup/student"
+          : "http://localhost:3001/api/signup/request";
 
-          // Store the newly created user data in localStorage for login verification
-          const newUser = {
-            id: formData.id,
-            email: formData.email,
-            password: formData.password,
-            role: formData.role,
-            firstName: formData.firstName,
-            lastName: formData.lastName,
-            phone: formData.phone
-          };
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
-          // Save for immediate login (temporary)
-          localStorage.setItem('newUser', JSON.stringify(newUser));
+      const data = await response.json();
 
-          // Also save permanently in the users array
-          const savedUsers = JSON.parse(localStorage.getItem('educluster_users') || '[]');
+      if (data.success) {
+        if (formData.role === "student") {
+          // Student account created immediately - proceed with login
+          if (onSignUp) {
+            onSignUp(formData);
+            console.log("Student registered successfully:", formData);
 
-          // Check if user already exists to prevent duplicates
-          const userExists = savedUsers.some(user =>
-            user.id === newUser.id || user.email === newUser.email
+            // Store the newly created user data in localStorage for login verification
+            const newUser = {
+              id: formData.id,
+              email: formData.email,
+              password: formData.password,
+              role: formData.role,
+              firstName: formData.firstName,
+              lastName: formData.lastName,
+              phone: formData.phone,
+            };
+
+            localStorage.setItem("newUser", JSON.stringify(newUser));
+
+            // Also save permanently in the users array
+            const savedUsers = JSON.parse(
+              localStorage.getItem("educluster_users") || "[]"
+            );
+
+            const userExists = savedUsers.some(
+              (user) => user.id === newUser.id || user.email === newUser.email
+            );
+
+            if (!userExists) {
+              savedUsers.push(newUser);
+              localStorage.setItem(
+                "educluster_users",
+                JSON.stringify(savedUsers)
+              );
+              console.log("User saved permanently:", newUser);
+            }
+          }
+        } else {
+          // Non-student request submitted - show success message
+          setError("");
+          alert(
+            `Success! Your ${formData.role} account request has been submitted. Please wait for admin approval. You will be able to login once your account is approved.`
           );
 
-          if (!userExists) {
-            savedUsers.push(newUser);
-            localStorage.setItem('educluster_users', JSON.stringify(savedUsers));
-            console.log("User saved permanently:", newUser);
-          }
-
-          // The onSignUp function will handle the automatic login
-          // and the App component will automatically show the main interface
-        } else {
-          throw new Error("onSignUp function is not available");
+          // Reset form for non-students
+          setFormData({
+            firstName: "",
+            lastName: "",
+            email: "",
+            phone: "",
+            id: "",
+            password: "",
+            confirmPassword: "",
+            role: "student",
+          });
+          setShowPasswordRequirements(false);
         }
-      } catch (err) {
-        console.error("Registration error:", err);
-        setError("There was a problem creating your account. Please try again.");
-      } finally {
-        setIsLoading(false);
+      } else {
+        setError(data.message || "Registration failed. Please try again.");
       }
-    }, 1500);
+    } catch (err) {
+      console.error("Registration error:", err);
+      setError("There was a problem creating your account. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -486,9 +552,13 @@ const SignUp = ({ onSignUp }) => {
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ delay: 0.3 }}
-              style={{ borderColor: errors.firstName ? '#ff6b6b' : 'transparent' }}
+              style={{
+                borderColor: errors.firstName ? "#ff6b6b" : "transparent",
+              }}
             />
-            {errors.firstName && <ErrorMessage>{errors.firstName}</ErrorMessage>}
+            {errors.firstName && (
+              <ErrorMessage>{errors.firstName}</ErrorMessage>
+            )}
           </InputGroup>
 
           <InputGroup>
@@ -505,7 +575,9 @@ const SignUp = ({ onSignUp }) => {
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ delay: 0.35 }}
-              style={{ borderColor: errors.lastName ? '#ff6b6b' : 'transparent' }}
+              style={{
+                borderColor: errors.lastName ? "#ff6b6b" : "transparent",
+              }}
             />
             {errors.lastName && <ErrorMessage>{errors.lastName}</ErrorMessage>}
           </InputGroup>
@@ -524,7 +596,7 @@ const SignUp = ({ onSignUp }) => {
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ delay: 0.4 }}
-              style={{ borderColor: errors.email ? '#ff6b6b' : 'transparent' }}
+              style={{ borderColor: errors.email ? "#ff6b6b" : "transparent" }}
             />
             {errors.email && <ErrorMessage>{errors.email}</ErrorMessage>}
           </InputGroup>
@@ -543,7 +615,7 @@ const SignUp = ({ onSignUp }) => {
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ delay: 0.45 }}
-              style={{ borderColor: errors.phone ? '#ff6b6b' : 'transparent' }}
+              style={{ borderColor: errors.phone ? "#ff6b6b" : "transparent" }}
             />
             {errors.phone && <ErrorMessage>{errors.phone}</ErrorMessage>}
           </InputGroup>
@@ -562,7 +634,7 @@ const SignUp = ({ onSignUp }) => {
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ delay: 0.5 }}
-              style={{ borderColor: errors.id ? '#ff6b6b' : 'transparent' }}
+              style={{ borderColor: errors.id ? "#ff6b6b" : "transparent" }}
             />
             {errors.id && <ErrorMessage>{errors.id}</ErrorMessage>}
           </InputGroup>
@@ -583,10 +655,12 @@ const SignUp = ({ onSignUp }) => {
                 whileFocus={{ scale: 1.01 }}
                 style={{
                   color: roleColors[formData.role],
-                  borderColor: errors.role ? '#ff6b6b' : 'transparent'
+                  borderColor: errors.role ? "#ff6b6b" : "transparent",
                 }}
               >
-                <option value="" disabled>Select Your Role</option>
+                <option value="" disabled>
+                  Select Your Role
+                </option>
                 <option value="principal">Principal</option>
                 <option value="hod">HOD</option>
                 <option value="faculty">Faculty</option>
@@ -615,7 +689,9 @@ const SignUp = ({ onSignUp }) => {
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ delay: 0.65 }}
-              style={{ borderColor: errors.password ? '#ff6b6b' : 'transparent' }}
+              style={{
+                borderColor: errors.password ? "#ff6b6b" : "transparent",
+              }}
             />
             {errors.password && <ErrorMessage>{errors.password}</ErrorMessage>}
           </InputGroup>
@@ -626,24 +702,30 @@ const SignUp = ({ onSignUp }) => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <h4><FaInfoCircle /> Password Requirements</h4>
+              <h4>
+                <FaInfoCircle /> Password Requirements
+              </h4>
               <ul>
-                <li className={validationStates.length ? 'valid' : 'invalid'}>
+                <li className={validationStates.length ? "valid" : "invalid"}>
                   At least 8 characters
                 </li>
-                <li className={validationStates.upperCase ? 'valid' : 'invalid'}>
+                <li
+                  className={validationStates.upperCase ? "valid" : "invalid"}
+                >
                   At least one uppercase letter
                 </li>
-                <li className={validationStates.lowerCase ? 'valid' : 'invalid'}>
+                <li
+                  className={validationStates.lowerCase ? "valid" : "invalid"}
+                >
                   At least one lowercase letter
                 </li>
-                <li className={validationStates.number ? 'valid' : 'invalid'}>
+                <li className={validationStates.number ? "valid" : "invalid"}>
                   At least one number
                 </li>
-                <li className={validationStates.special ? 'valid' : 'invalid'}>
+                <li className={validationStates.special ? "valid" : "invalid"}>
                   At least one special character (!@#$%^&*)
                 </li>
-                <li className={validationStates.match ? 'valid' : 'invalid'}>
+                <li className={validationStates.match ? "valid" : "invalid"}>
                   Passwords must match
                 </li>
               </ul>
@@ -664,16 +746,17 @@ const SignUp = ({ onSignUp }) => {
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ delay: 0.7 }}
-              style={{ borderColor: errors.confirmPassword ? '#ff6b6b' : 'transparent' }}
+              style={{
+                borderColor: errors.confirmPassword ? "#ff6b6b" : "transparent",
+              }}
             />
-            {errors.confirmPassword && <ErrorMessage>{errors.confirmPassword}</ErrorMessage>}
+            {errors.confirmPassword && (
+              <ErrorMessage>{errors.confirmPassword}</ErrorMessage>
+            )}
           </InputGroup>
 
           {error && (
-            <ErrorMessage
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-            >
+            <ErrorMessage initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
               {error}
             </ErrorMessage>
           )}
@@ -687,11 +770,25 @@ const SignUp = ({ onSignUp }) => {
             transition={{ delay: 0.75 }}
             disabled={isLoading}
           >
-            {isLoading ? "Creating Account & Logging In..." : "Create Account & Login"}
+            {isLoading
+              ? formData.role === "student"
+                ? "Creating Account & Logging In..."
+                : "Submitting Request..."
+              : formData.role === "student"
+              ? "Create Account & Login"
+              : "Submit Account Request"}
           </Button>
 
-          <div style={{ fontSize: '0.8rem', textAlign: 'center', marginTop: '0.8rem', color: '#a0a0a0' }}>
-            By creating an account, you agree to our Terms of Service and Privacy Policy
+          <div
+            style={{
+              fontSize: "0.8rem",
+              textAlign: "center",
+              marginTop: "0.8rem",
+              color: "#a0a0a0",
+            }}
+          >
+            By creating an account, you agree to our Terms of Service and
+            Privacy Policy
           </div>
 
           <LoginPrompt

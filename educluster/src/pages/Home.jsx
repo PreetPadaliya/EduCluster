@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 import styled, { createGlobalStyle } from "styled-components";
 import { motion } from "framer-motion";
-import { Link, Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import {
+  Link,
+  Routes,
+  Route,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
 import {
   FaBook,
   FaCalendarAlt,
@@ -14,7 +20,7 @@ import {
   FaSearch,
   FaUser,
   FaUserTag,
-  FaSignOutAlt
+  FaSignOutAlt,
 } from "react-icons/fa";
 
 import Schedule from "./Schedule";
@@ -81,7 +87,7 @@ const Header = styled.header`
 const Logo = styled(motion.div)`
   font-size: 1.8rem;
   font-weight: 700;
-  background: linear-gradient(135deg, #A076F9, #7E57C2);
+  background: linear-gradient(135deg, #a076f9, #7e57c2);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -108,18 +114,18 @@ const NavLink = styled(motion.a)`
   padding: 0.5rem;
   cursor: pointer;
   position: relative;
-  
+
   &:after {
-    content: '';
+    content: "";
     position: absolute;
     width: 0;
     height: 2px;
     bottom: 0;
     left: 0;
-    background: linear-gradient(135deg, #A076F9, #7E57C2);
+    background: linear-gradient(135deg, #a076f9, #7e57c2);
     transition: width 0.3s ease;
   }
-  
+
   &:hover:after {
     width: 100%;
   }
@@ -140,7 +146,7 @@ const Avatar = styled(motion.div)`
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #A076F9, #7E57C2);
+  background: linear-gradient(135deg, #a076f9, #7e57c2);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -154,9 +160,9 @@ const NotificationBell = styled(motion.div)`
   color: #e0e0e0;
   font-size: 1.2rem;
   cursor: pointer;
-  
+
   &:after {
-    content: '';
+    content: "";
     position: absolute;
     width: 8px;
     height: 8px;
@@ -199,17 +205,17 @@ const Sidebar = styled.aside`
   overflow-y: auto;
   position: sticky;
   top: 80px; /* Header height + some padding */
-  
+
   /* Hide scrollbar but allow scrolling */
   &::-webkit-scrollbar {
     width: 5px;
   }
-  
+
   &::-webkit-scrollbar-thumb {
     background-color: rgba(160, 118, 249, 0.3);
     border-radius: 10px;
   }
-  
+
   @media (max-width: 768px) {
     width: 100%;
     min-width: 100%;
@@ -229,12 +235,13 @@ const SidebarLink = styled(motion.div)`
   color: #e0e0e0;
   cursor: pointer;
   transition: all 0.2s ease;
-  
-  &:hover, &.active {
+
+  &:hover,
+  &.active {
     background: rgba(160, 118, 249, 0.15);
-    color: #A076F9;
+    color: #a076f9;
   }
-  
+
   svg {
     font-size: 1.2rem;
   }
@@ -251,7 +258,11 @@ const ContentArea = styled.div`
 `;
 
 const WelcomeCard = styled(motion.div)`
-  background: linear-gradient(135deg, rgba(126, 87, 194, 0.2), rgba(160, 118, 249, 0.1));
+  background: linear-gradient(
+    135deg,
+    rgba(126, 87, 194, 0.2),
+    rgba(160, 118, 249, 0.1)
+  );
   backdrop-filter: blur(10px);
   border-radius: 16px;
   padding: 3.5rem 2rem;
@@ -266,26 +277,30 @@ const WelcomeCard = styled(motion.div)`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  
+
   @media (max-width: 768px) {
     padding: 2.5rem 1.5rem;
     min-height: 200px;
   }
-  
+
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     right: 0;
     width: 400px;
     height: 400px;
-    background: radial-gradient(circle, rgba(160, 118, 249, 0.1) 0%, rgba(126, 87, 194, 0) 70%);
+    background: radial-gradient(
+      circle,
+      rgba(160, 118, 249, 0.1) 0%,
+      rgba(126, 87, 194, 0) 70%
+    );
     border-radius: 50%;
     transform: translate(25%, -40%);
     pointer-events: none;
     z-index: 0;
   }
-  
+
   h1 {
     font-size: 1.8rem;
     font-weight: 700;
@@ -298,12 +313,12 @@ const WelcomeCard = styled(motion.div)`
     z-index: 1;
     padding: 0;
     line-height: 1.2;
-    
+
     @media (max-width: 768px) {
       font-size: 1.5rem;
     }
   }
-  
+
   p {
     color: #b0b0b0;
     max-width: 90%;
@@ -313,13 +328,13 @@ const WelcomeCard = styled(motion.div)`
     z-index: 1;
     padding: 0;
     margin-bottom: 0.5rem;
-    
+
     @media (max-width: 768px) {
       max-width: 100%;
       font-size: 0.9rem;
       line-height: 1.4;
     }
-    
+
     strong {
       color: #e0e0e0;
       font-weight: 600;
@@ -342,22 +357,22 @@ const StatCard = styled(motion.div)`
   flex-direction: column;
   gap: 0.5rem;
   border: 1px solid rgba(50, 50, 60, 0.4);
-  
+
   h3 {
     font-size: 1rem;
     color: #a0a0a0;
     margin: 0;
   }
-  
+
   .value {
     font-size: 2rem;
     font-weight: 700;
-    background: linear-gradient(135deg, #A076F9, #7E57C2);
+    background: linear-gradient(135deg, #a076f9, #7e57c2);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
-  
+
   .icon {
     position: absolute;
     top: 1rem;
@@ -381,17 +396,17 @@ const FeatureCard = styled(motion.div)`
   border: 1px solid rgba(50, 50, 60, 0.4);
   transition: all 0.3s ease;
   cursor: pointer;
-  
+
   &:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
     border-color: rgba(160, 118, 249, 0.3);
   }
-  
+
   .card-content {
     padding: 1.5rem;
   }
-  
+
   h3 {
     font-size: 1.2rem;
     margin-bottom: 0.5rem;
@@ -399,12 +414,12 @@ const FeatureCard = styled(motion.div)`
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    
+
     svg {
-      color: #A076F9;
+      color: #a076f9;
     }
   }
-  
+
   p {
     color: #a0a0a0;
     font-size: 0.9rem;
@@ -413,7 +428,11 @@ const FeatureCard = styled(motion.div)`
 `;
 
 const CardHeader = styled.div`
-  background: linear-gradient(135deg, rgba(126, 87, 194, 0.2), rgba(160, 118, 249, 0.1));
+  background: linear-gradient(
+    135deg,
+    rgba(126, 87, 194, 0.2),
+    rgba(160, 118, 249, 0.1)
+  );
   padding: 0.5rem 1.5rem;
   display: flex;
   justify-content: space-between;
@@ -431,22 +450,33 @@ const ButtonWrapper = styled.div`
 
 const Button = styled(motion.button)`
   padding: 0.6rem 1.2rem;
-  background: ${props => props.primary ? 'linear-gradient(135deg, #A076F9, #7E57C2)' : 'rgba(30, 30, 35, 0.5)'};
-  color: ${props => props.primary ? 'white' : '#d0d0d0'};
-  border: ${props => props.primary ? 'none' : '1px solid rgba(160, 118, 249, 0.3)'};
+  background: ${(props) =>
+    props.primary
+      ? "linear-gradient(135deg, #A076F9, #7E57C2)"
+      : "rgba(30, 30, 35, 0.5)"};
+  color: ${(props) => (props.primary ? "white" : "#d0d0d0")};
+  border: ${(props) =>
+    props.primary ? "none" : "1px solid rgba(160, 118, 249, 0.3)"};
   border-radius: 50px;
   cursor: pointer;
   font-size: 0.85rem;
-  font-weight: ${props => props.primary ? '600' : '400'};
+  font-weight: ${(props) => (props.primary ? "600" : "400")};
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  box-shadow: ${props => props.primary ? '0 4px 15px rgba(126, 87, 194, 0.3)' : 'none'};
+  box-shadow: ${(props) =>
+    props.primary ? "0 4px 15px rgba(126, 87, 194, 0.3)" : "none"};
   transition: all 0.3s ease;
-  
+
   &:hover {
-    box-shadow: ${props => props.primary ? '0 6px 20px rgba(126, 87, 194, 0.4)' : '0 4px 12px rgba(0, 0, 0, 0.2)'};
-    background: ${props => props.primary ? 'linear-gradient(135deg, #b18aff, #9065db)' : 'rgba(40, 40, 45, 0.6)'};
+    box-shadow: ${(props) =>
+      props.primary
+        ? "0 6px 20px rgba(126, 87, 194, 0.4)"
+        : "0 4px 12px rgba(0, 0, 0, 0.2)"};
+    background: ${(props) =>
+      props.primary
+        ? "linear-gradient(135deg, #b18aff, #9065db)"
+        : "rgba(40, 40, 45, 0.6)"};
   }
 `;
 
@@ -454,7 +484,7 @@ const SearchBar = styled.div`
   position: relative;
   max-width: 400px;
   width: 100%;
-  
+
   input {
     width: 100%;
     padding: 0.6rem 1rem 0.6rem 2.5rem;
@@ -463,18 +493,18 @@ const SearchBar = styled.div`
     border: 1px solid rgba(160, 118, 249, 0.2);
     color: #e0e0e0;
     font-size: 0.9rem;
-    
+
     &:focus {
       outline: none;
       border-color: rgba(160, 118, 249, 0.5);
       box-shadow: 0 0 0 2px rgba(160, 118, 249, 0.2);
     }
-    
+
     &::placeholder {
       color: #808080;
     }
   }
-  
+
   svg {
     position: absolute;
     left: 0.8rem;
@@ -506,11 +536,11 @@ const MenuItem = styled(motion.div)`
   color: #e0e0e0;
   cursor: pointer;
   transition: all 0.2s ease;
-  
+
   &:hover {
     background: rgba(160, 118, 249, 0.15);
   }
-  
+
   &:not(:last-child) {
     border-bottom: 1px solid rgba(50, 50, 60, 0.4);
   }
@@ -523,7 +553,7 @@ const sidebarItems = [
   { icon: <FaChalkboardTeacher />, label: "Teachers", path: "/teachers" },
   { icon: <FaUserFriends />, label: "Classmates", path: "/classmates" },
   { icon: <FaGraduationCap />, label: "Grades", path: "/grades" },
-  { icon: <FaChartBar />, label: "Reports", path: "/reports" }
+  { icon: <FaChartBar />, label: "Reports", path: "/reports" },
 ];
 
 // ScrollToTop component to ensure page is at the top when mounting
@@ -540,7 +570,10 @@ const Home = ({ user, onLogout }) => {
   const location = useLocation();
   // Don't default to courses - only set active if explicitly on a specific path
   const currentPath = location.pathname;
-  const activeItem = currentPath !== '/' ? sidebarItems.find(item => item.path === currentPath)?.label : null;
+  const activeItem =
+    currentPath !== "/"
+      ? sidebarItems.find((item) => item.path === currentPath)?.label
+      : null;
 
   const [activeTab, setActiveTab] = useState(activeItem);
   const [currentDateTime, setCurrentDateTime] = useState(new Date());
@@ -555,16 +588,17 @@ const Home = ({ user, onLogout }) => {
   }, []);
 
   // Get user's display name - prefer firstName + lastName, fallback to username, then to "User"
-  const userDisplayName = user?.firstName && user?.lastName
-    ? `${user.firstName} ${user.lastName}`
-    : user?.username || "User";
+  const userDisplayName =
+    user?.firstName && user?.lastName
+      ? `${user.firstName} ${user.lastName}`
+      : user?.username || "User";
 
   // Get first letter for avatar - use firstName if available, otherwise username or "U"
   const userInitial = user?.firstName
     ? user.firstName.charAt(0).toUpperCase()
     : user?.username
-      ? user.username.charAt(0).toUpperCase()
-      : "U";
+    ? user.username.charAt(0).toUpperCase()
+    : "U";
 
   const role = user?.role || "Student";
   const [showUserMenu, setShowUserMenu] = useState(false);
@@ -572,21 +606,21 @@ const Home = ({ user, onLogout }) => {
   // Format current date and time
   const formatDateTime = (date) => {
     const timeOptions = {
-      hour: '2-digit',
-      minute: '2-digit',
-      timeZone: 'Asia/Kolkata',
-      hour12: true
+      hour: "2-digit",
+      minute: "2-digit",
+      timeZone: "Asia/Kolkata",
+      hour12: true,
     };
     const dateOptions = {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      timeZone: 'Asia/Kolkata'
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      timeZone: "Asia/Kolkata",
     };
 
-    const time = date.toLocaleTimeString('en-IN', timeOptions);
-    const dateString = date.toLocaleDateString('en-IN', dateOptions);
+    const time = date.toLocaleTimeString("en-IN", timeOptions);
+    const dateString = date.toLocaleDateString("en-IN", dateOptions);
 
     return { time: `${time} IST`, date: dateString };
   };
@@ -689,166 +723,200 @@ const Home = ({ user, onLogout }) => {
 
         <ContentArea>
           <Routes>
-            <Route path="/courses" element={<Course />} />
-            <Route path="/schedule" element={<Schedule />} />
-            <Route path="/assignments" element={<Assignment />} />
-            <Route path="/teachers" element={<Teachers />} />
-            <Route path="/classmates" element={<Classmates />} />
-            <Route path="/grades" element={<Grades />} />
-            <Route path="/reports" element={<Reports />} />
-            <Route path="*" element={
-              <>
-                <WelcomeCard
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5 }}
-                >
-                  <div style={{ position: 'relative', zIndex: 1 }}>
-                    <h1>Welcome back, {userDisplayName}!</h1>
-                    <p style={{ marginBottom: '1rem' }}>
-                      It's <strong>{time}</strong> on <strong>{date}</strong>.
-                    </p>
-                    <p style={{ marginBottom: '1.2rem' }}>
-                      You're logged in as{' '}
-                      <span style={{
-                        color: '#A076F9',
-                        fontWeight: 'bold',
-                        textTransform: 'capitalize',
-                        background: 'rgba(160, 118, 249, 0.15)',
-                        padding: '4px 8px',
-                        borderRadius: '6px',
-                        border: '1px solid rgba(160, 118, 249, 0.3)',
-                        fontSize: '0.9rem',
-                      }}>{role}</span>. Explore your educational resources, track assignments, connect with teachers and classmates, and manage your academic journey from this comprehensive dashboard.
-                    </p>
-                    <ButtonWrapper>
-                      <Button
-                        primary
-                        whileHover={{ scale: 1.03 }}
-                        whileTap={{ scale: 0.97 }}
-                      >
-                        <FaChartBar style={{ fontSize: '0.9rem' }} /> View Dashboard
-                      </Button>
-                      <Button
-                        whileHover={{ scale: 1.03 }}
-                        whileTap={{ scale: 0.97 }}
-                      >
-                        <FaUser style={{ fontSize: '0.9rem' }} /> My Profile
-                      </Button>
-                    </ButtonWrapper>
-                  </div>
-                  {/* Ensure the gradient overlay doesn't obscure content */}
-                  <div style={{
-                    position: 'absolute',
-                    top: 0,
-                    right: 0,
-                    width: '400px',
-                    height: '400px',
-                    background: 'radial-gradient(circle, rgba(160, 118, 249, 0.1) 0%, rgba(126, 87, 194, 0) 70%)',
-                    borderRadius: '50%',
-                    transform: 'translate(25%, -40%)',
-                    pointerEvents: 'none',
-                    zIndex: 0,
-                  }} />
-                </WelcomeCard>
-
-                <QuickStatsGrid>
-                  <StatCard
+            <Route path="/courses" element={<Course user={user} />} />
+            <Route path="/schedule" element={<Schedule user={user} />} />
+            <Route path="/assignments" element={<Assignment user={user} />} />
+            <Route path="/teachers" element={<Teachers user={user} />} />
+            <Route path="/classmates" element={<Classmates user={user} />} />
+            <Route path="/grades" element={<Grades user={user} />} />
+            <Route path="/reports" element={<Reports user={user} />} />
+            <Route
+              path="*"
+              element={
+                <>
+                  <WelcomeCard
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
+                    transition={{ duration: 0.5 }}
                   >
-                    <h3>Active Courses</h3>
-                    <div className="value">5</div>
-                  </StatCard>
-
-                  <StatCard
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.3 }}
-                  >
-                    <h3>Pending Assignments</h3>
-                    <div className="value">3</div>
-                  </StatCard>
-
-                  <StatCard
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.4 }}
-                  >
-                    <h3>Grade Average</h3>
-                    <div className="value">A</div>
-                  </StatCard>
-
-                  <StatCard
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.5 }}
-                  >
-                    <h3>Next Exam</h3>
-                    <div className="value">2d</div>
-                  </StatCard>
-                </QuickStatsGrid>
-
-                <FeaturesSection>
-                  <FeatureCard
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.6 }}
-                  >
-                    <CardHeader>
-                      <strong>My Courses</strong>
-                    </CardHeader>
-                    <div className="card-content">
-                      <h3><FaBook /> Course Explorer</h3>
-                      <p>Access all your current courses, class materials, and recorded lectures in one place.</p>
+                    <div style={{ position: "relative", zIndex: 1 }}>
+                      <h1>Welcome back, {userDisplayName}!</h1>
+                      <p style={{ marginBottom: "1rem" }}>
+                        It's <strong>{time}</strong> on <strong>{date}</strong>.
+                      </p>
+                      <p style={{ marginBottom: "1.2rem" }}>
+                        You're logged in as{" "}
+                        <span
+                          style={{
+                            color: "#A076F9",
+                            fontWeight: "bold",
+                            textTransform: "capitalize",
+                            background: "rgba(160, 118, 249, 0.15)",
+                            padding: "4px 8px",
+                            borderRadius: "6px",
+                            border: "1px solid rgba(160, 118, 249, 0.3)",
+                            fontSize: "0.9rem",
+                          }}
+                        >
+                          {role}
+                        </span>
+                        . Explore your educational resources, track assignments,
+                        connect with teachers and classmates, and manage your
+                        academic journey from this comprehensive dashboard.
+                      </p>
+                      <ButtonWrapper>
+                        <Button
+                          primary
+                          whileHover={{ scale: 1.03 }}
+                          whileTap={{ scale: 0.97 }}
+                        >
+                          <FaChartBar style={{ fontSize: "0.9rem" }} /> View
+                          Dashboard
+                        </Button>
+                        <Button
+                          whileHover={{ scale: 1.03 }}
+                          whileTap={{ scale: 0.97 }}
+                        >
+                          <FaUser style={{ fontSize: "0.9rem" }} /> My Profile
+                        </Button>
+                      </ButtonWrapper>
                     </div>
-                  </FeatureCard>
+                    {/* Ensure the gradient overlay doesn't obscure content */}
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: 0,
+                        right: 0,
+                        width: "400px",
+                        height: "400px",
+                        background:
+                          "radial-gradient(circle, rgba(160, 118, 249, 0.1) 0%, rgba(126, 87, 194, 0) 70%)",
+                        borderRadius: "50%",
+                        transform: "translate(25%, -40%)",
+                        pointerEvents: "none",
+                        zIndex: 0,
+                      }}
+                    />
+                  </WelcomeCard>
 
-                  <FeatureCard
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.7 }}
-                  >
-                    <CardHeader>
-                      <strong>Schedule</strong>
-                    </CardHeader>
-                    <div className="card-content">
-                      <h3><FaCalendarAlt /> Class Timetable</h3>
-                      <p>View your weekly schedule, upcoming classes, exams, and important deadlines.</p>
-                    </div>
-                  </FeatureCard>
+                  <QuickStatsGrid>
+                    <StatCard
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 0.2 }}
+                    >
+                      <h3>Active Courses</h3>
+                      <div className="value">5</div>
+                    </StatCard>
 
-                  <FeatureCard
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.8 }}
-                  >
-                    <CardHeader>
-                      <strong>Assignments</strong>
-                    </CardHeader>
-                    <div className="card-content">
-                      <h3><FaClipboardList /> Task Manager</h3>
-                      <p>Track all your pending assignments, submission deadlines, and graded work.</p>
-                    </div>
-                  </FeatureCard>
+                    <StatCard
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 0.3 }}
+                    >
+                      <h3>Pending Assignments</h3>
+                      <div className="value">3</div>
+                    </StatCard>
 
-                  <FeatureCard
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.9 }}
-                  >
-                    <CardHeader>
-                      <strong>Performance</strong>
-                    </CardHeader>
-                    <div className="card-content">
-                      <h3><FaChartBar /> Academic Progress</h3>
-                      <p>Monitor your performance, grades, attendance, and growth over time.</p>
-                    </div>
-                  </FeatureCard>
-                </FeaturesSection>
-              </>
-            } />
+                    <StatCard
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 0.4 }}
+                    >
+                      <h3>Grade Average</h3>
+                      <div className="value">A</div>
+                    </StatCard>
+
+                    <StatCard
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 0.5 }}
+                    >
+                      <h3>Next Exam</h3>
+                      <div className="value">2d</div>
+                    </StatCard>
+                  </QuickStatsGrid>
+
+                  <FeaturesSection>
+                    <FeatureCard
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 0.6 }}
+                    >
+                      <CardHeader>
+                        <strong>My Courses</strong>
+                      </CardHeader>
+                      <div className="card-content">
+                        <h3>
+                          <FaBook /> Course Explorer
+                        </h3>
+                        <p>
+                          Access all your current courses, class materials, and
+                          recorded lectures in one place.
+                        </p>
+                      </div>
+                    </FeatureCard>
+
+                    <FeatureCard
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 0.7 }}
+                    >
+                      <CardHeader>
+                        <strong>Schedule</strong>
+                      </CardHeader>
+                      <div className="card-content">
+                        <h3>
+                          <FaCalendarAlt /> Class Timetable
+                        </h3>
+                        <p>
+                          View your weekly schedule, upcoming classes, exams,
+                          and important deadlines.
+                        </p>
+                      </div>
+                    </FeatureCard>
+
+                    <FeatureCard
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 0.8 }}
+                    >
+                      <CardHeader>
+                        <strong>Assignments</strong>
+                      </CardHeader>
+                      <div className="card-content">
+                        <h3>
+                          <FaClipboardList /> Task Manager
+                        </h3>
+                        <p>
+                          Track all your pending assignments, submission
+                          deadlines, and graded work.
+                        </p>
+                      </div>
+                    </FeatureCard>
+
+                    <FeatureCard
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 0.9 }}
+                    >
+                      <CardHeader>
+                        <strong>Performance</strong>
+                      </CardHeader>
+                      <div className="card-content">
+                        <h3>
+                          <FaChartBar /> Academic Progress
+                        </h3>
+                        <p>
+                          Monitor your performance, grades, attendance, and
+                          growth over time.
+                        </p>
+                      </div>
+                    </FeatureCard>
+                  </FeaturesSection>
+                </>
+              }
+            />
           </Routes>
         </ContentArea>
       </MainContent>

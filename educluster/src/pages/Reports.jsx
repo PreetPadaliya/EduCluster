@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled, { createGlobalStyle } from "styled-components";
 import { motion } from "framer-motion";
 import {
@@ -12,6 +12,7 @@ import {
   FaCalendarAlt,
   FaDownload,
 } from "react-icons/fa";
+import { API } from "../utils/api";
 
 // Global styles to ensure proper viewport fitting
 const GlobalStyles = createGlobalStyle`
@@ -49,7 +50,7 @@ const Header = styled.header`
   margin-bottom: 2.5rem;
   margin-top: 1rem;
   flex-wrap: wrap;
-  
+
   h1 {
     font-size: 1.8rem;
     font-weight: 700;
@@ -63,12 +64,12 @@ const Header = styled.header`
     gap: 0.8rem;
     margin-right: 1.5rem;
     white-space: nowrap;
-    
+
     svg {
-      color: #A076F9;
+      color: #a076f9;
     }
   }
-  
+
   @media (max-width: 768px) {
     flex-direction: column;
     align-items: flex-start;
@@ -84,7 +85,7 @@ const ToolBar = styled.div`
   flex-wrap: wrap;
   width: 100%;
   margin-top: 0.8rem;
-  
+
   @media (max-width: 768px) {
     width: 100%;
     justify-content: space-between;
@@ -97,7 +98,7 @@ const ButtonGroup = styled.div`
   display: flex;
   gap: 0.8rem;
   align-items: center;
-  
+
   @media (max-width: 768px) {
     gap: 0.5rem;
   }
@@ -105,42 +106,55 @@ const ButtonGroup = styled.div`
 
 const Button = styled(motion.button)`
   padding: 0.6rem 1.2rem;
-  background: ${props => props.primary ? 'linear-gradient(135deg, #A076F9, #7E57C2)' : 'rgba(30, 30, 35, 0.6)'};
-  color: ${props => props.primary ? 'white' : '#d0d0d0'};
-  border: ${props => props.primary ? 'none' : '1px solid rgba(160, 118, 249, 0.3)'};
+  background: ${(props) =>
+    props.primary
+      ? "linear-gradient(135deg, #A076F9, #7E57C2)"
+      : "rgba(30, 30, 35, 0.6)"};
+  color: ${(props) => (props.primary ? "white" : "#d0d0d0")};
+  border: ${(props) =>
+    props.primary ? "none" : "1px solid rgba(160, 118, 249, 0.3)"};
   border-radius: 50px;
   cursor: pointer;
   font-size: 0.9rem;
-  font-weight: ${props => props.primary ? '600' : '400'};
+  font-weight: ${(props) => (props.primary ? "600" : "400")};
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.6rem;
-  box-shadow: ${props => props.primary ? '0 4px 15px rgba(126, 87, 194, 0.3)' : '0 4px 8px rgba(0, 0, 0, 0.15)'};
+  box-shadow: ${(props) =>
+    props.primary
+      ? "0 4px 15px rgba(126, 87, 194, 0.3)"
+      : "0 4px 8px rgba(0, 0, 0, 0.15)"};
   transition: all 0.3s ease;
-  min-width: ${props => props.icon ? '42px' : '120px'};
+  min-width: ${(props) => (props.icon ? "42px" : "120px")};
   height: 38px;
   flex-shrink: 0;
   margin: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  opacity: ${props => props.disabled ? '0.6' : '1'};
-  pointer-events: ${props => props.disabled ? 'none' : 'auto'};
+  opacity: ${(props) => (props.disabled ? "0.6" : "1")};
+  pointer-events: ${(props) => (props.disabled ? "none" : "auto")};
 
   &:hover {
-    box-shadow: ${props => props.primary ? '0 6px 20px rgba(126, 87, 194, 0.4)' : '0 4px 12px rgba(0, 0, 0, 0.2)'};
-    background: ${props => props.primary ? 'linear-gradient(135deg, #b18aff, #9065db)' : 'rgba(40, 40, 45, 0.6)'};
+    box-shadow: ${(props) =>
+      props.primary
+        ? "0 6px 20px rgba(126, 87, 194, 0.4)"
+        : "0 4px 12px rgba(0, 0, 0, 0.2)"};
+    background: ${(props) =>
+      props.primary
+        ? "linear-gradient(135deg, #b18aff, #9065db)"
+        : "rgba(40, 40, 45, 0.6)"};
   }
-  
+
   @media (max-width: 768px) {
-    min-width: ${props => props.icon ? '38px' : '90px'};
-    padding: 0.6rem ${props => props.icon ? '0.8rem' : '1rem'};
+    min-width: ${(props) => (props.icon ? "38px" : "90px")};
+    padding: 0.6rem ${(props) => (props.icon ? "0.8rem" : "1rem")};
     font-size: 0.85rem;
   }
-  
+
   @media (max-width: 480px) {
-    min-width: ${props => props.icon ? '36px' : '80px'};
+    min-width: ${(props) => (props.icon ? "36px" : "80px")};
   }
 `;
 
@@ -150,7 +164,7 @@ const SearchInputWrapper = styled.div`
   width: 100%;
   flex-shrink: 1;
   margin-right: 0.5rem;
-  
+
   input {
     width: 100%;
     padding: 0.6rem 1rem 0.6rem 2.5rem;
@@ -161,18 +175,18 @@ const SearchInputWrapper = styled.div`
     font-size: 0.9rem;
     height: 38px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-    
+
     &:focus {
       outline: none;
       border-color: rgba(160, 118, 249, 0.5);
       box-shadow: 0 0 0 2px rgba(160, 118, 249, 0.2);
     }
-    
+
     &::placeholder {
       color: #808080;
     }
   }
-  
+
   svg {
     position: absolute;
     left: 0.8rem;
@@ -181,7 +195,7 @@ const SearchInputWrapper = styled.div`
     color: #808080;
     font-size: 1rem;
   }
-  
+
   @media (max-width: 768px) {
     flex-basis: 100%;
     max-width: 100%;
@@ -202,14 +216,14 @@ const TabsContainer = styled.div`
   width: 100%;
   justify-content: flex-start;
   align-items: center;
-  
+
   @media (max-width: 768px) {
     gap: 0.8rem;
     padding: 0.5rem 0 1.2rem 0;
     margin-bottom: 1rem;
     justify-content: center;
   }
-  
+
   @media (max-width: 480px) {
     gap: 0.6rem;
     justify-content: flex-start;
@@ -218,13 +232,15 @@ const TabsContainer = styled.div`
 
 const Tab = styled(motion.button)`
   padding: 0.7rem 1.3rem;
-  background: ${props => props.active ? 'rgba(160, 118, 249, 0.15)' : 'rgba(30, 30, 35, 0.8)'};
-  color: ${props => props.active ? '#A076F9' : '#b0b0b0'};
-  border: ${props => props.active ? '2px solid #A076F9' : '2px solid rgba(160, 118, 249, 0.2)'};
+  background: ${(props) =>
+    props.active ? "rgba(160, 118, 249, 0.15)" : "rgba(30, 30, 35, 0.8)"};
+  color: ${(props) => (props.active ? "#A076F9" : "#b0b0b0")};
+  border: ${(props) =>
+    props.active ? "2px solid #A076F9" : "2px solid rgba(160, 118, 249, 0.2)"};
   border-radius: 10px;
   cursor: pointer;
   font-size: 0.85rem;
-  font-weight: ${props => props.active ? '600' : '500'};
+  font-weight: ${(props) => (props.active ? "600" : "500")};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -233,23 +249,31 @@ const Tab = styled(motion.button)`
   white-space: nowrap;
   min-width: fit-content;
   margin: 0.2rem;
-  box-shadow: ${props => props.active ? '0 4px 15px rgba(160, 118, 249, 0.2)' : '0 2px 8px rgba(0, 0, 0, 0.1)'};
+  box-shadow: ${(props) =>
+    props.active
+      ? "0 4px 15px rgba(160, 118, 249, 0.2)"
+      : "0 2px 8px rgba(0, 0, 0, 0.1)"};
   box-sizing: border-box;
   position: relative;
   flex-shrink: 0;
-  
+
   &:hover {
-    background: ${props => props.active ? 'rgba(160, 118, 249, 0.25)' : 'rgba(45, 45, 50, 0.9)'};
-    color: ${props => props.active ? '#A076F9' : '#e0e0e0'};
-    border-color: ${props => props.active ? '#A076F9' : 'rgba(160, 118, 249, 0.4)'};
+    background: ${(props) =>
+      props.active ? "rgba(160, 118, 249, 0.25)" : "rgba(45, 45, 50, 0.9)"};
+    color: ${(props) => (props.active ? "#A076F9" : "#e0e0e0")};
+    border-color: ${(props) =>
+      props.active ? "#A076F9" : "rgba(160, 118, 249, 0.4)"};
     transform: translateY(-1px);
-    box-shadow: ${props => props.active ? '0 6px 20px rgba(160, 118, 249, 0.25)' : '0 4px 12px rgba(0, 0, 0, 0.15)'};
+    box-shadow: ${(props) =>
+      props.active
+        ? "0 6px 20px rgba(160, 118, 249, 0.25)"
+        : "0 4px 12px rgba(0, 0, 0, 0.15)"};
   }
-  
+
   &:active {
     transform: translateY(0);
   }
-  
+
   @media (max-width: 768px) {
     padding: 0.6rem 1.1rem;
     font-size: 0.8rem;
@@ -257,7 +281,7 @@ const Tab = styled(motion.button)`
     flex: 1;
     min-width: 110px;
   }
-  
+
   @media (max-width: 480px) {
     padding: 0.5rem 0.9rem;
     font-size: 0.75rem;
@@ -272,7 +296,7 @@ const ContentWrapper = styled.div`
   gap: 2rem;
   padding: 1rem 0;
   margin-top: 0.5rem;
-  
+
   @media (max-width: 1024px) {
     flex-direction: column;
     gap: 1.5rem;
@@ -316,7 +340,7 @@ const ReportCard = styled(motion.div)`
         gap: 0.5rem;
 
         svg {
-          color: #A076F9;
+          color: #a076f9;
         }
       }
 
@@ -328,7 +352,7 @@ const ReportCard = styled(motion.div)`
         gap: 0.4rem;
 
         svg {
-          color: #7E57C2;
+          color: #7e57c2;
         }
       }
     }
@@ -352,7 +376,7 @@ const ReportCard = styled(motion.div)`
       color: #a0a0a0;
 
       svg {
-        color: #A076F9;
+        color: #a076f9;
       }
     }
   }
@@ -361,7 +385,7 @@ const ReportCard = styled(motion.div)`
 const ReportDetailSection = styled.div`
   width: 350px;
   flex-shrink: 0;
-  
+
   @media (max-width: 1200px) {
     width: 320px;
   }
@@ -389,7 +413,7 @@ const ReportDetail = styled(motion.div)`
     gap: 0.5rem;
 
     svg {
-      color: #A076F9;
+      color: #a076f9;
     }
   }
 
@@ -421,7 +445,7 @@ const ReportDetail = styled(motion.div)`
         font-size: 0.9rem;
 
         svg {
-          color: #A076F9;
+          color: #a076f9;
           min-width: 16px;
         }
       }
@@ -474,7 +498,7 @@ const ModalContent = styled(motion.div)`
     gap: 0.5rem;
 
     svg {
-      color: #A076F9;
+      color: #a076f9;
     }
   }
 
@@ -498,7 +522,7 @@ const ModalContent = styled(motion.div)`
 
       &:focus {
         outline: none;
-        border-color: #A076F9;
+        border-color: #a076f9;
       }
     }
   }
@@ -519,7 +543,8 @@ const reportsData = [
     category: "Course Analysis",
     date: "2025-07-20",
     generatedBy: "Dr. Sarah Johnson",
-    description: "Analysis of student performance in Introduction to Computer Science.",
+    description:
+      "Analysis of student performance in Introduction to Computer Science.",
     metrics: {
       avgGrade: 85,
       completionRate: 92,
@@ -532,7 +557,8 @@ const reportsData = [
     category: "Assignment Analysis",
     date: "2025-07-22",
     generatedBy: "Prof. Michael Chen",
-    description: "Overview of assignment submission rates and grades for Data Structures and Algorithms.",
+    description:
+      "Overview of assignment submission rates and grades for Data Structures and Algorithms.",
     metrics: {
       submissionRate: 88,
       avgPoints: 45,
@@ -545,7 +571,8 @@ const reportsData = [
     category: "Student Progress",
     date: "2025-07-21",
     generatedBy: "Emma Rodriguez",
-    description: "Detailed progress tracking for students in Web Development Fundamentals.",
+    description:
+      "Detailed progress tracking for students in Web Development Fundamentals.",
     metrics: {
       avgAttendance: 95,
       gradeTrend: "Upward",
@@ -554,21 +581,130 @@ const reportsData = [
   },
 ];
 
-const Reports = () => {
+const Reports = ({ user }) => {
   const [activeTab, setActiveTab] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedReport, setSelectedReport] = useState(null);
   const [showExportModal, setShowExportModal] = useState(false);
   const [exportFormat, setExportFormat] = useState("pdf");
+  const [reports, setReports] = useState([]);
+  const [analytics, setAnalytics] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const filteredReports = reportsData.filter(report => {
-    if (searchTerm && !report.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      !report.category.toLowerCase().includes(searchTerm.toLowerCase())) {
+  // Fetch reports on component mount
+  useEffect(() => {
+    fetchReports();
+  }, [user]);
+
+  const fetchReports = async () => {
+    try {
+      setLoading(true);
+      const response = await API.reports.getReports(
+        user?.id,
+        user?.role?.toUpperCase()
+      );
+
+      setAnalytics(response.reports);
+
+      // Generate report cards based on analytics
+      const generatedReports = [];
+
+      if (user?.role?.toLowerCase() === "student") {
+        generatedReports.push(
+          {
+            id: 1,
+            title: "Academic Performance Summary",
+            category: "Student Progress",
+            description:
+              "Comprehensive overview of your academic performance across all courses",
+            metrics: {
+              "Courses Enrolled": response.reports.enrolledCourses || 0,
+              "Assignments Submitted":
+                response.reports.submittedAssignments || 0,
+              "Average Grade": response.reports.averageGrade || 0,
+              "Grade Points":
+                Math.round(
+                  (((response.reports.averageGrade || 0) * 4) / 100) * 100
+                ) / 100,
+            },
+            lastUpdated: new Date().toLocaleDateString(),
+            status: "Current",
+          },
+          {
+            id: 2,
+            title: "Grade Distribution Analysis",
+            category: "Grade Analysis",
+            description:
+              "Breakdown of your grades across different performance levels",
+            metrics: response.reports.gradeDistribution || {
+              A: 0,
+              B: 0,
+              C: 0,
+              D: 0,
+            },
+            lastUpdated: new Date().toLocaleDateString(),
+            status: "Current",
+          }
+        );
+      } else if (user?.role?.toLowerCase() === "faculty") {
+        generatedReports.push(
+          {
+            id: 1,
+            title: "Teaching Load Summary",
+            category: "Course Analysis",
+            description:
+              "Overview of your teaching responsibilities and student engagement",
+            metrics: {
+              "Courses Teaching": response.reports.coursesTeaching || 0,
+              "Total Students": response.reports.totalStudents || 0,
+              "Assignments Created": response.reports.totalAssignments || 0,
+              "Pending Grading": response.reports.pendingGrading || 0,
+            },
+            lastUpdated: new Date().toLocaleDateString(),
+            status: "Current",
+          },
+          {
+            id: 2,
+            title: "Student Submission Analytics",
+            category: "Assignment Analysis",
+            description:
+              "Analysis of student submission patterns and engagement",
+            metrics: {
+              "Total Submissions": response.reports.totalSubmissions || 0,
+              "Pending Reviews": response.reports.pendingGrading || 0,
+              "Average Response Time": "2 days",
+              "Completion Rate": "85%",
+            },
+            lastUpdated: new Date().toLocaleDateString(),
+            status: "Current",
+          }
+        );
+      }
+
+      setReports(generatedReports);
+    } catch (err) {
+      console.error("Error fetching reports:", err);
+      setError("Failed to load reports. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const filteredReports = reports.filter((report) => {
+    if (
+      searchTerm &&
+      !report.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      !report.category.toLowerCase().includes(searchTerm.toLowerCase())
+    ) {
       return false;
     }
-    if (activeTab === "course" && report.category !== "Course Analysis") return false;
-    if (activeTab === "assignment" && report.category !== "Assignment Analysis") return false;
-    if (activeTab === "student" && report.category !== "Student Progress") return false;
+    if (activeTab === "course" && report.category !== "Course Analysis")
+      return false;
+    if (activeTab === "assignment" && report.category !== "Assignment Analysis")
+      return false;
+    if (activeTab === "student" && report.category !== "Student Progress")
+      return false;
     return true;
   });
 
@@ -584,14 +720,19 @@ const Reports = () => {
     const height = canvas.height;
     ctx.clearRect(0, 0, width, height);
 
-    const data = Object.values(metrics).map(val => val);
+    const data = Object.values(metrics).map((val) => val);
     const maxValue = Math.max(...data);
     const barWidth = (width / data.length) * 0.6;
 
     ctx.fillStyle = "#A076F9";
     data.forEach((value, index) => {
       const barHeight = (value / maxValue) * (height - 40);
-      ctx.fillRect(index * (width / data.length) + 10, height - barHeight - 10, barWidth, barHeight);
+      ctx.fillRect(
+        index * (width / data.length) + 10,
+        height - barHeight - 10,
+        barWidth,
+        barHeight
+      );
     });
 
     ctx.fillStyle = "#e0e0e0";
@@ -606,7 +747,9 @@ const Reports = () => {
       <GlobalStyles />
 
       <Header>
-        <h1><FaChartBar /> Reports</h1>
+        <h1>
+          <FaChartBar /> Reports
+        </h1>
         <ToolBar>
           <SearchInputWrapper>
             <FaSearch />
@@ -644,13 +787,22 @@ const Reports = () => {
         <Tab active={activeTab === "all"} onClick={() => setActiveTab("all")}>
           <FaChartBar /> All Reports
         </Tab>
-        <Tab active={activeTab === "course"} onClick={() => setActiveTab("course")}>
+        <Tab
+          active={activeTab === "course"}
+          onClick={() => setActiveTab("course")}
+        >
           <FaBook /> Course Analysis
         </Tab>
-        <Tab active={activeTab === "assignment"} onClick={() => setActiveTab("assignment")}>
+        <Tab
+          active={activeTab === "assignment"}
+          onClick={() => setActiveTab("assignment")}
+        >
           <FaClipboardList /> Assignment Analysis
         </Tab>
-        <Tab active={activeTab === "student"} onClick={() => setActiveTab("student")}>
+        <Tab
+          active={activeTab === "student"}
+          onClick={() => setActiveTab("student")}
+        >
           <FaUserGraduate /> Student Progress
         </Tab>
       </TabsContainer>
@@ -659,7 +811,7 @@ const Reports = () => {
 
       <ContentWrapper>
         <ReportList>
-          {filteredReports.map(report => (
+          {filteredReports.map((report) => (
             <ReportCard
               key={report.id}
               initial={{ opacity: 0, y: 20 }}
@@ -667,7 +819,10 @@ const Reports = () => {
               transition={{ duration: 0.3 }}
               onClick={() => setSelectedReport(report)}
               style={{
-                borderLeft: selectedReport && selectedReport.id === report.id ? '4px solid #A076F9' : '1px solid rgba(50, 50, 60, 0.4)',
+                borderLeft:
+                  selectedReport && selectedReport.id === report.id
+                    ? "4px solid #A076F9"
+                    : "1px solid rgba(50, 50, 60, 0.4)",
               }}
             >
               <div className="card-header">
@@ -680,10 +835,10 @@ const Reports = () => {
                   </div>
                 </div>
                 <div className="date">
-                  {new Date(report.date).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric',
+                  {new Date(report.date).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
                   })}
                 </div>
               </div>
@@ -692,10 +847,11 @@ const Reports = () => {
                   <FaUserGraduate /> Generated by: {report.generatedBy}
                 </div>
                 <div className="info-item">
-                  <FaCalendarAlt /> Last Updated: {new Date(report.date).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
+                  <FaCalendarAlt /> Last Updated:{" "}
+                  {new Date(report.date).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
                   })}
                 </div>
               </div>
@@ -703,16 +859,24 @@ const Reports = () => {
           ))}
 
           {filteredReports.length === 0 && (
-            <div style={{
-              textAlign: 'center',
-              padding: '3rem',
-              color: '#a0a0a0',
-              background: 'rgba(25, 25, 30, 0.8)',
-              borderRadius: '12px',
-              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
-              border: '1px solid rgba(50, 50, 60, 0.4)',
-            }}>
-              <FaChartBar style={{ fontSize: '3rem', color: '#A076F9', marginBottom: '1rem' }} />
+            <div
+              style={{
+                textAlign: "center",
+                padding: "3rem",
+                color: "#a0a0a0",
+                background: "rgba(25, 25, 30, 0.8)",
+                borderRadius: "12px",
+                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)",
+                border: "1px solid rgba(50, 50, 60, 0.4)",
+              }}
+            >
+              <FaChartBar
+                style={{
+                  fontSize: "3rem",
+                  color: "#A076F9",
+                  marginBottom: "1rem",
+                }}
+              />
               <h2>No reports found</h2>
               <p>Try adjusting your search or filter criteria</p>
             </div>
@@ -726,7 +890,9 @@ const Reports = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <h3><FaChartBar /> Report Details</h3>
+              <h3>
+                <FaChartBar /> Report Details
+              </h3>
 
               <div className="detail-section">
                 <h4>{selectedReport.title}</h4>
@@ -735,13 +901,15 @@ const Reports = () => {
                     <FaBook /> Category: {selectedReport.category}
                   </div>
                   <div className="detail-item">
-                    <FaUserGraduate /> Generated by: {selectedReport.generatedBy}
+                    <FaUserGraduate /> Generated by:{" "}
+                    {selectedReport.generatedBy}
                   </div>
                   <div className="detail-item">
-                    <FaCalendarAlt /> Date: {new Date(selectedReport.date).toLocaleDateString('en-US', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric',
+                    <FaCalendarAlt /> Date:{" "}
+                    {new Date(selectedReport.date).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
                     })}
                   </div>
                 </div>
@@ -753,17 +921,24 @@ const Reports = () => {
               </div>
 
               <div className="chart-container">
-                <canvas ref={canvas => canvas && drawChart(canvas, selectedReport.metrics)} />
+                <canvas
+                  ref={(canvas) =>
+                    canvas && drawChart(canvas, selectedReport.metrics)
+                  }
+                />
               </div>
 
               <div className="detail-section">
                 <h4>Key Metrics</h4>
                 <div className="detail-list">
-                  {Object.entries(selectedReport.metrics).map(([key, value]) => (
-                    <div key={key} className="detail-item">
-                      <FaChartBar /> {key.replace(/([A-Z])/g, ' $1').trim()}: {value}
-                    </div>
-                  ))}
+                  {Object.entries(selectedReport.metrics).map(
+                    ([key, value]) => (
+                      <div key={key} className="detail-item">
+                        <FaChartBar /> {key.replace(/([A-Z])/g, " $1").trim()}:{" "}
+                        {value}
+                      </div>
+                    )
+                  )}
                 </div>
               </div>
 
@@ -794,8 +969,16 @@ const Reports = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <h3><FaChartBar /> Report Details</h3>
-              <p style={{ color: '#a0a0a0', textAlign: 'center', margin: '2rem 0' }}>
+              <h3>
+                <FaChartBar /> Report Details
+              </h3>
+              <p
+                style={{
+                  color: "#a0a0a0",
+                  textAlign: "center",
+                  margin: "2rem 0",
+                }}
+              >
                 Select a report to view details
               </p>
             </ReportDetail>
@@ -816,11 +999,16 @@ const Reports = () => {
             transition={{ duration: 0.3 }}
             onClick={(e) => e.stopPropagation()}
           >
-            <h2><FaFileExport /> Export Report</h2>
+            <h2>
+              <FaFileExport /> Export Report
+            </h2>
 
             <div className="form-group">
               <label>Export Format</label>
-              <select value={exportFormat} onChange={(e) => setExportFormat(e.target.value)}>
+              <select
+                value={exportFormat}
+                onChange={(e) => setExportFormat(e.target.value)}
+              >
                 <option value="pdf">PDF</option>
                 <option value="csv">CSV</option>
               </select>

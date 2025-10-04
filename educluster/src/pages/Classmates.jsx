@@ -15,8 +15,9 @@ import {
   FaPaperclip,
   FaMicrophone,
   FaImage,
-  FaTimes
+  FaTimes,
 } from "react-icons/fa";
+import { API } from "../utils/api";
 
 // Global styles to ensure proper viewport fitting
 const GlobalStyles = createGlobalStyle`
@@ -36,7 +37,7 @@ const ClassmatesContainer = styled.div`
   background-color: #121214;
   color: #e0e0e0;
   padding: 1rem;
-  
+
   @media (max-width: 768px) {
     padding: 0.5rem;
   }
@@ -47,7 +48,7 @@ const Header = styled.header`
   align-items: center;
   justify-content: space-between;
   margin-bottom: 2rem;
-  
+
   h1 {
     font-size: 1.8rem;
     font-weight: 700;
@@ -59,12 +60,12 @@ const Header = styled.header`
     display: flex;
     align-items: center;
     gap: 0.8rem;
-    
+
     svg {
-      color: #A076F9;
+      color: #a076f9;
     }
   }
-  
+
   @media (max-width: 768px) {
     flex-direction: column;
     align-items: flex-start;
@@ -76,7 +77,7 @@ const SearchInputWrapper = styled.div`
   position: relative;
   max-width: 400px;
   width: 100%;
-  
+
   input {
     width: 100%;
     padding: 0.6rem 1rem 0.6rem 2.5rem;
@@ -85,18 +86,18 @@ const SearchInputWrapper = styled.div`
     border: 1px solid rgba(160, 118, 249, 0.2);
     color: #e0e0e0;
     font-size: 0.9rem;
-    
+
     &:focus {
       outline: none;
       border-color: rgba(160, 118, 249, 0.5);
       box-shadow: 0 0 0 2px rgba(160, 118, 249, 0.2);
     }
-    
+
     &::placeholder {
       color: #808080;
     }
   }
-  
+
   svg {
     position: absolute;
     left: 0.8rem;
@@ -109,22 +110,33 @@ const SearchInputWrapper = styled.div`
 
 const Button = styled(motion.button)`
   padding: 0.6rem 1.2rem;
-  background: ${props => props.primary ? 'linear-gradient(135deg, #A076F9, #7E57C2)' : 'rgba(30, 30, 35, 0.6)'};
-  color: ${props => props.primary ? 'white' : '#d0d0d0'};
-  border: ${props => props.primary ? 'none' : '1px solid rgba(160, 118, 249, 0.3)'};
+  background: ${(props) =>
+    props.primary
+      ? "linear-gradient(135deg, #A076F9, #7E57C2)"
+      : "rgba(30, 30, 35, 0.6)"};
+  color: ${(props) => (props.primary ? "white" : "#d0d0d0")};
+  border: ${(props) =>
+    props.primary ? "none" : "1px solid rgba(160, 118, 249, 0.3)"};
   border-radius: 50px;
   cursor: pointer;
   font-size: 0.9rem;
-  font-weight: ${props => props.primary ? '600' : '400'};
+  font-weight: ${(props) => (props.primary ? "600" : "400")};
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  box-shadow: ${props => props.primary ? '0 4px 15px rgba(126, 87, 194, 0.3)' : 'none'};
+  box-shadow: ${(props) =>
+    props.primary ? "0 4px 15px rgba(126, 87, 194, 0.3)" : "none"};
   transition: all 0.3s ease;
-  
+
   &:hover {
-    box-shadow: ${props => props.primary ? '0 6px 20px rgba(126, 87, 194, 0.4)' : '0 4px 12px rgba(0, 0, 0, 0.2)'};
-    background: ${props => props.primary ? 'linear-gradient(135deg, #b18aff, #9065db)' : 'rgba(40, 40, 45, 0.6)'};
+    box-shadow: ${(props) =>
+      props.primary
+        ? "0 6px 20px rgba(126, 87, 194, 0.4)"
+        : "0 4px 12px rgba(0, 0, 0, 0.2)"};
+    background: ${(props) =>
+      props.primary
+        ? "linear-gradient(135deg, #b18aff, #9065db)"
+        : "rgba(40, 40, 45, 0.6)"};
   }
 `;
 
@@ -132,7 +144,7 @@ const ContentWrapper = styled.div`
   display: flex;
   gap: 1.5rem;
   height: calc(90vh - 100px);
-  
+
   @media (max-width: 1024px) {
     flex-direction: column;
     height: auto;
@@ -147,7 +159,7 @@ const ContactsList = styled.div`
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  
+
   @media (max-width: 1024px) {
     width: 100%;
     max-height: 300px;
@@ -160,23 +172,23 @@ const ContactsHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid rgba(50, 50, 60, 0.4);
-  
+
   h2 {
     margin: 0;
     font-size: 1.2rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    
+
     svg {
-      color: #A076F9;
+      color: #a076f9;
     }
   }
-  
+
   .actions {
     display: flex;
     gap: 0.5rem;
-    
+
     button {
       width: 32px;
       height: 32px;
@@ -189,10 +201,10 @@ const ContactsHeader = styled.div`
       justify-content: center;
       cursor: pointer;
       transition: all 0.2s ease;
-      
+
       &:hover {
         background: rgba(160, 118, 249, 0.15);
-        color: #A076F9;
+        color: #a076f9;
       }
     }
   }
@@ -200,7 +212,7 @@ const ContactsHeader = styled.div`
 
 const ContactsSearchBox = styled.div`
   padding: 0.8rem;
-  
+
   input {
     width: 100%;
     padding: 0.6rem 1rem;
@@ -209,13 +221,13 @@ const ContactsSearchBox = styled.div`
     border: 1px solid rgba(160, 118, 249, 0.2);
     color: #e0e0e0;
     font-size: 0.9rem;
-    
+
     &:focus {
       outline: none;
       border-color: rgba(160, 118, 249, 0.5);
       box-shadow: 0 0 0 2px rgba(160, 118, 249, 0.2);
     }
-    
+
     &::placeholder {
       color: #808080;
     }
@@ -225,12 +237,12 @@ const ContactsSearchBox = styled.div`
 const ContactsListContent = styled.div`
   flex: 1;
   overflow-y: auto;
-  
+
   /* Hide scrollbar but allow scrolling */
   &::-webkit-scrollbar {
     width: 6px;
   }
-  
+
   &::-webkit-scrollbar-thumb {
     background-color: rgba(160, 118, 249, 0.3);
     border-radius: 10px;
@@ -243,26 +255,28 @@ const ContactItem = styled(motion.div)`
   align-items: center;
   gap: 0.8rem;
   cursor: pointer;
-  border-left: ${props => props.active ? '3px solid #A076F9' : '3px solid transparent'};
-  background: ${props => props.active ? 'rgba(160, 118, 249, 0.1)' : 'transparent'};
+  border-left: ${(props) =>
+    props.active ? "3px solid #A076F9" : "3px solid transparent"};
+  background: ${(props) =>
+    props.active ? "rgba(160, 118, 249, 0.1)" : "transparent"};
   transition: all 0.2s ease;
-  
+
   &:hover {
     background: rgba(40, 40, 45, 0.6);
   }
-  
+
   .avatar {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #A076F9, #7E57C2);
+    background: linear-gradient(135deg, #a076f9, #7e57c2);
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 600;
     color: white;
     position: relative;
-    
+
     .status {
       position: absolute;
       width: 10px;
@@ -270,30 +284,30 @@ const ContactItem = styled(motion.div)`
       border-radius: 50%;
       bottom: 0;
       right: 0;
-      border: 2px solid #19191E;
-      
+      border: 2px solid #19191e;
+
       &.online {
-        background: #4CAF50;
+        background: #4caf50;
       }
-      
+
       &.offline {
         background: #9e9e9e;
       }
-      
+
       &.busy {
-        background: #F44336;
+        background: #f44336;
       }
     }
   }
-  
+
   .info {
     flex: 1;
-    
+
     .name {
       font-weight: 500;
       margin-bottom: 0.2rem;
     }
-    
+
     .last-message {
       font-size: 0.8rem;
       color: #a0a0a0;
@@ -303,7 +317,7 @@ const ContactItem = styled(motion.div)`
       max-width: 180px;
     }
   }
-  
+
   .time {
     font-size: 0.75rem;
     color: #808080;
@@ -326,24 +340,24 @@ const ChatHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid rgba(50, 50, 60, 0.4);
-  
+
   .user-info {
     display: flex;
     align-items: center;
     gap: 0.8rem;
-    
+
     .avatar {
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #A076F9, #7E57C2);
+      background: linear-gradient(135deg, #a076f9, #7e57c2);
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 600;
       color: white;
       position: relative;
-      
+
       .status {
         position: absolute;
         width: 10px;
@@ -351,39 +365,39 @@ const ChatHeader = styled.div`
         border-radius: 50%;
         bottom: 0;
         right: 0;
-        border: 2px solid #19191E;
-        
+        border: 2px solid #19191e;
+
         &.online {
-          background: #4CAF50;
+          background: #4caf50;
         }
       }
     }
-    
+
     .info {
       .name {
         font-weight: 500;
         margin-bottom: 0.2rem;
       }
-      
+
       .status-text {
         font-size: 0.8rem;
         color: #a0a0a0;
         display: flex;
         align-items: center;
         gap: 0.3rem;
-        
+
         svg {
-          color: #4CAF50;
+          color: #4caf50;
           font-size: 0.6rem;
         }
       }
     }
   }
-  
+
   .actions {
     display: flex;
     gap: 0.8rem;
-    
+
     button {
       width: 36px;
       height: 36px;
@@ -396,10 +410,10 @@ const ChatHeader = styled.div`
       justify-content: center;
       cursor: pointer;
       transition: all 0.2s ease;
-      
+
       &:hover {
         background: rgba(160, 118, 249, 0.15);
-        color: #A076F9;
+        color: #a076f9;
       }
     }
   }
@@ -411,12 +425,12 @@ const ChatContent = styled.div`
   padding: 1rem;
   display: flex;
   flex-direction: column;
-  
+
   /* Hide scrollbar but allow scrolling */
   &::-webkit-scrollbar {
     width: 6px;
   }
-  
+
   &::-webkit-scrollbar-thumb {
     background-color: rgba(160, 118, 249, 0.3);
     border-radius: 10px;
@@ -429,27 +443,31 @@ const MessageBubble = styled.div`
   border-radius: 18px;
   margin-bottom: 1rem;
   position: relative;
-  
+
   &.outgoing {
     align-self: flex-end;
-    background: linear-gradient(135deg, rgba(160, 118, 249, 0.8), rgba(126, 87, 194, 0.8));
+    background: linear-gradient(
+      135deg,
+      rgba(160, 118, 249, 0.8),
+      rgba(126, 87, 194, 0.8)
+    );
     border-bottom-right-radius: 4px;
-    
+
     .time {
       color: rgba(255, 255, 255, 0.7);
     }
   }
-  
+
   &.incoming {
     align-self: flex-start;
     background: rgba(40, 40, 45, 0.8);
     border-bottom-left-radius: 4px;
   }
-  
+
   .message-content {
     margin-bottom: 0.3rem;
   }
-  
+
   .time {
     font-size: 0.7rem;
     color: #a0a0a0;
@@ -461,7 +479,7 @@ const DateDivider = styled.div`
   display: flex;
   align-items: center;
   margin: 1.5rem 0;
-  
+
   &::before,
   &::after {
     content: "";
@@ -469,7 +487,7 @@ const DateDivider = styled.div`
     height: 1px;
     background: rgba(160, 118, 249, 0.3);
   }
-  
+
   .date {
     padding: 0 1rem;
     font-size: 0.8rem;
@@ -487,11 +505,11 @@ const ChatInput = styled.div`
   align-items: center;
   gap: 0.8rem;
   position: relative;
-  
+
   .attachments {
     display: flex;
     gap: 0.5rem;
-    
+
     button {
       width: 36px;
       height: 36px;
@@ -504,18 +522,18 @@ const ChatInput = styled.div`
       justify-content: center;
       cursor: pointer;
       transition: all 0.2s ease;
-      
+
       &:hover {
         background: rgba(160, 118, 249, 0.15);
-        color: #A076F9;
+        color: #a076f9;
       }
     }
   }
-  
+
   .input-wrapper {
     flex: 1;
     position: relative;
-    
+
     input {
       width: 100%;
       padding: 0.8rem 1rem;
@@ -524,36 +542,36 @@ const ChatInput = styled.div`
       border: 1px solid rgba(160, 118, 249, 0.2);
       color: #e0e0e0;
       font-size: 0.9rem;
-      
+
       &:focus {
         outline: none;
         border-color: rgba(160, 118, 249, 0.5);
         box-shadow: 0 0 0 2px rgba(160, 118, 249, 0.2);
       }
-      
+
       &::placeholder {
         color: #808080;
       }
     }
   }
-  
+
   .send-button {
     width: 36px;
     height: 36px;
     border-radius: 50%;
     border: none;
-    background: linear-gradient(135deg, #A076F9, #7E57C2);
+    background: linear-gradient(135deg, #a076f9, #7e57c2);
     color: white;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: all 0.2s ease;
-    
+
     &:hover {
       box-shadow: 0 4px 12px rgba(126, 87, 194, 0.4);
     }
-    
+
     svg {
       margin-left: 2px;
     }
@@ -584,29 +602,30 @@ const ModalContent = styled(motion.div)`
   overflow-y: auto;
   border: 1px solid rgba(160, 118, 249, 0.3);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  
+
   h2 {
     margin-top: 0;
     color: #e0e0e0;
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    
+
     svg {
-      color: #A076F9;
+      color: #a076f9;
     }
   }
-  
+
   .form-group {
     margin-bottom: 1.5rem;
-    
+
     label {
       display: block;
       margin-bottom: 0.5rem;
       color: #c0c0c0;
     }
-    
-    input, select {
+
+    input,
+    select {
       width: 100%;
       padding: 0.8rem;
       background: rgba(30, 30, 35, 0.6);
@@ -614,14 +633,14 @@ const ModalContent = styled(motion.div)`
       border-radius: 8px;
       color: #e0e0e0;
       font-size: 0.9rem;
-      
+
       &:focus {
         outline: none;
-        border-color: #A076F9;
+        border-color: #a076f9;
       }
     }
   }
-  
+
   .modal-actions {
     display: flex;
     justify-content: flex-end;
@@ -644,21 +663,21 @@ const classmatesData = [
         id: 1,
         content: "Hey, how's the study going?",
         timestamp: "10:15 AM",
-        outgoing: false
+        outgoing: false,
       },
       {
         id: 2,
         content: "Pretty good, just finishing up the math problems.",
         timestamp: "10:18 AM",
-        outgoing: true
+        outgoing: true,
       },
       {
         id: 3,
         content: "Did you complete the assignment?",
         timestamp: "10:30 AM",
-        outgoing: false
-      }
-    ]
+        outgoing: false,
+      },
+    ],
   },
   {
     id: 2,
@@ -672,21 +691,22 @@ const classmatesData = [
         id: 1,
         content: "Hi Emma, do you have time to study together?",
         timestamp: "Yesterday, 3:45 PM",
-        outgoing: true
+        outgoing: true,
       },
       {
         id: 2,
-        content: "I'm busy with piano lessons until 6, can we do it after that?",
+        content:
+          "I'm busy with piano lessons until 6, can we do it after that?",
         timestamp: "Yesterday, 4:00 PM",
-        outgoing: false
+        outgoing: false,
       },
       {
         id: 3,
         content: "Can you send me your notes from yesterday?",
         timestamp: "Yesterday, 4:05 PM",
-        outgoing: false
-      }
-    ]
+        outgoing: false,
+      },
+    ],
   },
   {
     id: 3,
@@ -700,21 +720,21 @@ const classmatesData = [
         id: 1,
         content: "I've completed the presentation slides",
         timestamp: "Yesterday, 2:15 PM",
-        outgoing: false
+        outgoing: false,
       },
       {
         id: 2,
         content: "Great! I'll review them and add my section",
         timestamp: "Yesterday, 2:20 PM",
-        outgoing: true
+        outgoing: true,
       },
       {
         id: 3,
         content: "Thanks for helping with the project",
         timestamp: "Yesterday, 2:30 PM",
-        outgoing: false
-      }
-    ]
+        outgoing: false,
+      },
+    ],
   },
   {
     id: 4,
@@ -728,21 +748,21 @@ const classmatesData = [
         id: 1,
         content: "Did you understand the physics homework?",
         timestamp: "Monday, 8:30 PM",
-        outgoing: true
+        outgoing: true,
       },
       {
         id: 2,
         content: "Yes, problem 3 was tricky but I figured it out",
         timestamp: "Monday, 9:00 PM",
-        outgoing: false
+        outgoing: false,
       },
       {
         id: 3,
         content: "See you tomorrow in class",
         timestamp: "Monday, 9:15 PM",
-        outgoing: false
-      }
-    ]
+        outgoing: false,
+      },
+    ],
   },
   {
     id: 5,
@@ -757,36 +777,76 @@ const classmatesData = [
         id: 1,
         content: "Who's free to study for the midterm this weekend?",
         timestamp: "2 days ago, 3:15 PM",
-        outgoing: true
+        outgoing: true,
       },
       {
         id: 2,
         sender: "Emily",
         content: "I can do Saturday afternoon",
         timestamp: "2 days ago, 3:20 PM",
-        outgoing: false
+        outgoing: false,
       },
       {
         id: 3,
         sender: "Jason",
         content: "Let's meet at the library at 4pm",
         timestamp: "2 days ago, 3:45 PM",
-        outgoing: false
-      }
-    ]
-  }
+        outgoing: false,
+      },
+    ],
+  },
 ];
 
-const Classmates = () => {
+const Classmates = ({ user }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedClassmate, setSelectedClassmate] = useState(null);
   const [messageInput, setMessageInput] = useState("");
   const [messages, setMessages] = useState([]);
   const [showAddModal, setShowAddModal] = useState(false);
   const [newContact, setNewContact] = useState({ name: "", email: "" });
-  const [classmates, setClassmates] = useState(classmatesData);
+  const [classmates, setClassmates] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   const chatContentRef = useRef(null);
+
+  // Fetch classmates on component mount
+  useEffect(() => {
+    if (user?.role?.toLowerCase() === "student") {
+      fetchClassmates();
+    }
+  }, [user]);
+
+  const fetchClassmates = async () => {
+    try {
+      setLoading(true);
+      const response = await API.classmates.getClassmates(user?.id);
+
+      // Transform API data to match component expectations
+      const transformedClassmates = response.classmates.map((classmate) => ({
+        id: classmate.id,
+        name: `${classmate.user.firstName} ${classmate.user.lastName}`,
+        email: classmate.user.email,
+        studentId: classmate.user.studentId,
+        avatar: "/api/placeholder/40/40", // Placeholder avatar
+        status: "online", // Mock status
+        lastSeen: "Active now", // Mock last seen
+        commonCourses: classmate.enrollments?.map((e) => e.course.name) || [],
+        messages: [], // Mock messages - you can implement a real messaging system
+        phone: "N/A", // Mock data
+        year: "N/A", // Mock data
+        major:
+          classmate.enrollments?.[0]?.course?.department?.name || "General",
+      }));
+
+      setClassmates(transformedClassmates);
+    } catch (err) {
+      console.error("Error fetching classmates:", err);
+      setError("Failed to load classmates. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Effect to scroll chat to bottom when messages change
   useEffect(() => {
@@ -805,7 +865,7 @@ const Classmates = () => {
   }, [selectedClassmate]);
 
   // Filter classmates based on search term
-  const filteredClassmates = classmates.filter(classmate =>
+  const filteredClassmates = classmates.filter((classmate) =>
     classmate.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -816,8 +876,11 @@ const Classmates = () => {
     const newMessage = {
       id: messages.length + 1,
       content: messageInput,
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      outgoing: true
+      timestamp: new Date().toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+      outgoing: true,
     };
 
     // Update messages state
@@ -825,13 +888,13 @@ const Classmates = () => {
     setMessages(updatedMessages);
 
     // Update classmates with new message
-    const updatedClassmates = classmates.map(classmate => {
+    const updatedClassmates = classmates.map((classmate) => {
       if (classmate.id === selectedClassmate.id) {
         return {
           ...classmate,
           messages: updatedMessages,
           lastMessage: messageInput,
-          lastMessageTime: "Just now"
+          lastMessageTime: "Just now",
         };
       }
       return classmate;
@@ -844,14 +907,15 @@ const Classmates = () => {
       ...selectedClassmate,
       messages: updatedMessages,
       lastMessage: messageInput,
-      lastMessageTime: "Just now"
+      lastMessageTime: "Just now",
     });
 
     // Clear input
     setMessageInput("");
 
     // Simulate response after 1-3 seconds
-    if (Math.random() > 0.3) { // 70% chance of getting a response
+    if (Math.random() > 0.3) {
+      // 70% chance of getting a response
       const delay = 1000 + Math.random() * 2000;
 
       setTimeout(() => {
@@ -869,8 +933,11 @@ const Classmates = () => {
         const responseMessage = {
           id: updatedMessages.length + 1,
           content: responses[Math.floor(Math.random() * responses.length)],
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-          outgoing: false
+          timestamp: new Date().toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+          outgoing: false,
         };
 
         const newUpdatedMessages = [...updatedMessages, responseMessage];
@@ -879,13 +946,13 @@ const Classmates = () => {
         setMessages(newUpdatedMessages);
 
         // Update classmates with new message
-        const newUpdatedClassmates = classmates.map(classmate => {
+        const newUpdatedClassmates = classmates.map((classmate) => {
           if (classmate.id === selectedClassmate.id) {
             return {
               ...classmate,
               messages: newUpdatedMessages,
               lastMessage: responseMessage.content,
-              lastMessageTime: "Just now"
+              lastMessageTime: "Just now",
             };
           }
           return classmate;
@@ -898,7 +965,7 @@ const Classmates = () => {
           ...selectedClassmate,
           messages: newUpdatedMessages,
           lastMessage: responseMessage.content,
-          lastMessageTime: "Just now"
+          lastMessageTime: "Just now",
         });
       }, delay);
     }
@@ -911,11 +978,15 @@ const Classmates = () => {
     const newClassmate = {
       id: classmates.length + 1,
       name: newContact.name,
-      avatar: newContact.name.split(" ").map(n => n[0]).join("").toUpperCase(),
+      avatar: newContact.name
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .toUpperCase(),
       status: "offline",
       lastMessage: "New contact added",
       lastMessageTime: "Just now",
-      messages: []
+      messages: [],
     };
 
     setClassmates([...classmates, newClassmate]);
@@ -928,7 +999,9 @@ const Classmates = () => {
       <GlobalStyles />
 
       <Header>
-        <h1><FaUserFriends /> Classmates</h1>
+        <h1>
+          <FaUserFriends /> Classmates
+        </h1>
         <SearchInputWrapper>
           <FaSearch />
           <input
@@ -943,7 +1016,9 @@ const Classmates = () => {
       <ContentWrapper>
         <ContactsList>
           <ContactsHeader>
-            <h2><FaUserFriends /> Chats</h2>
+            <h2>
+              <FaUserFriends /> Chats
+            </h2>
             <div className="actions">
               <button onClick={() => setShowAddModal(true)}>
                 <FaUserPlus />
@@ -967,7 +1042,9 @@ const Classmates = () => {
             {filteredClassmates.map((classmate) => (
               <ContactItem
                 key={classmate.id}
-                active={selectedClassmate && selectedClassmate.id === classmate.id}
+                active={
+                  selectedClassmate && selectedClassmate.id === classmate.id
+                }
                 onClick={() => setSelectedClassmate(classmate)}
                 whileHover={{ x: 3 }}
               >
@@ -984,7 +1061,13 @@ const Classmates = () => {
             ))}
 
             {filteredClassmates.length === 0 && (
-              <div style={{ padding: '2rem 1rem', textAlign: 'center', color: '#a0a0a0' }}>
+              <div
+                style={{
+                  padding: "2rem 1rem",
+                  textAlign: "center",
+                  color: "#a0a0a0",
+                }}
+              >
                 No conversations found
               </div>
             )}
@@ -997,7 +1080,11 @@ const Classmates = () => {
               <ChatHeader>
                 <div className="user-info">
                   <div className="avatar">
-                    {selectedClassmate.isGroup ? <FaUsers /> : selectedClassmate.avatar}
+                    {selectedClassmate.isGroup ? (
+                      <FaUsers />
+                    ) : (
+                      selectedClassmate.avatar
+                    )}
                     <div className={`status ${selectedClassmate.status}`}></div>
                   </div>
                   <div className="info">
@@ -1037,12 +1124,14 @@ const Classmates = () => {
                     className={message.outgoing ? "outgoing" : "incoming"}
                   >
                     {message.sender && !message.outgoing && (
-                      <div style={{
-                        fontSize: '0.7rem',
-                        fontWeight: '600',
-                        marginBottom: '0.2rem',
-                        color: '#A076F9'
-                      }}>
+                      <div
+                        style={{
+                          fontSize: "0.7rem",
+                          fontWeight: "600",
+                          marginBottom: "0.2rem",
+                          color: "#A076F9",
+                        }}
+                      >
                         {message.sender}
                       </div>
                     )}
@@ -1068,7 +1157,9 @@ const Classmates = () => {
                       placeholder="Type a message..."
                       value={messageInput}
                       onChange={(e) => setMessageInput(e.target.value)}
-                      onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                      onKeyPress={(e) =>
+                        e.key === "Enter" && handleSendMessage()
+                      }
                     />
                   </div>
                   <button className="send-button" onClick={handleSendMessage}>
@@ -1078,24 +1169,33 @@ const Classmates = () => {
               </ChatInputArea>
             </>
           ) : (
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              height: '100%',
-              padding: '2rem'
-            }}>
-              <FaUserFriends style={{ fontSize: '3rem', color: '#A076F9', marginBottom: '1rem' }} />
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                height: "100%",
+                padding: "2rem",
+              }}
+            >
+              <FaUserFriends
+                style={{
+                  fontSize: "3rem",
+                  color: "#A076F9",
+                  marginBottom: "1rem",
+                }}
+              />
               <h2>Select a classmate to start chatting</h2>
-              <p style={{ color: '#a0a0a0', textAlign: 'center' }}>
-                Connect with your classmates, share study resources, and collaborate on projects.
+              <p style={{ color: "#a0a0a0", textAlign: "center" }}>
+                Connect with your classmates, share study resources, and
+                collaborate on projects.
               </p>
               <Button
                 primary
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
-                style={{ marginTop: '1.5rem' }}
+                style={{ marginTop: "1.5rem" }}
                 onClick={() => setShowAddModal(true)}
               >
                 <FaUserPlus /> Add New Classmate
@@ -1119,10 +1219,24 @@ const Classmates = () => {
             transition={{ duration: 0.3 }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-              <h2><FaUserPlus /> Add New Classmate</h2>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "1.5rem",
+              }}
+            >
+              <h2>
+                <FaUserPlus /> Add New Classmate
+              </h2>
               <Button
-                style={{ padding: '0.5rem', minWidth: 'unset', width: '32px', height: '32px' }}
+                style={{
+                  padding: "0.5rem",
+                  minWidth: "unset",
+                  width: "32px",
+                  height: "32px",
+                }}
                 onClick={() => setShowAddModal(false)}
               >
                 <FaTimes />
@@ -1134,7 +1248,9 @@ const Classmates = () => {
               <input
                 type="text"
                 value={newContact.name}
-                onChange={(e) => setNewContact({ ...newContact, name: e.target.value })}
+                onChange={(e) =>
+                  setNewContact({ ...newContact, name: e.target.value })
+                }
                 placeholder="Enter classmate's name"
               />
             </div>
@@ -1144,7 +1260,9 @@ const Classmates = () => {
               <input
                 type="email"
                 value={newContact.email}
-                onChange={(e) => setNewContact({ ...newContact, email: e.target.value })}
+                onChange={(e) =>
+                  setNewContact({ ...newContact, email: e.target.value })
+                }
                 placeholder="Enter classmate's email"
               />
             </div>

@@ -1,0 +1,392 @@
+const express = require("express");
+const cors = require("cors");
+const bcrypt = require("bcryptjs");
+const bodyParser = require("body-parser");
+const { PrismaClient } = require("@prisma/client");
+
+const app = express();
+const PORT = process.env.PORT || 3001;
+const prisma = new PrismaClient();
+
+// Middleware
+app.use(cors());
+app.use(bodyParser.json());
+app.use(express.json());
+
+// Admin credentials (hardcoded as requested)
+const ADMIN_CREDENTIALS = {
+  id: "admin123",
+  password: "admin@123",
+};
+
+// Helper function to generate unique ID
+const generateId = () => {
+  return Date.now().toString(36) + Math.random().toString(36).substr(2);
+};
+
+// Routes
+
+// Student direct registration (no approval needed)
+// Student direct registration (no approval needed)
+app.post("/api/signup/student", async (req, res) => {
+  try {
+    const { firstName, lastName, email, phone, id, password, role } = req.body;
+
+    // Check if user already exists
+    const existingUser = await prisma.user.findFirst({
+      where: {
+        OR: [{ email: email }, { studentId: id }, { employeeId: id }],
+      },
+    });
+
+    if (existingUser) {
+      return res.status(400).json({
+        success: false,
+        message: "User with this email or ID already exists",
+      });
+    }
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create user with student profile using Prisma transaction
+    const newUser = await prisma.$transaction(async (tx) => {
+      const user = await tx.user.create({
+        data: {
+          firstName,
+          lastName,
+          email,
+          phone,
+          studentId: id,
+          password: hashedPassword,
+          role: "STUDENT",
+          status: "APPROVED",
+          studentProfile: {
+            create: {
+              rollNumber: id,
+              semester: 1,
+              academicYear: new Date().getFullYear().toString(),
+              admissionDate: new Date(),
+            },
+          },
+        },
+        include: {
+          studentProfile: true,
+        },
+      });
+      return user;
+    });
+
+    res.status(201).json({
+      success: true,
+      message: "Student account created successfully",
+      user: {
+        id: newUser.id,
+        firstName: newUser.firstName,
+        lastName: newUser.lastName,
+        email: newUser.email,
+        role: newUser.role,
+      },
+    });
+  } catch (error) {
+    console.error("Student registration error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Registration failed. Please try again.",
+    });
+  }
+});
+
+// Non-student registration (requires approval)
+app.post("/api/signup/request", async (req, res) => {
+  try {
+    const { firstName, lastName, email, phone, id, password, role } = req.body;
+
+    const existingUser = await prisma.user.findFirst({
+      where: {
+        OR: [{ email: email }, { studentId: id }, { employeeId: id }],
+      },
+    });
+
+    if (existingUser) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "User with this email or ID already exists or has a pending request",
+      });
+    }
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newRequest = {
+      id: generateId(),
+      firstName,
+      lastName,
+      email,
+      phone,
+      userId: id,
+      password: hashedPassword,
+      role,
+      status: "pending",
+      createdAt: new Date(),
+    };
+
+    pendingUsers.push(newRequest);
+
+    res.status(201).json({
+      success: true,
+      message: `Your ${role} account request has been submitted. Please wait for admin approval.`,
+      requestId: newRequest.id,
+    });
+  } catch (error) {
+    console.error("Registration request error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Request submission failed. Please try again.",
+    });
+  }
+});
+
+// Admin login
+app.post("/api/admin/login", (req, res) => {
+  try {
+    const { id, password } = req.body;
+
+    if (
+      id === ADMIN_CREDENTIALS.id &&
+      password === ADMIN_CREDENTIALS.password
+    ) {
+      res.json({
+        success: true,
+        message: "Admin login successful",
+      });
+    } else {
+      res.status(401).json({
+        success: false,
+        message: "Invalid admin credentials",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Login failed",
+    });
+  }
+});
+
+// Get pending requests (admin only)
+app.get("/api/admin/pending-requests", (req, res) => {
+  try {
+    res.json({
+      success: true,
+      requests: pendingUsers.map((user) => ({
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        phone: user.phone,
+        userId: user.userId,
+        role: user.role,
+        createdAt: user.createdAt,
+      })),
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch requests",
+    });
+  }
+});
+
+// Approve user request (admin only)
+app.post("/api/admin/approve/:requestId", (req, res) => {
+  try {
+    const { requestId } = req.params;
+
+    const requestIndex = pendingUsers.findIndex(
+      (user) => user.id === requestId
+    );
+
+    if (requestIndex === -1) {
+      return res.status(404).json({
+        success: false,
+        message: "Request not found",
+      });
+    }
+
+    const approvedUser = pendingUsers[requestIndex];
+    approvedUser.status = "approved";
+    approvedUser.approvedAt = new Date();
+
+    // Move from pending to approved
+    approvedUsers.push(approvedUser);
+    pendingUsers.splice(requestIndex, 1);
+
+    res.json({
+      success: true,
+      message: `${approvedUser.role} account approved successfully`,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Approval failed",
+    });
+  }
+});
+
+// Reject user request (admin only)
+app.post("/api/admin/reject/:requestId", (req, res) => {
+  try {
+    const { requestId } = req.params;
+    const { reason } = req.body;
+
+    const requestIndex = pendingUsers.findIndex(
+      (user) => user.id === requestId
+    );
+
+    if (requestIndex === -1) {
+      return res.status(404).json({
+        success: false,
+        message: "Request not found",
+      });
+    }
+
+    const rejectedUser = pendingUsers[requestIndex];
+    rejectedUser.status = "rejected";
+    rejectedUser.rejectedAt = new Date();
+    rejectedUser.rejectionReason = reason || "No reason provided";
+
+    // Move from pending to rejected
+    rejectedUsers.push(rejectedUser);
+    pendingUsers.splice(requestIndex, 1);
+
+    res.json({
+      success: true,
+      message: `${rejectedUser.role} account request rejected`,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Rejection failed",
+    });
+  }
+});
+
+// Regular user login
+app.post("/api/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = approvedUsers.find((user) => user.email === email);
+
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid credentials or account not approved",
+      });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid credentials",
+      });
+    }
+
+    res.json({
+      success: true,
+      message: "Login successful",
+      user: {
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        role: user.role,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Login failed",
+    });
+  }
+});
+
+// Get all approved users (admin only)
+app.get("/api/admin/users", (req, res) => {
+  try {
+    res.json({
+      success: true,
+      users: approvedUsers.map((user) => ({
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        phone: user.phone,
+        userId: user.userId,
+        role: user.role,
+        createdAt: user.createdAt,
+        approvedAt: user.approvedAt,
+      })),
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch users",
+    });
+  }
+});
+
+// Check request status
+app.get("/api/request-status/:email", (req, res) => {
+  try {
+    const { email } = req.params;
+
+    const pendingRequest = pendingUsers.find((user) => user.email === email);
+    if (pendingRequest) {
+      return res.json({
+        success: true,
+        status: "pending",
+        message: "Your request is still pending approval",
+      });
+    }
+
+    const approvedUser = approvedUsers.find((user) => user.email === email);
+    if (approvedUser) {
+      return res.json({
+        success: true,
+        status: "approved",
+        message: "Your account has been approved",
+      });
+    }
+
+    const rejectedUser = rejectedUsers.find((user) => user.email === email);
+    if (rejectedUser) {
+      return res.json({
+        success: true,
+        status: "rejected",
+        message: rejectedUser.rejectionReason,
+      });
+    }
+
+    res.status(404).json({
+      success: false,
+      message: "No request found for this email",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Failed to check status",
+    });
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+  console.log("Admin credentials:");
+  console.log("ID:", ADMIN_CREDENTIALS.id);
+  console.log("Password:", ADMIN_CREDENTIALS.password);
+});

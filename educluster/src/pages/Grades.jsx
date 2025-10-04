@@ -17,8 +17,9 @@ import {
   FaBook,
   FaChartLine,
   FaChevronDown,
-  FaChevronUp
+  FaChevronUp,
 } from "react-icons/fa";
+import { API } from "../utils/api";
 
 // Global styles to ensure proper viewport fitting
 const GlobalStyles = createGlobalStyle`
@@ -38,7 +39,7 @@ const GradesContainer = styled.div`
   background-color: #121214;
   color: #e0e0e0;
   padding: 1rem;
-  
+
   @media (max-width: 768px) {
     padding: 0.5rem;
   }
@@ -50,7 +51,7 @@ const Header = styled.header`
   justify-content: space-between;
   margin-bottom: 2rem;
   flex-wrap: wrap;
-  
+
   h1 {
     font-size: 1.8rem;
     font-weight: 700;
@@ -64,12 +65,12 @@ const Header = styled.header`
     gap: 0.8rem;
     margin-right: 1.5rem;
     white-space: nowrap;
-    
+
     svg {
-      color: #A076F9;
+      color: #a076f9;
     }
   }
-  
+
   @media (max-width: 768px) {
     flex-direction: column;
     align-items: flex-start;
@@ -86,7 +87,7 @@ const ToolBar = styled.div`
   width: 100%;
   min-height: 60px;
   padding: 0.5rem 0;
-  
+
   @media (max-width: 768px) {
     width: 100%;
     justify-content: flex-start;
@@ -97,7 +98,7 @@ const ToolBar = styled.div`
     flex-wrap: wrap;
     min-height: 50px;
   }
-  
+
   @media (max-width: 480px) {
     flex-direction: column;
     align-items: stretch;
@@ -111,7 +112,7 @@ const SearchInputWrapper = styled.div`
   width: 100%;
   flex-shrink: 1;
   margin-right: 1rem;
-  
+
   input {
     width: 100%;
     padding: 0.7rem 1rem 0.7rem 2.8rem;
@@ -123,19 +124,19 @@ const SearchInputWrapper = styled.div`
     height: 42px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease;
-    
+
     &:focus {
       outline: none;
       border-color: rgba(160, 118, 249, 0.6);
       box-shadow: 0 0 0 3px rgba(160, 118, 249, 0.2);
       background: rgba(35, 35, 40, 0.9);
     }
-    
+
     &::placeholder {
       color: #909090;
     }
   }
-  
+
   svg {
     position: absolute;
     left: 1rem;
@@ -145,18 +146,18 @@ const SearchInputWrapper = styled.div`
     font-size: 1.1rem;
     transition: color 0.3s ease;
   }
-  
+
   &:focus-within svg {
-    color: #A076F9;
+    color: #a076f9;
   }
-  
+
   @media (max-width: 768px) {
     max-width: 100%;
     margin-right: 0;
     margin-bottom: 0;
     flex-basis: auto;
   }
-  
+
   @media (max-width: 480px) {
     margin-bottom: 0.8rem;
     width: 100%;
@@ -165,20 +166,27 @@ const SearchInputWrapper = styled.div`
 
 const Button = styled(motion.button)`
   padding: 0.7rem 1.4rem;
-  background: ${props => props.primary ? 'linear-gradient(135deg, #A076F9, #7E57C2)' : 'rgba(30, 30, 35, 0.8)'};
-  color: ${props => props.primary ? 'white' : '#e0e0e0'};
-  border: ${props => props.primary ? 'none' : '1px solid rgba(160, 118, 249, 0.4)'};
+  background: ${(props) =>
+    props.primary
+      ? "linear-gradient(135deg, #A076F9, #7E57C2)"
+      : "rgba(30, 30, 35, 0.8)"};
+  color: ${(props) => (props.primary ? "white" : "#e0e0e0")};
+  border: ${(props) =>
+    props.primary ? "none" : "1px solid rgba(160, 118, 249, 0.4)"};
   border-radius: 50px;
   cursor: pointer;
   font-size: 0.9rem;
-  font-weight: ${props => props.primary ? '600' : '500'};
+  font-weight: ${(props) => (props.primary ? "600" : "500")};
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.6rem;
-  box-shadow: ${props => props.primary ? '0 4px 15px rgba(126, 87, 194, 0.3)' : '0 4px 8px rgba(0, 0, 0, 0.2)'};
+  box-shadow: ${(props) =>
+    props.primary
+      ? "0 4px 15px rgba(126, 87, 194, 0.3)"
+      : "0 4px 8px rgba(0, 0, 0, 0.2)"};
   transition: all 0.3s ease;
-  min-width: ${props => props.icon ? '44px' : '130px'};
+  min-width: ${(props) => (props.icon ? "44px" : "130px")};
   height: 42px;
   flex-shrink: 0;
   margin: 0;
@@ -186,28 +194,35 @@ const Button = styled(motion.button)`
   overflow: visible;
   position: relative;
   z-index: 1;
-  
+
   &:hover {
     transform: translateY(-1px);
-    box-shadow: ${props => props.primary ? '0 6px 20px rgba(126, 87, 194, 0.4)' : '0 6px 15px rgba(0, 0, 0, 0.25)'};
-    background: ${props => props.primary ? 'linear-gradient(135deg, #b18aff, #9065db)' : 'rgba(45, 45, 50, 0.9)'};
-    border-color: ${props => props.primary ? 'none' : 'rgba(160, 118, 249, 0.6)'};
+    box-shadow: ${(props) =>
+      props.primary
+        ? "0 6px 20px rgba(126, 87, 194, 0.4)"
+        : "0 6px 15px rgba(0, 0, 0, 0.25)"};
+    background: ${(props) =>
+      props.primary
+        ? "linear-gradient(135deg, #b18aff, #9065db)"
+        : "rgba(45, 45, 50, 0.9)"};
+    border-color: ${(props) =>
+      props.primary ? "none" : "rgba(160, 118, 249, 0.6)"};
   }
-  
+
   &:active {
     transform: translateY(0);
   }
-  
+
   @media (max-width: 768px) {
-    min-width: ${props => props.icon ? '40px' : '110px'};
-    padding: 0.7rem ${props => props.icon ? '0.9rem' : '1.2rem'};
+    min-width: ${(props) => (props.icon ? "40px" : "110px")};
+    padding: 0.7rem ${(props) => (props.icon ? "0.9rem" : "1.2rem")};
     font-size: 0.85rem;
     height: 40px;
   }
-  
+
   @media (max-width: 480px) {
-    min-width: ${props => props.icon ? '38px' : '100px'};
-    padding: 0.6rem ${props => props.icon ? '0.8rem' : '1rem'};
+    min-width: ${(props) => (props.icon ? "38px" : "100px")};
+    padding: 0.6rem ${(props) => (props.icon ? "0.8rem" : "1rem")};
     font-size: 0.8rem;
     height: 38px;
   }
@@ -224,14 +239,14 @@ const TabsContainer = styled.div`
   width: 100%;
   justify-content: flex-start;
   align-items: center;
-  
+
   @media (max-width: 768px) {
     gap: 0.8rem;
     padding: 0.5rem 0 1.2rem 0;
     margin-bottom: 1rem;
     justify-content: center;
   }
-  
+
   @media (max-width: 480px) {
     gap: 0.6rem;
     justify-content: flex-start;
@@ -240,13 +255,15 @@ const TabsContainer = styled.div`
 
 const Tab = styled(motion.button)`
   padding: 0.8rem 1.6rem;
-  background: ${props => props.active ? 'rgba(160, 118, 249, 0.15)' : 'rgba(30, 30, 35, 0.8)'};
-  color: ${props => props.active ? '#A076F9' : '#b0b0b0'};
-  border: ${props => props.active ? '2px solid #A076F9' : '2px solid rgba(160, 118, 249, 0.2)'};
+  background: ${(props) =>
+    props.active ? "rgba(160, 118, 249, 0.15)" : "rgba(30, 30, 35, 0.8)"};
+  color: ${(props) => (props.active ? "#A076F9" : "#b0b0b0")};
+  border: ${(props) =>
+    props.active ? "2px solid #A076F9" : "2px solid rgba(160, 118, 249, 0.2)"};
   border-radius: 10px;
   cursor: pointer;
   font-size: 0.9rem;
-  font-weight: ${props => props.active ? '600' : '500'};
+  font-weight: ${(props) => (props.active ? "600" : "500")};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -255,23 +272,31 @@ const Tab = styled(motion.button)`
   white-space: nowrap;
   min-width: fit-content;
   margin: 0.2rem;
-  box-shadow: ${props => props.active ? '0 4px 15px rgba(160, 118, 249, 0.2)' : '0 2px 8px rgba(0, 0, 0, 0.1)'};
+  box-shadow: ${(props) =>
+    props.active
+      ? "0 4px 15px rgba(160, 118, 249, 0.2)"
+      : "0 2px 8px rgba(0, 0, 0, 0.1)"};
   box-sizing: border-box;
   position: relative;
   flex-shrink: 0;
-  
+
   &:hover {
-    background: ${props => props.active ? 'rgba(160, 118, 249, 0.25)' : 'rgba(45, 45, 50, 0.9)'};
-    color: ${props => props.active ? '#A076F9' : '#e0e0e0'};
-    border-color: ${props => props.active ? '#A076F9' : 'rgba(160, 118, 249, 0.4)'};
+    background: ${(props) =>
+      props.active ? "rgba(160, 118, 249, 0.25)" : "rgba(45, 45, 50, 0.9)"};
+    color: ${(props) => (props.active ? "#A076F9" : "#e0e0e0")};
+    border-color: ${(props) =>
+      props.active ? "#A076F9" : "rgba(160, 118, 249, 0.4)"};
     transform: translateY(-1px);
-    box-shadow: ${props => props.active ? '0 6px 20px rgba(160, 118, 249, 0.25)' : '0 4px 12px rgba(0, 0, 0, 0.15)'};
+    box-shadow: ${(props) =>
+      props.active
+        ? "0 6px 20px rgba(160, 118, 249, 0.25)"
+        : "0 4px 12px rgba(0, 0, 0, 0.15)"};
   }
-  
+
   &:active {
     transform: translateY(0);
   }
-  
+
   @media (max-width: 768px) {
     padding: 0.7rem 1.3rem;
     font-size: 0.85rem;
@@ -279,7 +304,7 @@ const Tab = styled(motion.button)`
     flex: 1;
     min-width: 120px;
   }
-  
+
   @media (max-width: 480px) {
     padding: 0.6rem 1rem;
     font-size: 0.8rem;
@@ -295,13 +320,13 @@ const ButtonGroup = styled.div`
   align-items: center;
   flex-wrap: wrap;
   min-height: 42px;
-  
+
   @media (max-width: 768px) {
     gap: 0.8rem;
     width: 100%;
     justify-content: flex-start;
   }
-  
+
   @media (max-width: 480px) {
     gap: 0.6rem;
     flex-direction: row;
@@ -313,7 +338,7 @@ const ContentWrapper = styled.div`
   display: flex;
   gap: 2rem;
   padding: 0.5rem 0;
-  
+
   @media (max-width: 1024px) {
     flex-direction: column;
     gap: 1.5rem;
@@ -340,7 +365,7 @@ const GradeHeader = styled.div`
   align-items: flex-start;
   padding: 1rem 1.5rem;
   border-bottom: 1px solid rgba(50, 50, 60, 0.4);
-  
+
   .course-info {
     .course-name {
       font-size: 1.2rem;
@@ -348,35 +373,35 @@ const GradeHeader = styled.div`
       margin: 0 0 0.3rem 0;
       color: #e0e0e0;
     }
-    
+
     .course-code {
       font-size: 0.9rem;
       color: #a0a0a0;
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      
+
       svg {
-        color: #A076F9;
+        color: #a076f9;
       }
     }
   }
-  
+
   .grade-display {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    
+
     .grade-value {
       font-size: 1.8rem;
       font-weight: 700;
-      background: linear-gradient(135deg, #A076F9, #7E57C2);
+      background: linear-gradient(135deg, #a076f9, #7e57c2);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
       margin-bottom: 0.2rem;
     }
-    
+
     .grade-percentage {
       font-size: 0.9rem;
       color: #a0a0a0;
@@ -386,7 +411,7 @@ const GradeHeader = styled.div`
 
 const GradeContent = styled.div`
   padding: 0 1.5rem;
-  
+
   &.collapsed {
     height: 0;
     padding: 0;
@@ -409,12 +434,12 @@ const ExpandButton = styled.button`
   justify-content: center;
   gap: 0.5rem;
   transition: all 0.2s ease;
-  
+
   &:hover {
     background: rgba(160, 118, 249, 0.05);
-    color: #A076F9;
+    color: #a076f9;
   }
-  
+
   &:active {
     background: rgba(160, 118, 249, 0.1);
   }
@@ -424,30 +449,31 @@ const AssignmentTable = styled.table`
   width: 100%;
   border-collapse: collapse;
   margin: 1rem 0;
-  
-  th, td {
+
+  th,
+  td {
     padding: 0.8rem;
     text-align: left;
     border-bottom: 1px solid rgba(50, 50, 60, 0.4);
   }
-  
+
   th {
     color: #a0a0a0;
     font-weight: 500;
     font-size: 0.85rem;
   }
-  
+
   td {
     font-size: 0.9rem;
   }
-  
+
   .score-cell {
     text-align: center;
   }
-  
+
   .status-cell {
     text-align: center;
-    
+
     .status {
       padding: 0.3rem 0.6rem;
       border-radius: 20px;
@@ -456,20 +482,20 @@ const AssignmentTable = styled.table`
       display: inline-flex;
       align-items: center;
       gap: 0.4rem;
-      
+
       &.completed {
         background: rgba(76, 175, 80, 0.15);
-        color: #4CAF50;
+        color: #4caf50;
       }
-      
+
       &.pending {
         background: rgba(255, 193, 7, 0.15);
-        color: #FFC107;
+        color: #ffc107;
       }
-      
+
       &.missed {
         background: rgba(244, 67, 54, 0.15);
-        color: #F44336;
+        color: #f44336;
       }
     }
   }
@@ -477,7 +503,7 @@ const AssignmentTable = styled.table`
 
 const SidebarWrapper = styled.div`
   width: 300px;
-  
+
   @media (max-width: 1024px) {
     width: 100%;
   }
@@ -490,7 +516,7 @@ const StatCard = styled(motion.div)`
   margin-bottom: 1rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(50, 50, 60, 0.4);
-  
+
   h3 {
     font-size: 1.1rem;
     color: #e0e0e0;
@@ -498,9 +524,9 @@ const StatCard = styled(motion.div)`
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    
+
     svg {
-      color: #A076F9;
+      color: #a076f9;
     }
   }
 `;
@@ -510,33 +536,33 @@ const GradeDistribution = styled.div`
   flex-direction: column;
   gap: 0.7rem;
   margin-top: 1rem;
-  
+
   .grade-bar {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    
+
     .label {
       width: 30px;
       font-weight: 600;
       text-align: center;
     }
-    
+
     .bar-wrapper {
       flex: 1;
       height: 6px;
       background: rgba(50, 50, 60, 0.4);
       border-radius: 3px;
       overflow: hidden;
-      
+
       .bar {
         height: 100%;
-        background: linear-gradient(90deg, #A076F9, #7E57C2);
+        background: linear-gradient(90deg, #a076f9, #7e57c2);
         border-radius: 3px;
         transition: width 1s ease;
       }
     }
-    
+
     .count {
       width: 30px;
       font-size: 0.8rem;
@@ -552,7 +578,7 @@ const GradePercentage = styled.div`
   flex-wrap: wrap;
   gap: 1rem;
   margin-top: 1rem;
-  
+
   .grade-stat {
     background: rgba(30, 30, 35, 0.6);
     padding: 0.8rem 1rem;
@@ -561,7 +587,7 @@ const GradePercentage = styled.div`
     flex-direction: column;
     align-items: center;
     min-width: calc(50% - 0.5rem);
-    
+
     .value {
       font-size: 1.3rem;
       font-weight: 600;
@@ -569,20 +595,20 @@ const GradePercentage = styled.div`
       display: flex;
       align-items: center;
       gap: 0.4rem;
-      
+
       &.positive {
-        color: #4CAF50;
+        color: #4caf50;
       }
-      
+
       &.negative {
-        color: #F44336;
+        color: #f44336;
       }
-      
+
       &.neutral {
-        color: #A076F9;
+        color: #a076f9;
       }
     }
-    
+
     .label {
       font-size: 0.8rem;
       color: #a0a0a0;
@@ -594,36 +620,36 @@ const GradePercentage = styled.div`
 const GradeProgressCard = styled(StatCard)`
   .progress-section {
     margin-bottom: 1.5rem;
-    
+
     &:last-child {
       margin-bottom: 0;
     }
-    
+
     .header {
       display: flex;
       justify-content: space-between;
       margin-bottom: 0.5rem;
-      
+
       .title {
         font-size: 0.9rem;
         color: #c0c0c0;
       }
-      
+
       .value {
         font-size: 0.9rem;
-        color: #A076F9;
+        color: #a076f9;
       }
     }
-    
+
     .progress-bar {
       height: 6px;
       background: rgba(50, 50, 60, 0.4);
       border-radius: 3px;
       overflow: hidden;
-      
+
       .bar {
         height: 100%;
-        background: linear-gradient(90deg, #A076F9, #7E57C2);
+        background: linear-gradient(90deg, #a076f9, #7e57c2);
         border-radius: 3px;
       }
     }
@@ -636,13 +662,13 @@ const ActivityChart = styled.div`
   align-items: flex-end;
   gap: 5px;
   margin: 1.5rem 0 0.5rem;
-  
+
   .bar {
     flex: 1;
-    background: linear-gradient(180deg, #A076F9 0%, #7E57C2 100%);
+    background: linear-gradient(180deg, #a076f9 0%, #7e57c2 100%);
     border-radius: 3px 3px 0 0;
     transition: height 0.5s ease;
-    
+
     &.inactive {
       background: rgba(50, 50, 60, 0.4);
     }
@@ -652,7 +678,7 @@ const ActivityChart = styled.div`
 const ActivityLabels = styled.div`
   display: flex;
   justify-content: space-between;
-  
+
   .label {
     font-size: 0.75rem;
     color: #a0a0a0;
@@ -676,7 +702,7 @@ const coursesData = [
         dueDate: "2025-06-10",
         score: "48/50",
         percentage: 96,
-        status: "completed"
+        status: "completed",
       },
       {
         id: 2,
@@ -684,7 +710,7 @@ const coursesData = [
         dueDate: "2025-06-15",
         score: "28/30",
         percentage: 93,
-        status: "completed"
+        status: "completed",
       },
       {
         id: 3,
@@ -692,7 +718,7 @@ const coursesData = [
         dueDate: "2025-06-25",
         score: "88/100",
         percentage: 88,
-        status: "completed"
+        status: "completed",
       },
       {
         id: 4,
@@ -700,10 +726,10 @@ const coursesData = [
         dueDate: "2025-07-30",
         score: "N/A",
         percentage: null,
-        status: "pending"
-      }
+        status: "pending",
+      },
     ],
-    professor: "Dr. Sarah Miller"
+    professor: "Dr. Sarah Miller",
   },
   {
     id: 2,
@@ -718,7 +744,7 @@ const coursesData = [
         dueDate: "2025-06-05",
         score: "10/10",
         percentage: 100,
-        status: "completed"
+        status: "completed",
       },
       {
         id: 2,
@@ -726,7 +752,7 @@ const coursesData = [
         dueDate: "2025-06-12",
         score: "20/20",
         percentage: 100,
-        status: "completed"
+        status: "completed",
       },
       {
         id: 3,
@@ -734,7 +760,7 @@ const coursesData = [
         dueDate: "2025-06-20",
         score: "19/20",
         percentage: 95,
-        status: "completed"
+        status: "completed",
       },
       {
         id: 4,
@@ -742,7 +768,7 @@ const coursesData = [
         dueDate: "2025-06-27",
         score: "28/30",
         percentage: 93,
-        status: "completed"
+        status: "completed",
       },
       {
         id: 5,
@@ -750,10 +776,10 @@ const coursesData = [
         dueDate: "2025-07-15",
         score: "97/100",
         percentage: 97,
-        status: "completed"
-      }
+        status: "completed",
+      },
     ],
-    professor: "Prof. Michael Chen"
+    professor: "Prof. Michael Chen",
   },
   {
     id: 3,
@@ -768,7 +794,7 @@ const coursesData = [
         dueDate: "2025-06-08",
         score: "45/50",
         percentage: 90,
-        status: "completed"
+        status: "completed",
       },
       {
         id: 2,
@@ -776,7 +802,7 @@ const coursesData = [
         dueDate: "2025-06-18",
         score: "18/25",
         percentage: 72,
-        status: "completed"
+        status: "completed",
       },
       {
         id: 3,
@@ -784,7 +810,7 @@ const coursesData = [
         dueDate: "2025-06-22",
         score: "92/100",
         percentage: 92,
-        status: "completed"
+        status: "completed",
       },
       {
         id: 4,
@@ -792,7 +818,7 @@ const coursesData = [
         dueDate: "2025-07-02",
         score: "43/50",
         percentage: 86,
-        status: "completed"
+        status: "completed",
       },
       {
         id: 5,
@@ -800,10 +826,10 @@ const coursesData = [
         dueDate: "2025-07-20",
         score: "N/A",
         percentage: null,
-        status: "pending"
-      }
+        status: "pending",
+      },
     ],
-    professor: "Dr. James Wilson"
+    professor: "Dr. James Wilson",
   },
   {
     id: 4,
@@ -818,7 +844,7 @@ const coursesData = [
         dueDate: "2025-06-07",
         score: "15/20",
         percentage: 75,
-        status: "completed"
+        status: "completed",
       },
       {
         id: 2,
@@ -826,7 +852,7 @@ const coursesData = [
         dueDate: "2025-06-14",
         score: "25/30",
         percentage: 83,
-        status: "completed"
+        status: "completed",
       },
       {
         id: 3,
@@ -834,7 +860,7 @@ const coursesData = [
         dueDate: "2025-06-21",
         score: "N/A",
         percentage: null,
-        status: "missed"
+        status: "missed",
       },
       {
         id: 4,
@@ -842,7 +868,7 @@ const coursesData = [
         dueDate: "2025-06-30",
         score: "18/25",
         percentage: 72,
-        status: "completed"
+        status: "completed",
       },
       {
         id: 5,
@@ -850,107 +876,224 @@ const coursesData = [
         dueDate: "2025-07-10",
         score: "70/100",
         percentage: 70,
-        status: "completed"
-      }
+        status: "completed",
+      },
     ],
-    professor: "Prof. Emma Rodriguez"
-  }
+    professor: "Prof. Emma Rodriguez",
+  },
 ];
 
 // Sample grade distribution for statistics
 const gradeDistribution = {
   "A+": 3,
-  "A": 5,
+  A: 5,
   "A-": 4,
   "B+": 7,
-  "B": 10,
+  B: 10,
   "B-": 6,
   "C+": 5,
-  "C": 4,
+  C: 4,
   "C-": 2,
-  "D": 1,
-  "F": 0
+  D: 1,
+  F: 0,
 };
 
 // Sample activities data
 const activitiesData = [60, 45, 75, 40, 80, 90, 65];
 const activityLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-const Grades = () => {
+const Grades = ({ user }) => {
   const [activeTab, setActiveTab] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOrder, setSortOrder] = useState("name");
   const [sortDirection, setSortDirection] = useState("asc");
   const [expandedCourses, setExpandedCourses] = useState({});
-  const [courses, setCourses] = useState(coursesData);
+  const [grades, setGrades] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  // Fetch grades on component mount
+  useEffect(() => {
+    fetchGrades();
+  }, [user]);
+
+  const fetchGrades = async () => {
+    try {
+      setLoading(true);
+      const response = await API.grades.getGrades(user?.id);
+
+      // Group grades by course and transform data
+      const courseGrades = {};
+      response.grades.forEach((grade) => {
+        const courseId = grade.assignment.course.id;
+        const courseName = grade.assignment.course.name;
+
+        if (!courseGrades[courseId]) {
+          courseGrades[courseId] = {
+            id: courseId,
+            name: courseName,
+            code: grade.assignment.course.code || "N/A",
+            instructor: grade.assignment.faculty
+              ? `${grade.assignment.faculty.user.firstName} ${grade.assignment.faculty.user.lastName}`
+              : "TBA",
+            credits: grade.assignment.course.credits || 3,
+            assignments: [],
+            totalMarks: 0,
+            totalMaxMarks: 0,
+          };
+        }
+
+        courseGrades[courseId].assignments.push({
+          id: grade.id,
+          title: grade.assignment.title,
+          marks: grade.marks,
+          maxMarks: grade.assignment.maxMarks,
+          submittedAt: grade.submittedAt,
+          gradedAt: grade.gradedAt,
+          feedback: grade.feedback,
+        });
+
+        courseGrades[courseId].totalMarks += grade.marks;
+        courseGrades[courseId].totalMaxMarks += grade.assignment.maxMarks;
+      });
+
+      // Calculate grades and percentages
+      const transformedGrades = Object.values(courseGrades).map((course) => {
+        const percentage =
+          course.totalMaxMarks > 0
+            ? Math.round((course.totalMarks / course.totalMaxMarks) * 100)
+            : 0;
+
+        let grade = "F";
+        if (percentage >= 90) grade = "A";
+        else if (percentage >= 80) grade = "B";
+        else if (percentage >= 70) grade = "C";
+        else if (percentage >= 60) grade = "D";
+
+        return {
+          ...course,
+          percentage,
+          grade,
+          status: "Completed",
+          trend: "stable", // You can implement trend calculation
+        };
+      });
+
+      setGrades(transformedGrades);
+    } catch (err) {
+      console.error("Error fetching grades:", err);
+      setError("Failed to load grades. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Toggle sort direction
   const toggleSortDirection = () => {
-    setSortDirection(prev => prev === "asc" ? "desc" : "asc");
+    setSortDirection((prev) => (prev === "asc" ? "desc" : "asc"));
   };
 
   // Toggle expanded state of a course
   const toggleCourseExpanded = (courseId) => {
-    setExpandedCourses(prev => ({
+    setExpandedCourses((prev) => ({
       ...prev,
-      [courseId]: !prev[courseId]
+      [courseId]: !prev[courseId],
     }));
   };
 
   // Calculate overall GPA
   const calculateGPA = () => {
     const gradePoints = {
-      "A+": 4.0, "A": 4.0, "A-": 3.7,
-      "B+": 3.3, "B": 3.0, "B-": 2.7,
-      "C+": 2.3, "C": 2.0, "C-": 1.7,
-      "D+": 1.3, "D": 1.0, "F": 0.0
+      "A+": 4.0,
+      A: 4.0,
+      "A-": 3.7,
+      "B+": 3.3,
+      B: 3.0,
+      "B-": 2.7,
+      "C+": 2.3,
+      C: 2.0,
+      "C-": 1.7,
+      "D+": 1.3,
+      D: 1.0,
+      F: 0.0,
     };
 
-    const totalPoints = courses.reduce((sum, course) => sum + gradePoints[course.grade], 0);
-    return (totalPoints / courses.length).toFixed(2);
+    const totalPoints = grades.reduce(
+      (sum, course) => sum + gradePoints[course.grade],
+      0
+    );
+    return grades.length > 0
+      ? (totalPoints / grades.length).toFixed(2)
+      : "0.00";
   };
 
   // Calculate overall percentage
   const calculateAveragePercentage = () => {
-    const totalPercentage = courses.reduce((sum, course) => sum + course.percentage, 0);
-    return (totalPercentage / courses.length).toFixed(1);
+    const totalPercentage = grades.reduce(
+      (sum, course) => sum + course.percentage,
+      0
+    );
+    return grades.length > 0
+      ? (totalPercentage / grades.length).toFixed(1)
+      : "0.0";
   };
 
   // Filter and sort courses
-  const filteredCourses = courses.filter(course => {
-    if (searchTerm && !course.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      !course.code.toLowerCase().includes(searchTerm.toLowerCase())) {
-      return false;
-    }
+  const filteredCourses = grades
+    .filter((course) => {
+      if (
+        searchTerm &&
+        !course.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+        !course.code.toLowerCase().includes(searchTerm.toLowerCase())
+      ) {
+        return false;
+      }
 
-    if (activeTab === "highGrades" && course.percentage < 90) return false;
-    if (activeTab === "lowGrades" && course.percentage >= 70) return false;
+      if (activeTab === "highGrades" && course.percentage < 90) return false;
+      if (activeTab === "lowGrades" && course.percentage >= 70) return false;
 
-    return true;
-  }).sort((a, b) => {
-    if (sortOrder === "name") {
-      return sortDirection === "asc"
-        ? a.name.localeCompare(b.name)
-        : b.name.localeCompare(a.name);
-    } else if (sortOrder === "grade") {
-      const gradeOrder = ["A+", "A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D+", "D", "D-", "F"];
-      const indexA = gradeOrder.indexOf(a.grade);
-      const indexB = gradeOrder.indexOf(b.grade);
-      return sortDirection === "asc" ? indexA - indexB : indexB - indexA;
-    } else if (sortOrder === "percentage") {
-      return sortDirection === "asc"
-        ? a.percentage - b.percentage
-        : b.percentage - a.percentage;
-    }
-    return 0;
-  });
+      return true;
+    })
+    .sort((a, b) => {
+      if (sortOrder === "name") {
+        return sortDirection === "asc"
+          ? a.name.localeCompare(b.name)
+          : b.name.localeCompare(a.name);
+      } else if (sortOrder === "grade") {
+        const gradeOrder = [
+          "A+",
+          "A",
+          "A-",
+          "B+",
+          "B",
+          "B-",
+          "C+",
+          "C",
+          "C-",
+          "D+",
+          "D",
+          "D-",
+          "F",
+        ];
+        const indexA = gradeOrder.indexOf(a.grade);
+        const indexB = gradeOrder.indexOf(b.grade);
+        return sortDirection === "asc" ? indexA - indexB : indexB - indexA;
+      } else if (sortOrder === "percentage") {
+        return sortDirection === "asc"
+          ? a.percentage - b.percentage
+          : b.percentage - a.percentage;
+      }
+      return 0;
+    });
 
   return (
     <GradesContainer>
       <GlobalStyles />
 
       <Header>
-        <h1><FaGraduationCap /> Grades</h1>
+        <h1>
+          <FaGraduationCap /> Grades
+        </h1>
         <ToolBar>
           <SearchInputWrapper>
             <FaSearch />
@@ -964,12 +1107,19 @@ const Grades = () => {
 
           <ButtonGroup>
             <Button
-              onClick={() => setSortOrder(sortOrder === "name" ? "percentage" : "name")}
+              onClick={() =>
+                setSortOrder(sortOrder === "name" ? "percentage" : "name")
+              }
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               aria-label="Change sort order"
             >
-              Sort: {sortOrder === "name" ? "Name" : sortOrder === "grade" ? "Grade" : "%"}
+              Sort:{" "}
+              {sortOrder === "name"
+                ? "Name"
+                : sortOrder === "grade"
+                ? "Grade"
+                : "%"}
             </Button>
 
             <Button
@@ -977,9 +1127,15 @@ const Grades = () => {
               onClick={toggleSortDirection}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
-              aria-label={`Sort ${sortDirection === "asc" ? "ascending" : "descending"}`}
+              aria-label={`Sort ${
+                sortDirection === "asc" ? "ascending" : "descending"
+              }`}
             >
-              {sortDirection === "asc" ? <FaSortAmountDown /> : <FaSortAmountUp />}
+              {sortDirection === "asc" ? (
+                <FaSortAmountDown />
+              ) : (
+                <FaSortAmountUp />
+              )}
             </Button>
           </ButtonGroup>
 
@@ -998,10 +1154,16 @@ const Grades = () => {
         <Tab active={activeTab === "all"} onClick={() => setActiveTab("all")}>
           All Grades
         </Tab>
-        <Tab active={activeTab === "highGrades"} onClick={() => setActiveTab("highGrades")}>
+        <Tab
+          active={activeTab === "highGrades"}
+          onClick={() => setActiveTab("highGrades")}
+        >
           <FaCheckCircle /> High Grades (A & A+)
         </Tab>
-        <Tab active={activeTab === "lowGrades"} onClick={() => setActiveTab("lowGrades")}>
+        <Tab
+          active={activeTab === "lowGrades"}
+          onClick={() => setActiveTab("lowGrades")}
+        >
           <FaExclamationCircle /> Needs Improvement (Below C)
         </Tab>
       </TabsContainer>
@@ -1028,7 +1190,9 @@ const Grades = () => {
                 </div>
               </GradeHeader>
 
-              <GradeContent className={!expandedCourses[course.id] ? "collapsed" : ""}>
+              <GradeContent
+                className={!expandedCourses[course.id] ? "collapsed" : ""}
+              >
                 <AssignmentTable>
                   <thead>
                     <tr>
@@ -1039,22 +1203,35 @@ const Grades = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {course.assignments.map(assignment => (
+                    {course.assignments.map((assignment) => (
                       <tr key={assignment.id}>
                         <td>{assignment.name}</td>
-                        <td>{new Date(assignment.dueDate).toLocaleDateString('en-US', {
-                          year: 'numeric', month: 'short', day: 'numeric'
-                        })}</td>
+                        <td>
+                          {new Date(assignment.dueDate).toLocaleDateString(
+                            "en-US",
+                            {
+                              year: "numeric",
+                              month: "short",
+                              day: "numeric",
+                            }
+                          )}
+                        </td>
                         <td className="score-cell">
                           {assignment.score}
-                          {assignment.percentage !== null && ` (${assignment.percentage}%)`}
+                          {assignment.percentage !== null &&
+                            ` (${assignment.percentage}%)`}
                         </td>
                         <td className="status-cell">
                           <div className={`status ${assignment.status}`}>
-                            {assignment.status === "completed" && <FaCheckCircle />}
+                            {assignment.status === "completed" && (
+                              <FaCheckCircle />
+                            )}
                             {assignment.status === "pending" && <FaClock />}
-                            {assignment.status === "missed" && <FaTimesCircle />}
-                            {assignment.status.charAt(0).toUpperCase() + assignment.status.slice(1)}
+                            {assignment.status === "missed" && (
+                              <FaTimesCircle />
+                            )}
+                            {assignment.status.charAt(0).toUpperCase() +
+                              assignment.status.slice(1)}
                           </div>
                         </td>
                       </tr>
@@ -1078,16 +1255,24 @@ const Grades = () => {
           ))}
 
           {filteredCourses.length === 0 && (
-            <div style={{
-              textAlign: 'center',
-              padding: '3rem',
-              color: '#a0a0a0',
-              background: 'rgba(25, 25, 30, 0.8)',
-              borderRadius: '12px',
-              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
-              border: '1px solid rgba(50, 50, 60, 0.4)',
-            }}>
-              <FaGraduationCap style={{ fontSize: '3rem', color: '#A076F9', marginBottom: '1rem' }} />
+            <div
+              style={{
+                textAlign: "center",
+                padding: "3rem",
+                color: "#a0a0a0",
+                background: "rgba(25, 25, 30, 0.8)",
+                borderRadius: "12px",
+                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)",
+                border: "1px solid rgba(50, 50, 60, 0.4)",
+              }}
+            >
+              <FaGraduationCap
+                style={{
+                  fontSize: "3rem",
+                  color: "#A076F9",
+                  marginBottom: "1rem",
+                }}
+              />
               <h2>No courses found</h2>
               <p>Try adjusting your search criteria</p>
             </div>
@@ -1100,14 +1285,18 @@ const Grades = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <h3><FaChartBar /> Grade Summary</h3>
+            <h3>
+              <FaChartBar /> Grade Summary
+            </h3>
             <GradePercentage>
               <div className="grade-stat">
                 <div className="value neutral">{calculateGPA()}</div>
                 <div className="label">GPA</div>
               </div>
               <div className="grade-stat">
-                <div className="value neutral">{calculateAveragePercentage()}%</div>
+                <div className="value neutral">
+                  {calculateAveragePercentage()}%
+                </div>
                 <div className="label">Average</div>
               </div>
               <div className="grade-stat">
@@ -1117,7 +1306,7 @@ const Grades = () => {
                 <div className="label">From Last Term</div>
               </div>
               <div className="grade-stat">
-                <div className="value neutral">{courses.length}</div>
+                <div className="value neutral">{grades.length}</div>
                 <div className="label">Courses</div>
               </div>
             </GradePercentage>
@@ -1128,13 +1317,18 @@ const Grades = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.3, delay: 0.1 }}
           >
-            <h3><FaChartBar /> Grade Distribution</h3>
+            <h3>
+              <FaChartBar /> Grade Distribution
+            </h3>
             <GradeDistribution>
               {Object.entries(gradeDistribution).map(([grade, count]) => (
                 <div className="grade-bar" key={grade}>
                   <div className="label">{grade}</div>
                   <div className="bar-wrapper">
-                    <div className="bar" style={{ width: `${Math.min(100, count * 10)}%` }}></div>
+                    <div
+                      className="bar"
+                      style={{ width: `${Math.min(100, count * 10)}%` }}
+                    ></div>
                   </div>
                   <div className="count">{count}</div>
                 </div>
@@ -1147,7 +1341,9 @@ const Grades = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.3, delay: 0.2 }}
           >
-            <h3><FaChartLine /> Progress Tracker</h3>
+            <h3>
+              <FaChartLine /> Progress Tracker
+            </h3>
             <div className="progress-section">
               <div className="header">
                 <div className="title">Semester Completion</div>
@@ -1184,19 +1380,23 @@ const Grades = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.3, delay: 0.3 }}
           >
-            <h3><FaChartBar /> Weekly Activity</h3>
+            <h3>
+              <FaChartBar /> Weekly Activity
+            </h3>
             <ActivityChart>
               {activitiesData.map((value, index) => (
                 <div
                   key={index}
-                  className={`bar ${value === 0 ? 'inactive' : ''}`}
+                  className={`bar ${value === 0 ? "inactive" : ""}`}
                   style={{ height: `${value}%` }}
                 ></div>
               ))}
             </ActivityChart>
             <ActivityLabels>
               {activityLabels.map((label, index) => (
-                <div key={index} className="label">{label}</div>
+                <div key={index} className="label">
+                  {label}
+                </div>
               ))}
             </ActivityLabels>
           </StatCard>
