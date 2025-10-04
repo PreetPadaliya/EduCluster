@@ -110,13 +110,13 @@ const Button = styled(motion.button)`
 
   &:hover {
     box-shadow: ${(props) =>
-      props.primary
-        ? "0 6px 20px rgba(126, 87, 194, 0.4)"
-        : "0 4px 12px rgba(0, 0, 0, 0.2)"};
+    props.primary
+      ? "0 6px 20px rgba(126, 87, 194, 0.4)"
+      : "0 4px 12px rgba(0, 0, 0, 0.2)"};
     background: ${(props) =>
-      props.primary
-        ? "linear-gradient(135deg, #b18aff, #9065db)"
-        : "rgba(40, 40, 45, 0.6)"};
+    props.primary
+      ? "linear-gradient(135deg, #b18aff, #9065db)"
+      : "rgba(40, 40, 45, 0.6)"};
   }
 `;
 
@@ -167,7 +167,7 @@ const Tab = styled(motion.button)`
     background: rgba(160, 118, 249, 0.1);
     color: ${(props) => (props.active ? "#A076F9" : "#d0d0d0")};
     border-color: ${(props) =>
-      props.active ? "#A076F9" : "rgba(160, 118, 249, 0.3)"};
+    props.active ? "#A076F9" : "rgba(160, 118, 249, 0.3)"};
   }
 
   @media (max-width: 768px) {
@@ -259,7 +259,7 @@ const CalendarDay = styled.div`
     props.isToday ? "rgba(160, 118, 249, 0.15)" : "rgba(25, 25, 30, 0.8)"};
   border: 1px solid
     ${(props) =>
-      props.isToday ? "rgba(160, 118, 249, 0.4)" : "rgba(50, 50, 60, 0.4)"};
+    props.isToday ? "rgba(160, 118, 249, 0.4)" : "rgba(50, 50, 60, 0.4)"};
   border-radius: 8px;
   padding: 0.5rem;
   min-height: 100px;
@@ -786,7 +786,7 @@ const Schedule = ({ user }) => {
       fetchSchedule();
     } catch (err) {
       console.error("Error creating schedule:", err);
-      setError("Failed to create schedule entry. Please try again.");
+      setError(err.message || "Failed to create event. Please try again.");
     }
   };
 
@@ -795,6 +795,7 @@ const Schedule = ({ user }) => {
 
   const resources = [
     {
+
       id: 1,
       title: "Academic Calendar 2025",
       type: "PDF",
@@ -1077,8 +1078,8 @@ const Schedule = ({ user }) => {
                           event.type === "Class"
                             ? "#7E57C2"
                             : event.type === "Lab"
-                            ? "#2196F3"
-                            : "#4CAF50"
+                              ? "#2196F3"
+                              : "#4CAF50"
                         }
                       >
                         {event.title}
@@ -1112,8 +1113,8 @@ const Schedule = ({ user }) => {
                     event.type === "Class"
                       ? "#7E57C2"
                       : event.type === "Lab"
-                      ? "#2196F3"
-                      : "#4CAF50"
+                        ? "#2196F3"
+                        : "#4CAF50"
                   }
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -1326,44 +1327,44 @@ const Schedule = ({ user }) => {
             {(user?.role === "FACULTY" ||
               user?.role === "HOD" ||
               user?.role === "PRINCIPAL") && (
-              <div className="form-row">
-                <div className="form-group">
-                  <label htmlFor="event-course">Course (Optional)</label>
-                  <select
-                    id="event-course"
-                    name="courseId"
-                    value={newEvent.courseId}
-                    onChange={handleInputChange}
-                  >
-                    <option value="">Select Course</option>
-                    {courses.map((course) => (
-                      <option key={course.id} value={course.id}>
-                        {course.code} - {course.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                {user?.role !== "FACULTY" && (
+                <div className="form-row">
                   <div className="form-group">
-                    <label htmlFor="event-faculty">Faculty (Optional)</label>
+                    <label htmlFor="event-course">Course (Optional)</label>
                     <select
-                      id="event-faculty"
-                      name="facultyId"
-                      value={newEvent.facultyId}
+                      id="event-course"
+                      name="courseId"
+                      value={newEvent.courseId}
                       onChange={handleInputChange}
                     >
-                      <option value="">Select Faculty</option>
-                      {faculty.map((fac) => (
-                        <option key={fac.id} value={fac.userId}>
-                          {fac.name}
+                      <option value="">Select Course</option>
+                      {courses.map((course) => (
+                        <option key={course.id} value={course.id}>
+                          {course.code} - {course.name}
                         </option>
                       ))}
                     </select>
                   </div>
-                )}
-              </div>
-            )}
+
+                  {user?.role !== "FACULTY" && (
+                    <div className="form-group">
+                      <label htmlFor="event-faculty">Faculty (Optional)</label>
+                      <select
+                        id="event-faculty"
+                        name="facultyId"
+                        value={newEvent.facultyId}
+                        onChange={handleInputChange}
+                      >
+                        <option value="">Select Faculty</option>
+                        {faculty.map((fac) => (
+                          <option key={fac.id} value={fac.userId}>
+                            {fac.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+                </div>
+              )}
 
             <div className="modal-actions">
               <Button

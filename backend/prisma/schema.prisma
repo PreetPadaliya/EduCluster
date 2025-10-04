@@ -17,10 +17,10 @@ model User {
   id              String        @id @default(cuid())
   firstName       String
   lastName        String
-  email           String        @unique
-  phone           String        @unique
-  employeeId      String?       @unique // For faculty, HOD, principal
-  studentId       String?       @unique // For students
+  email           String
+  phone           String
+  employeeId      String? // For faculty, HOD, principal
+  studentId       String? // For students
   password        String
   role            Role
   status          AccountStatus @default(PENDING)

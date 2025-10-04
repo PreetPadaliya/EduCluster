@@ -29,9 +29,9 @@ app.post("/api/signup/student", async (req, res) => {
     // Check if user already exists
     const existingUser = await prisma.user.findFirst({
       where: {
-        OR: [{ email: email }, { studentId: id }],
+        AND: [{ status: "APPROVED" }, { OR: [{ email: email }, { studentId: id }] }],
       },
-    });
+    });``
 
     if (existingUser) {
       return res.status(400).json({
@@ -100,12 +100,12 @@ app.post("/api/signup/request", async (req, res) => {
 
     const existingUser = await prisma.user.findFirst({
       where: {
-        OR: [
+        AND:[{OR: [
           { email: email },
           { employeeId: id },
           { studentId: id },
           { phone: phone },
-        ],
+        ]},{status:"APPROVED"}]
       },
     });
 
@@ -1876,7 +1876,7 @@ app.post("/api/schedules", async (req, res) => {
     if (!creator) {
       return res.status(404).json({
         success: false,
-        message: "Creator not found",
+        message: "Student cannot create schedules",
       });
     }
 
