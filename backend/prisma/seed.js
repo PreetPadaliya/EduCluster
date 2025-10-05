@@ -589,10 +589,10 @@ async function main() {
   console.log(`   - ${notifications.length} Notifications created`);
   
   console.log("\n🔑 Default Login Credentials:");
-  console.log("   Principal: principal@university.edu / principal123");
-  console.log("   HOD (CSE): hod.cse@university.edu / hod123");
-  console.log("   Faculty: john.smith@university.edu / faculty123");
-  console.log("   Student: alice.cooper@student.edu / student123");
+  console.log("   Principal: principal@university.edu / Principal@123");
+  console.log("   HOD (CSE): hod.cse@university.edu / Hod@123");
+  console.log("   Faculty: john.smith@university.edu / Faculty@123");
+  console.log("   Student: alice.cooper@student.edu / Student@123");
 }
 
 main()

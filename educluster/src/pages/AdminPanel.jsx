@@ -15,45 +15,67 @@ import {
   FaUserTie,
   FaCrown,
 } from "react-icons/fa";
+import AnimatedBackground from "../components/AnimatedBackground";
 
-// Global styles to match the app theme
 const GlobalStyles = createGlobalStyle`
   html, body, #root {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
     background-color: #121214;
     color: #e0e0e0;
   }
 `;
 
 const AdminContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100%;
+  max-width: 550px;
+  margin: 0 auto;
+  padding: 1rem 0;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+`;
+
+const LoginBox = styled(motion.div)`
+  background: rgba(18, 18, 20, 0.85);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 2rem;
+  width: 100%;
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(50, 50, 60, 0.4);
+  box-sizing: border-box;
+
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+`;
+
+const DashboardContainer = styled.div`
   min-height: 100vh;
   background: #121214;
   padding: 1.5rem;
   color: #e0e0e0;
+  max-width: 1400px;
+  margin: 0 auto;
 
   @media (max-width: 768px) {
     padding: 1rem;
   }
-`;
-
-const LoginBox = styled(motion.div)`
-  max-width: 400px;
-  margin: 0 auto;
-  background: rgba(25, 25, 30, 0.9);
-  border-radius: 16px;
-  padding: 2rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(160, 118, 249, 0.2);
-
-  @media (max-width: 768px) {
-    margin: 1rem;
-    padding: 1.5rem;
-  }
-`;
-
-const DashboardContainer = styled.div`
-  max-width: 1400px;
-  margin: 0 auto;
 `;
 
 const Header = styled.div`
@@ -160,7 +182,7 @@ const StatCard = styled(motion.div)`
     right: 0;
     height: 3px;
     background: ${(props) =>
-      props.accent || "linear-gradient(135deg, #a076f9, #7e57c2)"};
+    props.accent || "linear-gradient(135deg, #a076f9, #7e57c2)"};
   }
 
   &:hover {
@@ -405,13 +427,13 @@ const ActionButton = styled(motion.button)`
 
   &:hover {
     background: ${(props) =>
-      props.type === "approve"
-        ? "linear-gradient(135deg, #66bb6a, #388e3c)"
-        : "linear-gradient(135deg, #ef5350, #d32f2f)"};
+    props.type === "approve"
+      ? "linear-gradient(135deg, #66bb6a, #388e3c)"
+      : "linear-gradient(135deg, #ef5350, #d32f2f)"};
     box-shadow: ${(props) =>
-      props.type === "approve"
-        ? "0 5px 18px rgba(76, 175, 80, 0.4)"
-        : "0 5px 18px rgba(244, 67, 54, 0.4)"};
+    props.type === "approve"
+      ? "0 5px 18px rgba(76, 175, 80, 0.4)"
+      : "0 5px 18px rgba(244, 67, 54, 0.4)"};
     transform: translateY(-2px);
   }
 
@@ -437,26 +459,43 @@ const ActionButton = styled(motion.button)`
   }
 `;
 
+const InputIcon = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 1.5rem;
+  transform: translateY(-50%);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1.1rem;
+  z-index: 2;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+`;
+
 const Input = styled.input`
   width: 100%;
-  padding: 1rem;
-  border: 2px solid rgba(50, 50, 60, 0.4);
-  border-radius: 12px;
+  padding: 1rem 1.5rem 1rem 3.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 100px;
+  color: #ffffff;
   font-size: 1rem;
-  margin-bottom: 1.5rem;
-  transition: all 0.3s ease;
-  background: rgba(30, 30, 35, 0.6);
-  color: #e0e0e0;
+  outline: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-sizing: border-box;
 
   &::placeholder {
-    color: #a0a0a0;
+    color: rgba(255, 255, 255, 0.6);
   }
 
   &:focus {
-    outline: none;
-    border-color: #a076f9;
+    border-color: rgba(160, 118, 249, 0.5);
     box-shadow: 0 0 0 3px rgba(160, 118, 249, 0.1);
-    background: rgba(35, 35, 40, 0.8);
+    transform: translateY(-2px);
+    
+    + ${InputIcon} {
+      color: #a076f9;
+      transform: translateY(-50%) scale(1.1);
+    }
   }
 
   &:hover {
@@ -514,6 +553,27 @@ const Button = styled(motion.button)`
     cursor: not-allowed;
     transform: none;
   }
+`;
+
+const LoginTitle = styled(motion.h1)`
+  color: #e0e0e0;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-size: 2rem;
+  background: linear-gradient(135deg, #a076f9, #7e57c2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+`;
+
+const InputWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  margin-bottom: 1.5rem;
 `;
 
 const ErrorMessage = styled.div`
@@ -654,69 +714,101 @@ const AdminPanel = () => {
 
   if (!isLoggedIn) {
     return (
-      <AdminContainer>
-        <LoginBox
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <Title style={{ textAlign: "center", marginBottom: "2rem" }}>
-            <FaUserShield /> Admin Login
-          </Title>
+      <>
+        <GlobalStyles />
+        <AnimatedBackground />
+        <AdminContainer>
+          <LoginBox
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{
+              duration: 0.5,
+              ease: [0.4, 0, 0.2, 1]
+            }}
+          >
+            <LoginTitle
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              <FaUserShield /> Admin Login
+            </LoginTitle>
 
-          {error && <ErrorMessage>{error}</ErrorMessage>}
+            {error && <ErrorMessage>{error}</ErrorMessage>}
 
-          <form onSubmit={handleLogin}>
-            <div style={{ position: "relative", marginBottom: "1rem" }}>
-              <FaUser
-                style={{
-                  position: "absolute",
-                  left: "12px",
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  color: "#666",
-                }}
-              />
-              <Input
-                type="text"
-                placeholder="Admin ID (admin123)"
-                value={loginData.id}
-                onChange={(e) =>
-                  setLoginData({ ...loginData, id: e.target.value })
+            <motion.form
+              onSubmit={handleLogin}
+              initial="hidden"
+              animate="visible"
+              variants={{
+                hidden: { opacity: 0 },
+                visible: {
+                  opacity: 1,
+                  transition: {
+                    staggerChildren: 0.1,
+                    delayChildren: 0.3
+                  }
                 }
-                style={{ paddingLeft: "40px" }}
-                required
-              />
-            </div>
-
-            <div style={{ position: "relative", marginBottom: "1rem" }}>
-              <FaLock
-                style={{
-                  position: "absolute",
-                  left: "12px",
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  color: "#666",
+              }}
+            >
+              <motion.div
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: { opacity: 1, y: 0 }
                 }}
-              />
-              <Input
-                type="password"
-                placeholder="Password (admin@123)"
-                value={loginData.password}
-                onChange={(e) =>
-                  setLoginData({ ...loginData, password: e.target.value })
-                }
-                style={{ paddingLeft: "40px" }}
-                required
-              />
-            </div>
+              >
+                <InputWrapper>
+                  <Input
+                    type="text"
+                    placeholder="Admin ID (admin123)"
+                    value={loginData.id}
+                    onChange={(e) =>
+                      setLoginData({ ...loginData, id: e.target.value })
+                    }
+                    required
+                  />
+                  <InputIcon>
+                    <FaUser />
+                  </InputIcon>
+                </InputWrapper>
+              </motion.div>
 
-            <Button type="submit" disabled={loading}>
-              {loading ? "Logging in..." : "Login"}
-            </Button>
-          </form>
-        </LoginBox>
-      </AdminContainer>
+              <motion.div
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: { opacity: 1, y: 0 }
+                }}
+              >
+                <InputWrapper>
+                  <Input
+                    type="password"
+                    placeholder="Password (admin@123)"
+                    value={loginData.password}
+                    onChange={(e) =>
+                      setLoginData({ ...loginData, password: e.target.value })
+                    }
+                    required
+                  />
+                  <InputIcon>
+                    <FaLock />
+                  </InputIcon>
+                </InputWrapper>
+              </motion.div>
+
+              <motion.div
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: { opacity: 1, y: 0 }
+                }}
+              >
+                <Button type="submit" disabled={loading}>
+                  {loading ? "Logging in..." : "Login"}
+                </Button>
+              </motion.div>
+            </motion.form>
+          </LoginBox>
+        </AdminContainer>
+      </>
     );
   }
 
@@ -730,144 +822,142 @@ const AdminPanel = () => {
   };
 
   return (
-    <AdminContainer>
-      <DashboardContainer>
-        <Header>
-          <Title>
-            <FaUserShield /> Admin Dashboard
-          </Title>
-          <LogoutButton onClick={handleLogout}>
-            <FaSignOutAlt /> Logout
-          </LogoutButton>
-        </Header>
+    <DashboardContainer>
+      <Header>
+        <Title>
+          <FaUserShield /> Admin Dashboard
+        </Title>
+        <LogoutButton onClick={handleLogout}>
+          <FaSignOutAlt /> Logout
+        </LogoutButton>
+      </Header>
 
-        <StatsContainer>
-          <StatCard
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-          >
-            <StatNumber color="#ff9800">
-              <FaClock /> {stats.pending}
-            </StatNumber>
-            <StatLabel>Pending Requests</StatLabel>
-          </StatCard>
+      <StatsContainer>
+        <StatCard
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+        >
+          <StatNumber color="#ff9800">
+            <FaClock /> {stats.pending}
+          </StatNumber>
+          <StatLabel>Pending Requests</StatLabel>
+        </StatCard>
 
-          <StatCard
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-          >
-            <StatNumber color="#4caf50">
-              <FaUsers /> {stats.approved}
-            </StatNumber>
-            <StatLabel>Total Users</StatLabel>
-          </StatCard>
+        <StatCard
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          <StatNumber color="#4caf50">
+            <FaUsers /> {stats.approved}
+          </StatNumber>
+          <StatLabel>Total Users</StatLabel>
+        </StatCard>
 
-          <StatCard
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-          >
-            <StatNumber color="#9c27b0">{stats.principals}</StatNumber>
-            <StatLabel>Principals</StatLabel>
-          </StatCard>
+        <StatCard
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
+          <StatNumber color="#9c27b0">{stats.principals}</StatNumber>
+          <StatLabel>Principals</StatLabel>
+        </StatCard>
 
-          <StatCard
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-          >
-            <StatNumber color="#673ab7">{stats.hods}</StatNumber>
-            <StatLabel>HODs</StatLabel>
-          </StatCard>
+        <StatCard
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+        >
+          <StatNumber color="#673ab7">{stats.hods}</StatNumber>
+          <StatLabel>HODs</StatLabel>
+        </StatCard>
 
-          <StatCard
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-          >
-            <StatNumber color="#3f51b5">{stats.faculty}</StatNumber>
-            <StatLabel>Faculty</StatLabel>
-          </StatCard>
+        <StatCard
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+        >
+          <StatNumber color="#3f51b5">{stats.faculty}</StatNumber>
+          <StatLabel>Faculty</StatLabel>
+        </StatCard>
 
-          <StatCard
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-          >
-            <StatNumber color="#2196f3">{stats.students}</StatNumber>
-            <StatLabel>Students</StatLabel>
-          </StatCard>
-        </StatsContainer>
+        <StatCard
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+        >
+          <StatNumber color="#2196f3">{stats.students}</StatNumber>
+          <StatLabel>Students</StatLabel>
+        </StatCard>
+      </StatsContainer>
 
-        <RequestsContainer>
-          <h2>
-            <FaClock /> Pending Account Requests
-          </h2>
+      <RequestsContainer>
+        <h2>
+          <FaClock /> Pending Account Requests
+        </h2>
 
-          {pendingRequests.length === 0 ? (
-            <EmptyState>
-              <FaCheckCircle size={48} color="#4caf50" />
-              <h3>No Pending Requests</h3>
-              <p>All account requests have been processed.</p>
-            </EmptyState>
-          ) : (
-            pendingRequests.map((request, index) => (
-              <RequestCard
-                key={request.id}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <RequestHeader>
-                  <UserInfo>
-                    <UserName>
-                      {request.firstName} {request.lastName}
-                    </UserName>
-                    <UserDetails>
-                      <div>
-                        <strong>Email:</strong> {request.email}
-                      </div>
-                      <div>
-                        <strong>Phone:</strong> {request.phone}
-                      </div>
-                      <div>
-                        <strong>ID:</strong> {request.userId}
-                      </div>
-                      <div>
-                        <strong>Requested:</strong>{" "}
-                        {new Date(request.createdAt).toLocaleDateString()}
-                      </div>
-                    </UserDetails>
-                  </UserInfo>
-                  <RoleBadge role={request.role}>{request.role}</RoleBadge>
-                </RequestHeader>
+        {pendingRequests.length === 0 ? (
+          <EmptyState>
+            <FaCheckCircle size={48} color="#4caf50" />
+            <h3>No Pending Requests</h3>
+            <p>All account requests have been processed.</p>
+          </EmptyState>
+        ) : (
+          pendingRequests.map((request, index) => (
+            <RequestCard
+              key={request.id}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: index * 0.1 }}
+            >
+              <RequestHeader>
+                <UserInfo>
+                  <UserName>
+                    {request.firstName} {request.lastName}
+                  </UserName>
+                  <UserDetails>
+                    <div>
+                      <strong>Email:</strong> {request.email}
+                    </div>
+                    <div>
+                      <strong>Phone:</strong> {request.phone}
+                    </div>
+                    <div>
+                      <strong>ID:</strong> {request.userId}
+                    </div>
+                    <div>
+                      <strong>Requested:</strong>{" "}
+                      {new Date(request.createdAt).toLocaleDateString()}
+                    </div>
+                  </UserDetails>
+                </UserInfo>
+                <RoleBadge role={request.role}>{request.role}</RoleBadge>
+              </RequestHeader>
 
-                <ActionButtons>
-                  <ActionButton
-                    type="approve"
-                    onClick={() => handleApprove(request.id)}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <FaCheckCircle /> Approve
-                  </ActionButton>
-                  <ActionButton
-                    type="reject"
-                    onClick={() => handleReject(request.id)}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <FaTimesCircle /> Reject
-                  </ActionButton>
-                </ActionButtons>
-              </RequestCard>
-            ))
-          )}
-        </RequestsContainer>
-      </DashboardContainer>
-    </AdminContainer>
+              <ActionButtons>
+                <ActionButton
+                  type="approve"
+                  onClick={() => handleApprove(request.id)}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <FaCheckCircle /> Approve
+                </ActionButton>
+                <ActionButton
+                  type="reject"
+                  onClick={() => handleReject(request.id)}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <FaTimesCircle /> Reject
+                </ActionButton>
+              </ActionButtons>
+            </RequestCard>
+          ))
+        )}
+      </RequestsContainer>
+    </DashboardContainer>
   );
 };
 
