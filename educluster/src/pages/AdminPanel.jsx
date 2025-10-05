@@ -14,6 +14,7 @@ import {
   FaChalkboardTeacher,
   FaUserTie,
   FaCrown,
+  FaTrash,
 } from "react-icons/fa";
 import AnimatedBackground from "../components/AnimatedBackground";
 
@@ -173,6 +174,7 @@ const StatCard = styled(motion.div)`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  cursor: pointer;
 
   &:before {
     content: "";
@@ -604,6 +606,143 @@ const EmptyState = styled.div`
   }
 `;
 
+const DetailModal = styled(motion.div)`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 2rem;
+`;
+
+const DetailContent = styled(motion.div)`
+  background: rgba(25, 25, 30, 0.95);
+  border-radius: 16px;
+  padding: 2rem;
+  max-width: 800px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  border: 1px solid rgba(160, 118, 249, 0.3);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+`;
+
+const DetailHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(50, 50, 60, 0.4);
+`;
+
+const DetailTitle = styled.h2`
+  color: #e0e0e0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.5rem;
+`;
+
+const CloseButton = styled.button`
+  background: rgba(244, 67, 54, 0.2);
+  border: 1px solid rgba(244, 67, 54, 0.3);
+  color: #f44336;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(244, 67, 54, 0.3);
+    transform: translateY(-2px);
+  }
+`;
+
+const UserGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+`;
+
+const DetailUserCard = styled(motion.div)`
+  background: rgba(30, 30, 35, 0.6);
+  border: 1px solid rgba(50, 50, 60, 0.4);
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: rgba(160, 118, 249, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  }
+`;
+
+const DetailUserName = styled.h3`
+  color: #e0e0e0;
+  margin: 0 0 1rem 0;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+const DetailUserInfo = styled.div`
+  color: #a0a0a0;
+  font-size: 0.9rem;
+  line-height: 1.6;
+
+  strong {
+    color: #c0c0c0;
+  }
+`;
+
+const DeleteUserButton = styled(motion.button)`
+  margin-top: 1rem;
+  padding: 0.6rem 1.2rem;
+  background: linear-gradient(135deg, #f44336, #d32f2f);
+  border: 1px solid rgba(244, 67, 54, 0.3);
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  width: 100%;
+
+  &:hover {
+    background: linear-gradient(135deg, #d32f2f, #b71c1c);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(244, 67, 54, 0.4);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+`;
+
 const AdminPanel = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loginData, setLoginData] = useState({ id: "", password: "" });
@@ -611,6 +750,7 @@ const AdminPanel = () => {
   const [pendingRequests, setPendingRequests] = useState([]);
   const [approvedUsers, setApprovedUsers] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [detailView, setDetailView] = useState(null);
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -702,6 +842,68 @@ const AdminPanel = () => {
       }
     } catch (error) {
       console.error("Rejection failed:", error);
+    }
+  };
+
+  const handleDetailView = (viewType) => {
+    setDetailView(viewType);
+  };
+
+  const handleCloseDetailView = () => {
+    setDetailView(null);
+  };
+
+  const getFilteredUsers = (type) => {
+    switch (type) {
+      case 'all':
+        return approvedUsers;
+      case 'principals':
+        return approvedUsers.filter(u => u.role === 'principal');
+      case 'hods':
+        return approvedUsers.filter(u => u.role === 'hod');
+      case 'faculty':
+        return approvedUsers.filter(u => u.role === 'faculty');
+      case 'students':
+        return approvedUsers.filter(u => u.role === 'student');
+      case 'pending':
+        return pendingRequests;
+      default:
+        return [];
+    }
+  };
+
+  const handleDeleteUser = async (userId, userName) => {
+    if (window.confirm(`Are you sure you want to permanently delete ${userName}? This action cannot be undone.`)) {
+      try {
+        setLoading(true);
+        console.log('Deleting user:', userId, userName);
+
+        const response = await fetch(`http://localhost:3001/api/admin/users/${userId}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        console.log('Delete response status:', response.status);
+        const responseData = await response.json();
+        console.log('Delete response data:', responseData);
+
+        if (response.ok && responseData.success) {
+          // Remove from local state
+          setApprovedUsers(prevUsers => prevUsers.filter(user => user.id !== userId));
+          alert(`${userName} has been successfully removed from the system.`);
+        } else {
+          const errorMessage = responseData.error || responseData.message || 'Unknown error occurred';
+          console.error('Delete failed:', errorMessage);
+          alert(`Failed to delete user: ${errorMessage}`);
+        }
+      } catch (error) {
+        console.error('Error deleting user:', error);
+        alert(`Network error: ${error.message}. Please check if the server is running.`);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -837,6 +1039,7 @@ const AdminPanel = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
+          onClick={() => handleDetailView('pending')}
         >
           <StatNumber color="#ff9800">
             <FaClock /> {stats.pending}
@@ -848,6 +1051,7 @@ const AdminPanel = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
+          onClick={() => handleDetailView('all')}
         >
           <StatNumber color="#4caf50">
             <FaUsers /> {stats.approved}
@@ -859,8 +1063,11 @@ const AdminPanel = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
+          onClick={() => handleDetailView('principals')}
         >
-          <StatNumber color="#9c27b0">{stats.principals}</StatNumber>
+          <StatNumber color="#9c27b0">
+            <FaCrown /> {stats.principals}
+          </StatNumber>
           <StatLabel>Principals</StatLabel>
         </StatCard>
 
@@ -868,8 +1075,11 @@ const AdminPanel = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
+          onClick={() => handleDetailView('hods')}
         >
-          <StatNumber color="#673ab7">{stats.hods}</StatNumber>
+          <StatNumber color="#673ab7">
+            <FaUserTie /> {stats.hods}
+          </StatNumber>
           <StatLabel>HODs</StatLabel>
         </StatCard>
 
@@ -877,8 +1087,11 @@ const AdminPanel = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
+          onClick={() => handleDetailView('faculty')}
         >
-          <StatNumber color="#3f51b5">{stats.faculty}</StatNumber>
+          <StatNumber color="#3f51b5">
+            <FaChalkboardTeacher /> {stats.faculty}
+          </StatNumber>
           <StatLabel>Faculty</StatLabel>
         </StatCard>
 
@@ -886,8 +1099,11 @@ const AdminPanel = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
+          onClick={() => handleDetailView('students')}
         >
-          <StatNumber color="#2196f3">{stats.students}</StatNumber>
+          <StatNumber color="#2196f3">
+            <FaUserGraduate /> {stats.students}
+          </StatNumber>
           <StatLabel>Students</StatLabel>
         </StatCard>
       </StatsContainer>
@@ -957,6 +1173,87 @@ const AdminPanel = () => {
           ))
         )}
       </RequestsContainer>
+
+      {detailView && (
+        <DetailModal
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={handleCloseDetailView}
+        >
+          <DetailContent
+            initial={{ scale: 0.9, y: 20 }}
+            animate={{ scale: 1, y: 0 }}
+            exit={{ scale: 0.9, y: 20 }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <DetailHeader>
+              <DetailTitle>
+                {detailView === 'pending' && <><FaClock /> Pending Requests</>}
+                {detailView === 'all' && <><FaUsers /> All Users</>}
+                {detailView === 'principals' && <><FaCrown /> Principals</>}
+                {detailView === 'hods' && <><FaUserTie /> HODs</>}
+                {detailView === 'faculty' && <><FaChalkboardTeacher /> Faculty</>}
+                {detailView === 'students' && <><FaUserGraduate /> Students</>}
+              </DetailTitle>
+              <CloseButton onClick={handleCloseDetailView}>
+                <FaTimesCircle /> Close
+              </CloseButton>
+            </DetailHeader>
+
+            <UserGrid>
+              {getFilteredUsers(detailView).map((user, index) => (
+                <DetailUserCard
+                  key={user.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <DetailUserName>
+                    {detailView === 'principals' && <FaCrown />}
+                    {detailView === 'hods' && <FaUserTie />}
+                    {detailView === 'faculty' && <FaChalkboardTeacher />}
+                    {detailView === 'students' && <FaUserGraduate />}
+                    {detailView === 'pending' && <FaClock />}
+                    {detailView === 'all' && <FaUser />}
+                    {user.firstName} {user.lastName}
+                  </DetailUserName>
+                  <DetailUserInfo>
+                    <div><strong>Email:</strong> {user.email}</div>
+                    <div><strong>Phone:</strong> {user.phone}</div>
+                    <div><strong>ID:</strong> {user.enrollmentNo || user.id}</div>
+                    <div><strong>Role:</strong> {user.role}</div>
+                    {user.department && (
+                      <div><strong>Department:</strong> {user.department}</div>
+                    )}
+                    {detailView === 'pending' && user.requestedAt && (
+                      <div><strong>Requested:</strong> {new Date(user.requestedAt).toLocaleDateString()}</div>
+                    )}
+                  </DetailUserInfo>
+
+                  {detailView !== 'pending' && (
+                    <DeleteUserButton
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => handleDeleteUser(user.id, `${user.firstName} ${user.lastName}`)}
+                      disabled={loading}
+                    >
+                      <FaTrash /> {loading ? 'Deleting...' : 'Remove User'}
+                    </DeleteUserButton>
+                  )}
+                </DetailUserCard>
+              ))}
+            </UserGrid>
+
+            {getFilteredUsers(detailView).length === 0 && (
+              <EmptyState>
+                <h3>No {detailView === 'all' ? 'users' : detailView} found</h3>
+                <p>There are currently no {detailView === 'all' ? 'users' : detailView} to display.</p>
+              </EmptyState>
+            )}
+          </DetailContent>
+        </DetailModal>
+      )}
     </DashboardContainer>
   );
 };

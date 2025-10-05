@@ -490,6 +490,178 @@ app.get("/api/admin/users", async (req, res) => {
   }
 });
 
+// Delete user (admin only)
+app.delete("/api/admin/users/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    console.log(`[DELETE USER] Starting deletion process for userId: ${userId}`);
+
+    // Check if user exists
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      include: {
+        studentProfile: true,
+        facultyProfile: true,
+        hodProfile: true,
+        principalProfile: true,
+      },
+    });
+
+    if (!user) {
+      console.log(`[DELETE USER] User not found: ${userId}`);
+      return res.status(404).json({
+        success: false,
+        error: "User not found",
+      });
+    }
+
+    console.log(`[DELETE USER] Found user: ${user.firstName} ${user.lastName} (${user.role})`);
+
+    // Delete user and all related data in a transaction
+    await prisma.$transaction(async (tx) => {
+      // Delete role-specific profile and related data
+      if (user.role === "STUDENT" && user.studentProfile) {
+        console.log(`[DELETE USER] Deleting STUDENT profile and related data...`);
+        
+        // Delete student submissions
+        const deletedSubmissions = await tx.submission.deleteMany({
+          where: { studentId: user.studentProfile.id },
+        });
+        console.log(`[DELETE USER] Deleted ${deletedSubmissions.count} submissions`);
+
+        // Delete enrollments
+        const deletedEnrollments = await tx.enrollment.deleteMany({
+          where: { studentId: user.studentProfile.id },
+        });
+        console.log(`[DELETE USER] Deleted ${deletedEnrollments.count} enrollments`);
+
+        // Delete student profile
+        await tx.student.delete({
+          where: { id: user.studentProfile.id },
+        });
+        console.log(`[DELETE USER] Deleted student profile`);
+        
+      } else if (user.role === "FACULTY" && user.facultyProfile) {
+        console.log(`[DELETE USER] Deleting FACULTY profile and related data...`);
+        
+        // Update courses to remove faculty assignment
+        const updatedCourses = await tx.course.updateMany({
+          where: { facultyId: user.facultyProfile.id },
+          data: { facultyId: null },
+        });
+        console.log(`[DELETE USER] Updated ${updatedCourses.count} courses to remove faculty assignment`);
+
+        // Delete assignments created by faculty (and their submissions)
+        const assignments = await tx.assignment.findMany({
+          where: { facultyId: user.facultyProfile.id },
+          select: { id: true },
+        });
+        
+        for (const assignment of assignments) {
+          await tx.submission.deleteMany({
+            where: { assignmentId: assignment.id },
+          });
+        }
+        console.log(`[DELETE USER] Deleted submissions for ${assignments.length} assignments`);
+
+        const deletedAssignments = await tx.assignment.deleteMany({
+          where: { facultyId: user.facultyProfile.id },
+        });
+        console.log(`[DELETE USER] Deleted ${deletedAssignments.count} assignments`);
+
+        // Delete schedules where faculty is assigned
+        const deletedFacultySchedules = await tx.schedule.deleteMany({
+          where: { facultyId: userId },
+        });
+        console.log(`[DELETE USER] Deleted ${deletedFacultySchedules.count} faculty schedules`);
+
+        // Delete faculty profile
+        await tx.faculty.delete({
+          where: { id: user.facultyProfile.id },
+        });
+        console.log(`[DELETE USER] Deleted faculty profile`);
+        
+      } else if (user.role === "HOD" && user.hodProfile) {
+        console.log(`[DELETE USER] Deleting HOD profile and related data...`);
+        
+        // Remove HOD from department
+        const updatedDepts = await tx.department.updateMany({
+          where: { id: user.hodProfile.departmentId },
+          data: { hodId: null },
+        });
+        console.log(`[DELETE USER] Updated ${updatedDepts.count} departments to remove HOD`);
+
+        // Delete HOD profile
+        await tx.hOD.delete({
+          where: { id: user.hodProfile.id },
+        });
+        console.log(`[DELETE USER] Deleted HOD profile`);
+        
+      } else if (user.role === "PRINCIPAL" && user.principalProfile) {
+        console.log(`[DELETE USER] Deleting PRINCIPAL profile...`);
+        
+        // Delete principal profile
+        await tx.principal.delete({
+          where: { id: user.principalProfile.id },
+        });
+        console.log(`[DELETE USER] Deleted principal profile`);
+      }
+
+      // Delete notifications for this user
+      const deletedNotifications = await tx.notification.deleteMany({
+        where: { userId: userId },
+      });
+      console.log(`[DELETE USER] Deleted ${deletedNotifications.count} notifications`);
+
+      // Delete audit logs for this user
+      const deletedAuditLogs = await tx.auditLog.deleteMany({
+        where: { userId: userId },
+      });
+      console.log(`[DELETE USER] Deleted ${deletedAuditLogs.count} audit logs`);
+
+      // Delete announcements for faculty users only (using facultyId from schema)
+      if (user.role === "FACULTY" && user.facultyProfile) {
+        const deletedAnnouncements = await tx.announcement.deleteMany({
+          where: { facultyId: userId },
+        });
+        console.log(`[DELETE USER] Deleted ${deletedAnnouncements.count} announcements`);
+      }
+
+      // Delete schedules created by user
+      const deletedSchedules = await tx.schedule.deleteMany({
+        where: { createdById: userId },
+      });
+      console.log(`[DELETE USER] Deleted ${deletedSchedules.count} schedules created by user`);
+
+      // Finally, delete the user
+      await tx.user.delete({
+        where: { id: userId },
+      });
+      console.log(`[DELETE USER] Deleted user record`);
+    });
+
+    console.log(`[DELETE USER] Successfully deleted user: ${user.firstName} ${user.lastName}`);
+    
+    res.json({
+      success: true,
+      message: `User ${user.firstName} ${user.lastName} (${user.role}) has been permanently deleted from the system`,
+    });
+  } catch (error) {
+    console.error("[DELETE USER] Error deleting user:", error);
+    console.error("[DELETE USER] Error details:", {
+      message: error.message,
+      code: error.code,
+      meta: error.meta,
+    });
+    
+    res.status(500).json({
+      success: false,
+      error: error.message || "Failed to delete user. Please try again.",
+    });
+  }
+});
+
 // Check request status
 app.get("/api/request-status/:email", async (req, res) => {
   try {
@@ -605,6 +777,9 @@ app.get("/api/courses", async (req, res) => {
         include: {
           courses: {
             include: {
+              faculty: {
+                include: { user: true },
+              },
               department: true,
               enrollments: {
                 include: {
@@ -715,28 +890,46 @@ app.post("/api/courses", async (req, res) => {
     console.log(`Faculty: ${faculty.user.firstName} ${faculty.user.lastName}`);
     console.log(`Department: ${department.name}`);
 
-    const course = await prisma.course.create({
-      data: {
-        name,
-        code,
-        description,
-        credits,
-        semester,
-        departmentId,
-        facultyId: faculty.id, // Use the actual faculty ID
-      },
-      include: {
-        faculty: {
-          include: { user: true },
+    // Create course and update faculty department in a transaction
+    const result = await prisma.$transaction(async (tx) => {
+      // Create the course
+      const course = await tx.course.create({
+        data: {
+          name,
+          code,
+          description,
+          credits,
+          semester,
+          departmentId,
+          facultyId: faculty.id, // Use the actual faculty ID
         },
-        department: true,
-      },
+        include: {
+          faculty: {
+            include: { user: true },
+          },
+          department: true,
+        },
+      });
+
+      // Update faculty department if not set or if this is a new department assignment
+      // If faculty doesn't have a department yet, set it to this course's department
+      if (!faculty.departmentId) {
+        await tx.faculty.update({
+          where: { id: faculty.id },
+          data: { departmentId: departmentId },
+        });
+        console.log(`Updated faculty department to: ${department.name}`);
+      } else {
+        console.log(`Faculty already has department assigned, keeping existing department`);
+      }
+
+      return course;
     });
 
     res.status(201).json({
       success: true,
       message: "Course created successfully",
-      course,
+      course: result,
     });
   } catch (error) {
     console.error("Error creating course:", error);
@@ -798,6 +991,9 @@ app.get("/api/assignments", async (req, res) => {
           assignments: {
             include: {
               course: true,
+              faculty: {
+                include: { user: true },
+              },
               submissions: {
                 include: {
                   student: {
@@ -1222,6 +1418,109 @@ app.get("/api/faculty", async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Failed to fetch faculty",
+    });
+  }
+});
+
+// Update faculty profile (HOD/Principal/Faculty can update their own)
+app.put("/api/faculty/:facultyId", async (req, res) => {
+  try {
+    const { facultyId } = req.params;
+    const { 
+      departmentId, 
+      designation, 
+      qualification, 
+      experience, 
+      specialization,
+      updatedBy 
+    } = req.body;
+
+    // Verify the faculty exists
+    const faculty = await prisma.faculty.findUnique({
+      where: { id: facultyId },
+      include: { user: true },
+    });
+
+    if (!faculty) {
+      return res.status(404).json({
+        success: false,
+        message: "Faculty not found",
+      });
+    }
+
+    // Verify user has permission (faculty can update their own, HOD/Principal can update any)
+    if (updatedBy) {
+      const user = await prisma.user.findUnique({
+        where: { id: updatedBy },
+        select: { role: true, id: true },
+      });
+
+      if (!user) {
+        return res.status(403).json({
+          success: false,
+          message: "Invalid user",
+        });
+      }
+
+      // Check permissions: faculty can only update their own profile
+      if (user.role === "FACULTY" && faculty.userId !== updatedBy) {
+        return res.status(403).json({
+          success: false,
+          message: "You can only update your own profile",
+        });
+      }
+
+      // HOD and Principal can update any faculty
+      if (!["HOD", "PRINCIPAL", "FACULTY"].includes(user.role)) {
+        return res.status(403).json({
+          success: false,
+          message: "Insufficient permissions to update faculty profile",
+        });
+      }
+    }
+
+    // Prepare update data
+    const updateData = {};
+    if (departmentId !== undefined) updateData.departmentId = departmentId;
+    if (designation !== undefined) updateData.designation = designation;
+    if (qualification !== undefined) updateData.qualification = qualification;
+    if (experience !== undefined) updateData.experience = experience;
+    if (specialization !== undefined) updateData.specialization = specialization;
+
+    // Update faculty profile
+    const updatedFaculty = await prisma.faculty.update({
+      where: { id: facultyId },
+      data: updateData,
+      include: {
+        user: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+            phone: true,
+            employeeId: true,
+          },
+        },
+        department: true,
+        courses: {
+          include: {
+            department: true,
+          },
+        },
+      },
+    });
+
+    res.json({
+      success: true,
+      message: "Faculty profile updated successfully",
+      faculty: updatedFaculty,
+    });
+  } catch (error) {
+    console.error("Error updating faculty:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to update faculty profile",
     });
   }
 });

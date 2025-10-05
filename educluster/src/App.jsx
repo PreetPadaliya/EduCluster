@@ -112,23 +112,17 @@ function App() {
   return (
     <Router>
       {user ? (
-        <div>
-          <p
-            style={{
-              color: "white",
-              padding: "10px",
-              backgroundColor: "green",
-            }}
-          >
-            User logged in: {user.username || user.enrollmentNo} ({user.role})
-          </p>
-          <Routes>
-            <Route
-              path="/*"
-              element={<Home user={user} onLogout={handleLogout} />}
-            />
-          </Routes>
-        </div>
+
+
+        <Routes>
+          <Route path="/admin" element={<AdminPanel />} />
+          <Route
+            path="/*"
+            element={<Home user={user} onLogout={handleLogout} />}
+
+          />
+        </Routes>
+
       ) : (
         <AppContainer>
           <AnimatedBackground />

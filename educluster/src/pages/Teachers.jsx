@@ -108,13 +108,13 @@ const Button = styled(motion.button)`
 
   &:hover {
     box-shadow: ${(props) =>
-      props.primary
-        ? "0 6px 20px rgba(126, 87, 194, 0.4)"
-        : "0 4px 12px rgba(0, 0, 0, 0.2)"};
+    props.primary
+      ? "0 6px 20px rgba(126, 87, 194, 0.4)"
+      : "0 4px 12px rgba(0, 0, 0, 0.2)"};
     background: ${(props) =>
-      props.primary
-        ? "linear-gradient(135deg, #b18aff, #9065db)"
-        : "rgba(40, 40, 45, 0.6)"};
+    props.primary
+      ? "linear-gradient(135deg, #b18aff, #9065db)"
+      : "rgba(40, 40, 45, 0.6)"};
   }
 `;
 
@@ -196,7 +196,7 @@ const Tab = styled(motion.button)`
     background: rgba(160, 118, 249, 0.1);
     color: ${(props) => (props.active ? "#A076F9" : "#d0d0d0")};
     border-color: ${(props) =>
-      props.active ? "#A076F9" : "rgba(160, 118, 249, 0.3)"};
+    props.active ? "#A076F9" : "rgba(160, 118, 249, 0.3)"};
   }
 `;
 
@@ -701,27 +701,42 @@ const Teachers = ({ user }) => {
       const response = await API.faculty.getFaculty();
 
       // Transform API data to match component expectations
-      const transformedTeachers = response.faculty.map((faculty) => ({
-        id: faculty.id,
-        name: `${faculty.user.firstName} ${faculty.user.lastName}`,
-        specialization: faculty.designation || "Faculty",
-        branch: faculty.department?.name || "General",
-        email: faculty.user.email,
-        phone: faculty.user.phone || "N/A",
-        experience: "5+ years", // Mock data
-        status: "available", // Mock status
-        avatar: "/api/placeholder/80/80", // Placeholder
-        rating: 4.5, // Mock rating
-        courses: faculty.courses?.length || 0,
-        appointments: [], // Mock appointments
-        availability: [
-          { day: "Monday", time: "9:00 AM - 5:00 PM" },
-          { day: "Wednesday", time: "10:00 AM - 4:00 PM" },
-          { day: "Friday", time: "11:00 AM - 3:00 PM" },
-        ],
-        totalClients: Math.floor(Math.random() * 20) + 5, // Mock data
-        employeeId: faculty.user.employeeId,
-      }));
+      const transformedTeachers = response.faculty.map((faculty) => {
+        let department = []
+        for (let i = 0; i < faculty.courses.length; i++) {
+          department.push(faculty.courses[i].department.name)
+        }
+        department = [...new Set(department)]; // Remove duplicates
+        let dept = "";
+        if (department.length > 0) {
+          dept = department.join(", ");
+        }
+        else {
+          dept = "General";
+        }
+        return (
+          {
+            id: faculty.id,
+            name: `${faculty.user.firstName} ${faculty.user.lastName}`,
+            specialization: faculty.designation || "Faculty",
+            branch: dept,
+            email: faculty.user.email,
+            phone: faculty.user.phone || "N/A",
+            experience: "5+ years", // Mock data
+            status: "available", // Mock status
+            avatar: "/api/placeholder/80/80", // Placeholder
+            rating: 4.5, // Mock rating
+            courses: faculty.courses?.length || 0,
+            appointments: [], // Mock appointments
+            availability: [
+              { day: "Monday", time: "9:00 AM - 5:00 PM" },
+              { day: "Wednesday", time: "10:00 AM - 4:00 PM" },
+              { day: "Friday", time: "11:00 AM - 3:00 PM" },
+            ],
+            totalClients: Math.floor(Math.random() * 20) + 5, // Mock data
+            employeeId: faculty.user.employeeId,
+          })
+      });
 
       setTeachers(transformedTeachers);
     } catch (err) {
@@ -842,8 +857,8 @@ const Teachers = ({ user }) => {
               {activeFilter === "all"
                 ? "All"
                 : activeFilter === "mainBranch"
-                ? "Main Branch"
-                : "North Branch"}
+                  ? "Main Branch"
+                  : "North Branch"}
             </Button>
 
             {showFilter && (
@@ -885,8 +900,8 @@ const Teachers = ({ user }) => {
                     {filter === "all"
                       ? "All Teachers"
                       : filter === "mainBranch"
-                      ? "Main Branch"
-                      : "North Branch"}
+                        ? "Main Branch"
+                        : "North Branch"}
                   </div>
                 ))}
               </motion.div>
