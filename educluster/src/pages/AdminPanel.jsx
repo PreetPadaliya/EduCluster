@@ -962,7 +962,7 @@ const AdminPanel = () => {
                 <InputWrapper>
                   <Input
                     type="text"
-                    placeholder="Admin ID (admin123)"
+                    placeholder="Admin ID"
                     value={loginData.id}
                     onChange={(e) =>
                       setLoginData({ ...loginData, id: e.target.value })
@@ -984,7 +984,7 @@ const AdminPanel = () => {
                 <InputWrapper>
                   <Input
                     type="password"
-                    placeholder="Password (admin@123)"
+                    placeholder="Password"
                     value={loginData.password}
                     onChange={(e) =>
                       setLoginData({ ...loginData, password: e.target.value })

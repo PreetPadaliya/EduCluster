@@ -189,14 +189,11 @@ const TabsContainer = styled.div`
   overflow-x: auto;
   flex-wrap: nowrap;
   width: 100%;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
 
   &::-webkit-scrollbar {
-    height: 4px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: rgba(160, 118, 249, 0.3);
-    border-radius: 10px;
+    display: none; /* Chrome, Safari, Opera */
   }
 
   @media (max-width: 768px) {
@@ -755,6 +752,12 @@ const ModalContent = styled(motion.div)`
   border: 1px solid rgba(160, 118, 249, 0.3);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   margin: 1rem;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
 
   @media (max-width: 768px) {
     padding: 1.5rem;
